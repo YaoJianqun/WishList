@@ -1,0 +1,26 @@
+<script>
+	export default {
+		onLaunch: function() {
+			console.log('App Launch')
+		},
+		onShow: function() {
+			console.log('App Show')
+		},
+		onHide: function() {
+			console.log('App Hide')
+		}
+	}
+</script>
+
+<style lang="scss">
+	@import '~@/common/css/common.scss';
+	/*每个页面公共css */
+	.wrapper {
+		width: 100%;
+		color: #101010;
+		background-color: #EEE;
+		.scroll-Y {
+			background-color: #EEE;
+		}
+	}
+</style>

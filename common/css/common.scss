@@ -1,0 +1,27 @@
+@import '~@/common/css/variable.scss';
+
+.font-warning {
+	color: $Warning;
+}
+.font-danger {
+	color: $Danger;
+}
+.font-parimary {
+	color: $Primary;
+}
+.font-success {
+	color: $Success;
+}
+
+.progress.progress-blue {
+	border-color: $progress_blue;
+}
+.progress.progress-green1 {
+	border-color: $progress_green1;
+}
+.progress.progress-green2 {
+	border-color: $progress_green2;
+}
+.progress.progress-yellow {
+	border-color: $progress_yellow;
+}

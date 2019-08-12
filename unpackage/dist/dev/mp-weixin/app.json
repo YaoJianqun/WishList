@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#EEEEEE",
+    "backgroundColorTop": "#EEEEEE",
+    "backgroundColorBottom": "#EEEEEE"
+  },
+  "usingComponents": {}
+}
