@@ -1,27 +1,48 @@
 @import '~@/common/css/variable.scss';
 
-.font-warning {
+.iconfont.warning {
 	color: $Warning;
 }
-.font-danger {
+.iconfont.danger {
 	color: $Danger;
 }
-.font-parimary {
+.iconfont.parimary {
 	color: $Primary;
 }
-.font-success {
+.iconfont.success {
 	color: $Success;
 }
+.iconfont.info {
+	color: $Info;
+}
+.iconfont.black {
+	color: $Black;
+}
 
-.progress.progress-blue {
-	border-color: $progress_blue;
+.progress.success {
+	border-color: $Success!important;
 }
-.progress.progress-green1 {
-	border-color: $progress_green1;
+.progress.primary {
+	border-color: $Primary!important;
 }
-.progress.progress-green2 {
-	border-color: $progress_green2;
+.progress.danger {
+	border-color: $Danger!important;
 }
-.progress.progress-yellow {
-	border-color: $progress_yellow;
+.progress.warning {
+	border-color: $Warning!important;
 }
+.progress.info {
+	border-color: $Info!important;
+}
+.progress.pink {
+	border-color: $Pink!important;
+}
+.progress.purple {
+	border-color: $Purple!important;
+}
+.progress.gray {
+	border-color: $Gray!important;
+}
+.progress.black {
+	border-color: $Black!important;
+} 
