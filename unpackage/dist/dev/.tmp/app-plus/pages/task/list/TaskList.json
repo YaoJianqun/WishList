@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "task-list-header": "/pages/task/list/components/Header",
+    "task-list-content": "/pages/task/list/components/Content",
+    "task-list-dock": "/pages/task/list/components/Dock"
+  }
+}

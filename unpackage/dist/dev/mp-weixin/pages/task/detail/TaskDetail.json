@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "task-detail-header": "/pages/task/detail/components/Header",
+    "task-detail-info": "/pages/task/detail/components/Info"
+  }
+}
