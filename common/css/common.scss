@@ -19,6 +19,34 @@
 	color: $Black;
 }
 
+.bgcolor.success {
+	background-color: $Success!important;
+}
+.bgcolor.primary {
+	background-color: $Primary!important;
+}
+.bgcolor.danger {
+	background-color: $Danger!important;
+}
+.bgcolor.warning {
+	background-color: $Warning!important;
+}
+.bgcolor.info {
+	background-color: $Info!important;
+}
+.bgcolor.pink {
+	background-color: $Pink!important;
+}
+.bgcolor.purple {
+	background-color: $Purple!important;
+}
+.bgcolor.grey {
+	background-color: $Gray!important;
+}
+.bgcolor.black {
+	background-color: $Black!important;
+} 
+
 .progress.success {
 	border-color: $Success!important;
 }
@@ -40,7 +68,7 @@
 .progress.purple {
 	border-color: $Purple!important;
 }
-.progress.gray {
+.progress.grey {
 	border-color: $Gray!important;
 }
 .progress.black {

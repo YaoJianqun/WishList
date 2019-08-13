@@ -8,7 +8,7 @@
 			"icon": "iconcutlery",
 			"color": "danger",
 			"target_count": "1",
-			"completed_count": "0",
+			"completed_count": "1",
 			"unit": "次",
 			"frequency": "day",
 			"ration": [1,2,3,4,5,6,7],

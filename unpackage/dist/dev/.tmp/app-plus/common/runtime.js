@@ -102,11 +102,11 @@
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"pages/task/components/Dock":1,"pages/task/components/Header":1,"pages/task/components/List":1};
+/******/ 		var cssChunks = {"pages/task/list/components/Content":1,"pages/task/list/components/Header":1,"pages/task/list/components/Dock":1,"pages/task/detail/components/Dock":1,"pages/task/detail/components/Header":1,"pages/task/detail/components/Info":1,"components/uni-icon/uni-icon":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "" + ({"pages/task/components/Dock":"pages/task/components/Dock","pages/task/components/Header":"pages/task/components/Header","pages/task/components/List":"pages/task/components/List"}[chunkId]||chunkId) + ".wxss";
+/******/ 				var href = "" + ({"pages/task/list/components/Content":"pages/task/list/components/Content","pages/task/list/components/Header":"pages/task/list/components/Header","pages/task/list/components/Dock":"pages/task/list/components/Dock","pages/task/detail/components/Dock":"pages/task/detail/components/Dock","pages/task/detail/components/Header":"pages/task/detail/components/Header","pages/task/detail/components/Info":"pages/task/detail/components/Info","components/uni-icon/uni-icon":"components/uni-icon/uni-icon"}[chunkId]||chunkId) + ".wxss";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {

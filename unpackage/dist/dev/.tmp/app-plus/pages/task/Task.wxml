@@ -1,1 +1,0 @@
-<view class="wrapper"><task-header vue-id="1" bind:__l="__l"></task-header><task-list vue-id="2" taskList="{{taskList}}" bind:__l="__l"></task-list><task-dock vue-id="3" bind:__l="__l"></task-dock></view>

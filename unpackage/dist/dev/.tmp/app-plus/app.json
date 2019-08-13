@@ -1,8 +1,8 @@
 {
   "pages": [
-    "pages/task/Task"
+    "pages/task/list/TaskList",
+    "pages/task/detail/TaskDetail"
   ],
-  "subPackages": [],
   "window": {
     "navigationStyle": "custom",
     "navigationBarTextStyle": "black",
@@ -11,11 +11,12 @@
     "backgroundColorBottom": "#EEEEEE"
   },
   "nvueCompiler": "weex",
+  "renderer": "auto",
   "splashscreen": {
     "alwaysShowBeforeRender": true,
     "autoclose": false
   },
   "appname": "todolist",
-  "compilerVersion": "2.1.1",
+  "compilerVersion": "2.2.0",
   "usingComponents": {}
 }

@@ -1,1 +1,0 @@
-<view class="header-wrapper data-v-b3ff72a4"><view class="title data-v-b3ff72a4">任务</view><view data-event-opts="{{[['tap',[['handleAddTaskClick',['$event']]]]]}}" class="button-add data-v-b3ff72a4" bindtap="__e">+</view></view>
