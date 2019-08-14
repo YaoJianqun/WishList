@@ -10,9 +10,8 @@
 		name: 'TaskListHeader',
 		methods: {
 			handleAddTaskClick () {
-				console.log(666)
-				uni.redirectTo({
-					url: '../../../pages/task/detail/TaskDetail'
+				uni.navigateTo({
+					url: '../../../pages/task/base/TaskBase'
 				});
 			}
 		}

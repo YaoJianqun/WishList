@@ -1,7 +1,7 @@
 {
   "usingComponents": {
-    "task-detail-header": "/pages/task/detail/components/Header",
-    "task-detail-info": "/pages/task/detail/components/Info",
-    "task-detail-dock": "/pages/task/detail/components/Dock"
+    "detail-header": "/pages/task/detail/components/Header",
+    "detail-info": "/pages/task/detail/components/Info",
+    "detail-dock": "/pages/task/detail/components/Dock"
   }
 }

@@ -1,13 +1,20 @@
 <template>
 	<view class="dock">
-		<view class="item bgcolor success">下一步</view>
+		<view class="item bgcolor success" @click="">下一步</view>
 		<view class="item bgcolor danger">取消</view>
 	</view>
 </template>
 
 <script>
 	export default {
-		name: 'TaskDetailDock'
+		name: 'BaseDock',
+		methods: {
+			handleNextClick () {
+				uni.navigateTo({
+					url: '../../../pages/task/detail/TaskDetail'
+				});
+			}
+		}
 	}
 </script>
 

@@ -7619,6 +7619,29 @@ createPage(_TaskList.default);
 /* 15 */,
 /* 16 */,
 /* 17 */
+/*!**************************************************************************************************!*\
+  !*** G:/workspace/hbuilder_workspace/WishList/main.js?{"page":"pages%2Ftask%2Fbase%2FTaskBase"} ***!
+  \**************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(createPage) {__webpack_require__(/*! uni-pages */ 4);
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
+var _TaskBase = _interopRequireDefault(__webpack_require__(/*! ./pages/task/base/TaskBase.vue */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+createPage(_TaskBase.default);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["createPage"]))
+
+/***/ }),
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */
 /*!******************************************************************************************************!*\
   !*** G:/workspace/hbuilder_workspace/WishList/main.js?{"page":"pages%2Ftask%2Fdetail%2FTaskDetail"} ***!
   \******************************************************************************************************/
@@ -7629,9 +7652,54 @@ createPage(_TaskList.default);
 /* WEBPACK VAR INJECTION */(function(createPage) {__webpack_require__(/*! uni-pages */ 4);
 
 var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
-var _TaskDetail = _interopRequireDefault(__webpack_require__(/*! ./pages/task/detail/TaskDetail.vue */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+var _TaskDetail = _interopRequireDefault(__webpack_require__(/*! ./pages/task/detail/TaskDetail.vue */ 26));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 createPage(_TaskDetail.default);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["createPage"]))
+
+/***/ }),
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */
+/*!********************************************************************!*\
+  !*** G:/workspace/hbuilder_workspace/WishList/common/util/UUID.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var getUUID = function getUUID(len, radix) {
+  var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+  var uuid = [],i;
+  radix = radix || chars.length;
+
+  if (len) {
+    // Compact form
+    for (i = 0; i < len; i++) {uuid[i] = chars[0 | Math.random() * radix];}
+  } else {
+    // rfc4122, version 4 form
+    var r;
+
+    // rfc4122 requires these characters
+    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+    uuid[14] = '4';
+
+    // Fill in random data.  At i==19 set the high bits of clock sequence as
+    // per rfc4122, sec. 4.1.5
+    for (i = 0; i < 36; i++) {
+      if (!uuid[i]) {
+        r = 0 | Math.random() * 16;
+        uuid[i] = chars[i == 19 ? r & 0x3 | 0x8 : r];
+      }
+    }
+  }
+
+  return uuid.join('');
+};var _default =
+
+getUUID;exports.default = _default;
 
 /***/ })
 ]]);

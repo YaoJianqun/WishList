@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/task/list/TaskList",
+    "pages/task/base/TaskBase",
     "pages/task/detail/TaskDetail"
   ],
   "window": {
@@ -17,6 +18,6 @@
     "autoclose": false
   },
   "appname": "todolist",
-  "compilerVersion": "2.2.0",
+  "compilerVersion": "2.2.1",
   "usingComponents": {}
 }

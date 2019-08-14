@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/task/list/TaskList",
+    "pages/task/base/TaskBase",
     "pages/task/detail/TaskDetail"
   ],
   "subPackages": [],

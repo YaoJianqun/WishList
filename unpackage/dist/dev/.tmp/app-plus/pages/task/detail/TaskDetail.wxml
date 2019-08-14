@@ -1,1 +1,1 @@
-<view class="wrapper"><task-detail-header vue-id="1" bind:__l="__l"></task-detail-header><task-detail-info vue-id="2" bind:__l="__l"></task-detail-info><task-detail-dock vue-id="3" bind:__l="__l"></task-detail-dock></view>
+<view class="wrapper data-v-6da3bffe"><detail-header vue-id="1" class="data-v-6da3bffe" bind:__l="__l"></detail-header><detail-info vue-id="2" class="data-v-6da3bffe" bind:__l="__l"></detail-info><detail-dock vue-id="3" class="data-v-6da3bffe" bind:__l="__l"></detail-dock></view>

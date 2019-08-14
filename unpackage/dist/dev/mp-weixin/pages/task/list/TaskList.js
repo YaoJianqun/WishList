@@ -110,7 +110,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var TaskListHeader = function TaskListHeader() {return __webpack_require__.e(/*! import() | pages/task/list/components/Header */ "pages/task/list/components/Header").then(__webpack_require__.bind(null, /*! ./components/Header */ 25));};var TaskListContent = function TaskListContent() {return __webpack_require__.e(/*! import() | pages/task/list/components/Content */ "pages/task/list/components/Content").then(__webpack_require__.bind(null, /*! ./components/Content */ 32));};var TaskListDock = function TaskListDock() {return __webpack_require__.e(/*! import() | pages/task/list/components/Dock */ "pages/task/list/components/Dock").then(__webpack_require__.bind(null, /*! ./components/Dock */ 39));};var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var TaskListHeader = function TaskListHeader() {return __webpack_require__.e(/*! import() | pages/task/list/components/Header */ "pages/task/list/components/Header").then(__webpack_require__.bind(null, /*! ./components/Header */ 34));};var TaskListContent = function TaskListContent() {return __webpack_require__.e(/*! import() | pages/task/list/components/Content */ "pages/task/list/components/Content").then(__webpack_require__.bind(null, /*! ./components/Content */ 41));};var TaskListDock = function TaskListDock() {return __webpack_require__.e(/*! import() | pages/task/list/components/Dock */ "pages/task/list/components/Dock").then(__webpack_require__.bind(null, /*! ./components/Dock */ 48));};var _default =
 
 
 
@@ -136,7 +136,8 @@ __webpack_require__.r(__webpack_exports__);
 
   },
   mounted: function mounted() {
-    this.getListData();
+    //this.getListData()
+    this.taskList = [];
   },
   methods: {
     getListData: function getListData() {var _this = this;

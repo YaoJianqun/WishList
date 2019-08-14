@@ -43,7 +43,7 @@
 	import uniIcon from '@/components/uni-icon/uni-icon.vue'
 	
 	export default {
-		name: 'TaskDetailInfo',
+		name: 'BaseInfo',
 		components: {
 			uniIcon
 		},

@@ -42,6 +42,33 @@
 .iconfont.black {
   color: #101010;
 }
+.bgcolor.success {
+  background-color: #2AD181 !important;
+}
+.bgcolor.primary {
+  background-color: #007AFF !important;
+}
+.bgcolor.danger {
+  background-color: #EA3447 !important;
+}
+.bgcolor.warning {
+  background-color: #FFA323 !important;
+}
+.bgcolor.info {
+  background-color: #5bc0de !important;
+}
+.bgcolor.pink {
+  background-color: #FF546B !important;
+}
+.bgcolor.purple {
+  background-color: #5756CE !important;
+}
+.bgcolor.grey {
+  background-color: #8E8E92 !important;
+}
+.bgcolor.black {
+  background-color: #101010 !important;
+}
 .progress.success {
   border-color: #2AD181 !important;
 }
@@ -63,7 +90,7 @@
 .progress.purple {
   border-color: #5756CE !important;
 }
-.progress.gray {
+.progress.grey {
   border-color: #8E8E92 !important;
 }
 .progress.black {

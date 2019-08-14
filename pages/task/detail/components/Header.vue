@@ -13,7 +13,7 @@
 	import uniIcon from '@/components/uni-icon/uni-icon.vue'
 	
 	export default {
-		name: 'TaskDetailHeader',
+		name: 'BaseHeader',
 		components: {
 			uniIcon
 		},
