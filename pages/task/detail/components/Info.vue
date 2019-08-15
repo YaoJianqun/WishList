@@ -12,16 +12,18 @@
 			<view class="uni-form-item uni-column">
 				<view class="title">频率 : </view>
 				<view class="tab-wrapper iconfont" :class="task.color">
-					<view class="item frequency bgcolor day" :class="[isFrequencySel('day')]">日</view>
-					<view class="item frequency bgcolor week" :class="[isFrequencySel('week')]">周</view>
-					<view class="item frequency bgcolor month" :class="[isFrequencySel('week')]">月</view>
+					<view class="item day">日</view>
+					<view class="item week">周</view>
+					<view class="item month">月</view>
+					<view class="frequency bgitem bgcolor" :class="[task.color, task.frequency]">日</view>
 				</view>
 			</view>
 			<view class="uni-form-item uni-column">
 				<view class="title">标准类型 : </view>
 				<view class="tab-wrapper iconfont" :class="task.color">
-					<view class="item type bgcolor task" :class="[isTypeSel('task')]">每周定量</view>
-					<view class="item type bgcolor count" :class="[isTypeSel('count')]">每周定次</view>
+					<view class="item task" :class="[isTypeSel('task')]">每周定量</view>
+					<view class="item count" :class="[isTypeSel('count')]">每周定次</view>
+					<view class="type bgcolor bgitem" :class="[task.color, task.type]">每周定量</view>
 				</view>
 			</view>
 			<view class="uni-form-item uni-column">
@@ -35,14 +37,39 @@
 					<view class="item bgcolor" :class="[isRepeatCountSel(6)]">6</view>
 				</view>
 			</view>
-		</view>
-		<view class="uni-form-item uni-column">
-			<view class="title">标准类型 : </view>
-			<view class="tab-wrapper iconfont" :class="task.color">
-				<view class="item type bgcolor task" :class="[isTypeSel('task')]">每周定量</view>
-				<view class="item type bgcolor count" :class="[isTypeSel('count')]">每周定次</view>
+			<view class="uni-form-item uni-column">
+				<view class="title">提醒 : </view>
+				<scroll-view class="remind-wrapper" :scroll-left="scrollLeft" scroll-x="true" @scroll="scroll">
+						<view class="item iconfont bdcolor" :class="[task.color]">B</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">C</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">B</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">C</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">B</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">C</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">B</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">C</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">B</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">C</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">B</view>
+						<view class="item iconfont bdcolor" :class="[task.color]">C</view>
+						<view class="add item bgcolor bdcolor" :class="[task.color]">+</view>
+				</scroll-view>
+			</view>
+			<view class="uni-form-item uni-column">
+				<view class="title">提醒 : </view>
+				<view class="time-wrapper">
+					<view class="start time bdcolor iconfont" :class="[task.color]">
+						<view class="time-title">开始时间</view>
+					</view>
+					<view class="time-line bgcolor" :class="[task.color]"></view>
+					<view class="end time bdcolor iconfont" :class="[task.color]">
+						<view class="time-title">结束时间</view>
+					</view>
+				</view>
 			</view>
 		</view>
+		
+		<!-- 顶部标签 -->
 		<view :class="['tab bdcolor', task.color]"></view>
 	</view>
 </template>
@@ -57,12 +84,23 @@
 		},
 		data() {
 			return {
-				task: {}
+				task: {},
+				scrollLeft: 10000,
+				old: {
+					scrollLeft: 10000
+				}
 			}
 		},
 		methods: {
-			isFrequencySel (frequency) {
-				if(this.task.frequency === frequency) return 'sel ' + this.task.color;
+			scroll: function(e) {
+				this.old.scrollTop = e.detail.scrollTop
+			},
+			goLeft: function(e) {
+				// 解决view层不同步的问题
+				this.scrollTop = this.old.scrollTop
+				this.$nextTick(function() {
+					this.scrollTop = 10000
+				});
 			},
 			isTypeSel (type) {
 				if(this.task.type === type) return 'sel ' + this.task.color;
@@ -73,7 +111,6 @@
 		},
 		mounted () {
 			 this.task = this.$store.state.task;
-			 console.log(task)
 		}
 	}
 </script>
@@ -134,47 +171,43 @@
 			}
 			.tab-wrapper {
 				position: relative;
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
 				height: 60rpx;
 				line-height: 60rpx;
 				border-radius: 30rpx;
 				border: 1rpx solid #8E8E8E;
 				.item {
-					position: absolute;
+					flex: 1;
 					height: 64rpx;
 					text-align: center;
-					border-radius: 30rpx;
+					background-color: rgba(0, 0 ,0 ,0);
 				}
-				.frequency {
-					width: 33.333%;
+				.bgitem {
+					height: 64rpx;
+					color: #fff;
+					text-align: center;
+					border-radius: 30rpx;
+					position: absolute;
+					&.frequency {width: 33.333%;}
+					&.type {width: 50%;}
+					top: -2rpx;
+					left: -2rpx;
 					&.day {
-						top: -2rpx;
-						left: -2rpx;
+						left: 0;
 					}
 					&.week {
-						position: static;
-						margin-left: 33.333%;
+						left: 50%;
+						margin-left: -16.6666667%;
 					}
 					&.month {
-						top: -1rpx;
-						right: -2rpx;
+						right: 0;
 					}
-				}
-				.type {
-					width: 50%;
-					&.task {
-						top: -2rpx;
-						left: -2rpx;
-					}
-					&.count {
-						top: -2rpx;
-						right: -2rpx;
-					}
-				}
-				.sel {
-					color: #fff;
 				}
 			}
 			.count-wrapper {
+				&.remind {justify-content: flex-start;}
 				margin: 0 40rpx;
 				display: flex;
 				justify-content: space-around;
@@ -186,6 +219,45 @@
 					&.sel {
 						color: #fff;
 					}
+				}
+			}
+			.remind-wrapper {
+				white-space: nowrap;
+				.item, .item {
+					display: inline-block;
+					width: 72rpx;
+					text-align: center;
+					line-height: 72rpx;
+					border: 1px solid;
+					border-radius: 36rpx;
+					margin-right: 30rpx;
+					&.add {
+						color: #fff;
+					}
+				}
+			}
+			.time-wrapper {
+				display: flex;
+				align-items: center;
+				height: 100rpx;
+				.time {
+					position: relative;
+					height: 60rpx;
+					width: 240rpx;
+					border: 2rpx solid;
+					border-radius: 30rpx;
+					.time-title {
+						width: 240rpx;
+						font-size: 28rpx;
+						color: #6f6f6f;
+						text-align: center;
+						position: absolute;
+						bottom: -46rpx;
+					}
+				}
+				.time-line {
+					flex: 1;
+					height: 2rpx;
 				}
 			}
 		}
