@@ -24,17 +24,17 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.info-wrapper.data-v-1f4f550c {
+.info-wrapper.data-v-2247419e {
   position: relative;
-  height: 1130rpx;
   margin: 0 40rpx 30rpx;
   border-radius: 10px;
   background-color: #fff;
   padding-top: 72rpx;
   padding: 72rpx 50rpx 0;
 }
-.info-wrapper .tab.data-v-1f4f550c {
+.info-wrapper .tab.data-v-2247419e {
     height: 0;
+    width: 100%;
     border-top: 12rpx solid #2AD181;
     border-top-left-radius: 12rpx;
     border-top-right-radius: 12rpx;
@@ -42,58 +42,66 @@
     top: 0;
     left: 0;
 }
-.info-wrapper .task-icon.data-v-1f4f550c {
-    width: 140rpx;
-    height: 140rpx;
-    line-height: 140rpx;
-    font-size: 56rpx;
-    color: #8A8A8A;
-    text-align: center;
-    border-radius: 20rpx;
-    background-color: #CDCDCD;
-    margin: 0 auto 60rpx;
-}
-.info-wrapper .task-form .uni-form-item.data-v-1f4f550c {
+.info-wrapper .task-form .uni-form-item.data-v-2247419e {
     margin-bottom: 40rpx;
 }
-.info-wrapper .task-form .title.data-v-1f4f550c {
+.info-wrapper .task-form .title.data-v-2247419e {
     font-size: 32rpx;
     margin-bottom: 12rpx;
 }
-.info-wrapper .task-form .uni-input.data-v-1f4f550c {
-    height: 60rpx;
+.info-wrapper .task-form .input-wrapper.data-v-2247419e {
+    position: relative;
     line-height: 60rpx;
     font-size: 30rpx;
     border-bottom: 1px solid #BBBBBB;
     padding: 0 10rpx;
 }
-.info-wrapper .task-form .uni-textarea.data-v-1f4f550c {
-    font-size: 30rpx;
-    margin-top: 28rpx;
-    padding: 10rpx;
-    border: 1px solid #BBBBBB;
-    border-radius: 20rpx;
+.info-wrapper .task-form .input-wrapper .uni-input.data-v-2247419e {
+      height: 60rpx;
+      width: 230rpx;
+      line-height: 60rpx;
 }
-.info-wrapper .task-form .color-list.data-v-1f4f550c {
+.info-wrapper .task-form .input-wrapper .unit.data-v-2247419e {
+      width: 76rpx;
+      color: #fff;
+      height: 54rpx;
+      line-height: 54rpx;
+      text-align: center;
+      border-radius: 20rpx;
+      position: absolute;
+      left: 230rpx;
+      top: 3rpx;
+}
+.info-wrapper .task-form .input-wrapper .frequency.data-v-2247419e {
+      position: absolute;
+      left: 312rpx;
+      top: 0;
+}
+.info-wrapper .task-form .frequency-wrapper.data-v-2247419e {
+    height: 60rpx;
+    line-height: 60rpx;
+    overflow: hidden;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
-    width: 100%;
-    height: 60rpx;
-    padding: 0 40rpx;
-    margin-bottom: 16rpx;
+    -webkit-justify-content: space-around;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
+    border-radius: 30rpx;
+    border: 1px solid #8E8E8E;
 }
-.info-wrapper .task-form .color-list .bgcolor.data-v-1f4f550c {
-      width: 32rpx;
-      height: 32rpx;
-      line-height: 32rpx;
-      border-radius: 50%;
-      margin-right: 80rpx;
-      background-color: #007AFF;
+.info-wrapper .task-form .frequency-wrapper .frequency.data-v-2247419e {
+      height: 60rpx;
+      width: 33.333%;
+      text-align: center;
+      border-radius: 30rpx;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+          -ms-flex: 1;
+              flex: 1;
+}
+.info-wrapper .task-form .frequency-wrapper .frequency.sel.data-v-2247419e {
+        color: #fff;
 }
 

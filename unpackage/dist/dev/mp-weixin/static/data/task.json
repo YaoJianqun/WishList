@@ -5,6 +5,8 @@
 		{
 			"id": "2019-01-01@001",
 			"name": "减肥餐",
+			"happy_coin": 0,
+			"declaration" : "",
 			"icon": "iconcutlery",
 			"color": "danger",
 			"target_count": "1",

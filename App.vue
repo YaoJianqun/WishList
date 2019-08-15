@@ -1,7 +1,25 @@
 <script>
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
+			console.log('App Launch');
+			uni.getStorageInfo({
+				success: function (res) {
+					if (res.keys.indexOf('taskData') < 0) {
+						uni.setStorage({
+							key: 'taskData',
+							data: JSON.stringify([]),
+							success: function () {
+								console.log('init taskData success');
+							}
+						})
+					}
+				},
+				fail: function () {
+					console.log('getStorageInfo fail', arguments)
+				},
+				complete: function () {console.log('init appData complete')}
+			})
+			
 		},
 		onShow: function() {
 			console.log('App Show')

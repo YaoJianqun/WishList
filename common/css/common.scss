@@ -18,6 +18,15 @@
 .iconfont.black {
 	color: $Black;
 }
+.iconfont.pink {
+	color: $Pink;
+}
+.iconfont.purple {
+	color: $Purple;
+}
+.iconfont.grey {
+	color: $Gray;
+}
 
 .bgcolor.success {
 	background-color: $Success!important;
@@ -47,30 +56,30 @@
 	background-color: $Black!important;
 } 
 
-.progress.success {
+.bdcolor.success {
 	border-color: $Success!important;
 }
-.progress.primary {
+.bdcolor.primary {
 	border-color: $Primary!important;
 }
-.progress.danger {
+.bdcolor.danger {
 	border-color: $Danger!important;
 }
-.progress.warning {
+.bdcolor.warning {
 	border-color: $Warning!important;
 }
-.progress.info {
+.bdcolor.info {
 	border-color: $Info!important;
 }
-.progress.pink {
+.bdcolor.pink {
 	border-color: $Pink!important;
 }
-.progress.purple {
+.bdcolor.purple {
 	border-color: $Purple!important;
 }
-.progress.grey {
+.bdcolor.grey {
 	border-color: $Gray!important;
 }
-.progress.black {
+.bdcolor.black {
 	border-color: $Black!important;
 } 

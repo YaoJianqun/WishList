@@ -28,7 +28,7 @@
 			this.taskList = [];
 		},
 		methods: {
-			getListData () {
+			/*getListData () {
 				uni.request({
 						url: '/static/data/task.json', 
 						success: (res) => {
@@ -37,7 +37,7 @@
 							}
 						}
 				});
-			}
+			}*/
 		}
 	}
 </script>

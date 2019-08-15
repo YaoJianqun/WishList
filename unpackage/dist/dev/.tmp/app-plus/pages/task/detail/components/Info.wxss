@@ -24,7 +24,7 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.info-wrapper.data-v-1f4f550c {
+.info-wrapper.data-v-2247419e {
   position: relative;
   height: 1130rpx;
   margin: 0 40rpx 30rpx;
@@ -33,7 +33,7 @@
   padding-top: 72rpx;
   padding: 72rpx 50rpx 0;
 }
-.info-wrapper .tab.data-v-1f4f550c {
+.info-wrapper .tab.data-v-2247419e {
     height: 0;
     border-top: 12rpx solid #2AD181;
     border-top-left-radius: 12rpx;
@@ -42,7 +42,7 @@
     top: 0;
     left: 0;
 }
-.info-wrapper .task-icon.data-v-1f4f550c {
+.info-wrapper .task-icon.data-v-2247419e {
     width: 140rpx;
     height: 140rpx;
     line-height: 140rpx;
@@ -53,28 +53,28 @@
     background-color: #CDCDCD;
     margin: 0 auto 60rpx;
 }
-.info-wrapper .task-form .uni-form-item.data-v-1f4f550c {
+.info-wrapper .task-form .uni-form-item.data-v-2247419e {
     margin-bottom: 40rpx;
 }
-.info-wrapper .task-form .title.data-v-1f4f550c {
+.info-wrapper .task-form .title.data-v-2247419e {
     font-size: 32rpx;
     margin-bottom: 12rpx;
 }
-.info-wrapper .task-form .uni-input.data-v-1f4f550c {
+.info-wrapper .task-form .uni-input.data-v-2247419e {
     height: 60rpx;
     line-height: 60rpx;
     font-size: 30rpx;
     border-bottom: 1px solid #BBBBBB;
     padding: 0 10rpx;
 }
-.info-wrapper .task-form .uni-textarea.data-v-1f4f550c {
+.info-wrapper .task-form .uni-textarea.data-v-2247419e {
     font-size: 30rpx;
     margin-top: 28rpx;
     padding: 10rpx;
     border: 1px solid #BBBBBB;
     border-radius: 20rpx;
 }
-.info-wrapper .task-form .color-list.data-v-1f4f550c {
+.info-wrapper .task-form .color-list.data-v-2247419e {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -88,7 +88,7 @@
     padding: 0 40rpx;
     margin-bottom: 16rpx;
 }
-.info-wrapper .task-form .color-list .bgcolor.data-v-1f4f550c {
+.info-wrapper .task-form .color-list .bgcolor.data-v-2247419e {
       width: 32rpx;
       height: 32rpx;
       line-height: 32rpx;

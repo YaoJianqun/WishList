@@ -1,7 +1,7 @@
 <template>
 	<view class="dock">
-		<view class="item bgcolor success" @click="">下一步</view>
-		<view class="item bgcolor danger">取消</view>
+		<view class="item bgcolor success" @click="handleNextClick">下一步</view>
+		<view class="item bgcolor danger" @click="handleCancelClick">取消</view>
 	</view>
 </template>
 
@@ -13,6 +13,9 @@
 				uni.navigateTo({
 					url: '../../../pages/task/detail/TaskDetail'
 				});
+			},
+			handleCancelClick () {
+				uni.navigateBack();
 			}
 		}
 	}

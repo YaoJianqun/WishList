@@ -1,65 +1,74 @@
 <template>
 	<view class="info-wrapper">
-		<view class="task-icon">+</view>
+		<view class="task-icon sel" v-if="!task.icon">+</view>
+		<view class="task-icon" v-if="task.icon">
+			<view class="icon iconfont" :class="[task.icon,task.color]"></view>
+		</view>
 		<view class="task-form">
-			<view class="uni-common-mt">
-				<view class="uni-form-item uni-column">
-					<view class="title">名称 : </view>
-					<input class="uni-input" placeholder="请输入任务名称" />
+			<view class="uni-form-item uni-column">
+				<view class="title">名称 : </view>
+				<input class="uni-input" type="text" placeholder="请输入任务名称" v-model="task.name"/>
+			</view>
+			<view class="uni-form-item uni-column">
+				<view class="title">快乐币 : </view>
+				<input class="uni-input" type="number" placeholder="请输入当前任务快乐币价值" v-model="happy_coin"/>
+			</view>
+			<view class="uni-form-item uni-column">
+				<view class="title">宣言 : </view>
+				<view class="uni-textarea">
+					<textarea maxlength="100" placeholder-style="color:#888888" placeholder="请输入任务宣言" v-model="task.declaration"/>
 				</view>
-				<view class="uni-form-item uni-column">
-					<view class="title">快乐币 : </view>
-					<input class="uni-input" placeholder="请输入当前任务快乐币价值" />
-				</view>
-				<view class="uni-form-item uni-column">
-					<view class="title">宣言 : </view>
-					<view class="uni-textarea">
-						<textarea maxlength="100" placeholder-style="color:#888888" placeholder="请输入任务宣言"/>
-					</view>
-				</view>
-				<view class="uni-form-item uni-column">
-					<view class="title">颜色 : </view>
-					<view class="color-list">
-						<view class="bgcolor warning"></view>
-						<view class="bgcolor parimary"></view>
-						<view class="bgcolor success"></view>
-						<view class="bgcolor danger"></view>
-						<view class="bgcolor pink"></view>
-					</view>
-					<view class="color-list">
-						<view class="bgcolor purple"></view>
-						<view class="bgcolor info"></view>
-						<view class="bgcolor grey"></view>
-						<view class="bgcolor black"></view>
-					</view>
+			</view>
+			<view class="uni-form-item uni-column">
+				<view class="title">颜色 : </view>
+				<view class="color-list">
+					<view :class="['task-color bgcolor warning',isColorSel('warning')]"></view>
+					<view :class="['task-color bgcolor parimary',isColorSel('parimary')]"></view>
+					<view :class="['task-color bgcolor parimary',isColorSel('success')]"></view>
+					<view :class="['task-color bgcolor danger',isColorSel('danger')]"></view>
+					<view :class="['task-color bgcolor pink',isColorSel('pink')]"></view>
+					<view :class="['task-color bgcolor purple',isColorSel('purple')]"></view>
+					<view :class="['task-color bgcolor info',isColorSel('info')]"></view>
+					<view :class="['task-color bgcolor grey',isColorSel('grey')]"></view>
+					<view :class="['task-color bgcolor black',isColorSel('black')]"></view>
 				</view>
 			</view>
 		</view>
-		<view class="tab"></view>
+		<view :class="['tab bdcolor', task.color]"></view>
 	</view>
 </template>
 
 <script>
 	import uniIcon from '@/components/uni-icon/uni-icon.vue'
+	import Task from '@/common/model/Task'
 	
 	export default {
 		name: 'BaseInfo',
 		components: {
 			uniIcon
 		},
-		props: {
-			
-		},
 		data() {
 			return {
-				
+				task: {}
 			}
 		},
 		computed: {
-			
+			happy_coin: {
+				get: function () {
+					return this.task.happy_coin == 0 ? '' : this.task.happy_coin
+				},
+				set: function (newValue) {
+					this.task.happy_coin = newValue;
+				}
+			}
 		},
 		methods: {
-			
+			isColorSel (color) {
+				if(this.task.color === color) return 'sel';
+			}
+		},
+		mounted () {
+			 this.task = this.$store.state.task;
 		}
 	}
 </script>
@@ -67,7 +76,6 @@
 <style lang="scss" scoped>
 	.info-wrapper {
 		position: relative;
-		height: 1130rpx;
 		margin: 0 40rpx 30rpx;
 		border-radius: 10px;
 		background-color: #fff;
@@ -75,6 +83,7 @@
 		padding: 72rpx 50rpx 0;
 		.tab {
 			height: 0;
+			width: 100%;
 			border-top: 12rpx solid #2AD181;
 			border-top-left-radius: 12rpx;
 			border-top-right-radius: 12rpx;
@@ -87,11 +96,13 @@
 			height: 140rpx;
 			line-height: 140rpx;
 			font-size: 56rpx;
-			color: #8A8A8A;
 			text-align: center;
 			border-radius: 20rpx;
-			background-color: #CDCDCD;
 			margin: 0 auto 60rpx;
+			&.sel {
+				color: #8A8A8A;
+				background-color: #CDCDCD;
+			}
 		}
 		.task-form {
 			.uni-form-item {
@@ -118,18 +129,23 @@
 			}
 			.color-list {
 				display: flex;
+				flex-wrap: wrap;
 				align-items: center;
 				width: 100%;
-				height: 60rpx;
 				padding: 0 40rpx;
+				margin-top: 32rpx;
 				margin-bottom: 16rpx;
-				.bgcolor {
+				.task-color {
 					width: 32rpx;
 					height: 32rpx;
 					line-height: 32rpx;
 					border-radius: 50%;
 					margin-right: 80rpx;
+					margin-bottom: 30rpx;
 					background-color: #007AFF;
+					&.sel {
+						border: 1px solid #101010;
+					}
 				}
 			}
 		}

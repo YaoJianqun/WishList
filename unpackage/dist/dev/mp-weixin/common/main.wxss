@@ -42,6 +42,15 @@
 .iconfont.black {
   color: #101010;
 }
+.iconfont.pink {
+  color: #FF546B;
+}
+.iconfont.purple {
+  color: #5756CE;
+}
+.iconfont.grey {
+  color: #8E8E92;
+}
 .bgcolor.success {
   background-color: #2AD181 !important;
 }
@@ -69,31 +78,31 @@
 .bgcolor.black {
   background-color: #101010 !important;
 }
-.progress.success {
+.bdcolor.success {
   border-color: #2AD181 !important;
 }
-.progress.primary {
+.bdcolor.primary {
   border-color: #007AFF !important;
 }
-.progress.danger {
+.bdcolor.danger {
   border-color: #EA3447 !important;
 }
-.progress.warning {
+.bdcolor.warning {
   border-color: #FFA323 !important;
 }
-.progress.info {
+.bdcolor.info {
   border-color: #5bc0de !important;
 }
-.progress.pink {
+.bdcolor.pink {
   border-color: #FF546B !important;
 }
-.progress.purple {
+.bdcolor.purple {
   border-color: #5756CE !important;
 }
-.progress.grey {
+.bdcolor.grey {
   border-color: #8E8E92 !important;
 }
-.progress.black {
+.bdcolor.black {
   border-color: #101010 !important;
 }
 @font-face {

@@ -16,8 +16,8 @@
 			<label class="radio" style="margin-left: auto;transform:scale(1.28);">
 				<radio value="r1" :checked="isCompleted(task)" @click="handleTaskCompletedClick"/>
 			</label>
-			<view class="progress" :class="[task.color, {'completed': isCompleted(task)}]" :style="{width:taskProgress(task)}"></view>
-			<view class="progress bgprogress" :class="task.color"></view>
+			<view class="progress bdcolor" :class="[task.color, {'completed': isCompleted(task)}]" :style="{width:taskProgress(task)}"></view>
+			<view class="progress bgprogress bdcolor" :class="task.color"></view>
 			
 		</view>
 	</scroll-view>

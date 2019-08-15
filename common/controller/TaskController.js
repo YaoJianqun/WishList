@@ -1,11 +1,9 @@
-let TaskController = [];
-
-TaskController.prototype.setTask (task) {
+let setTask = function (task) {
 	this.push(task.id);
 	this[task.id] = task;
 }
 
-TaskController.prototype.delTask (task_id) {
+let delTask = function (task_id) {
 	let task_index = this.indexOf(task_id);
 	if (task_index > -1) {
 		this.splice(task_index, 1);
@@ -13,4 +11,17 @@ TaskController.prototype.delTask (task_id) {
 	}
 }
 
-export default TaskController;
+let importTask = function (taskData) {
+	taskData.setTask = setTask;
+	taskData.delTask = delTask;
+	return taskData;
+}
+
+export {setTask, delTask, importTask};
+
+/*export delTask;
+
+export function importTask (taskData) {
+	taskData.setTask = setTask;
+	taskData.delTask = delTask;
+}*/

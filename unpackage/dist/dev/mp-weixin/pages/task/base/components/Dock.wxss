@@ -24,7 +24,7 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.dock.data-v-ea59c55e {
+.dock.data-v-d4132694 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -40,7 +40,7 @@
   height: 80rpx;
   margin: 0 40rpx;
 }
-.dock .item.data-v-ea59c55e {
+.dock .item.data-v-d4132694 {
     width: 320rpx;
     height: 80rpx;
     line-height: 80rpx;

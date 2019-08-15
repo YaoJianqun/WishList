@@ -1,1 +1,1 @@
-<view class="dock data-v-ea59c55e"><view data-event-opts="{{[['tap',[['',['$event']]]]]}}" class="item bgcolor success data-v-ea59c55e" bindtap="__e">下一步</view><view class="item bgcolor danger data-v-ea59c55e">取消</view></view>
+<view class="dock data-v-d4132694"><view data-event-opts="{{[['tap',[['handleNextClick',['$event']]]]]}}" class="item bgcolor success data-v-d4132694" bindtap="__e">下一步</view><view data-event-opts="{{[['tap',[['handleCancelClick',['$event']]]]]}}" class="item bgcolor danger data-v-d4132694" bindtap="__e">取消</view></view>

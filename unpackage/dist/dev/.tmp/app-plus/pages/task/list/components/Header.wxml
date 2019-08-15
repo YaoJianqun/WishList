@@ -1,1 +1,1 @@
-<view class="header-wrapper data-v-5d534d90"><view class="title data-v-5d534d90">任务</view><view data-event-opts="{{[['tap',[['handleAddTaskClick',['$event']]]]]}}" class="button-add data-v-5d534d90" bindtap="__e">+</view></view>
+<view class="header-wrapper data-v-be393946"><view class="title data-v-be393946">任务</view><view data-event-opts="{{[['tap',[['handleAddTaskClick',['$event']]]]]}}" class="button-add data-v-be393946" bindtap="__e">+</view></view>

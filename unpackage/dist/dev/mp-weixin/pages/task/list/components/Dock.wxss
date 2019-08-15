@@ -24,7 +24,7 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.footer-wrapper.data-v-7165de9e {
+.footer-wrapper.data-v-7c892e03 {
   background-color: #EEE;
   height: 51px;
   width: 100%;
@@ -33,7 +33,7 @@
   position: fixed;
   bottom: 0;
 }
-.footer-wrapper .dock-bar.data-v-7165de9e {
+.footer-wrapper .dock-bar.data-v-7c892e03 {
     height: 51px;
     margin: 0 15px;
     border-radius: 10px;
@@ -43,16 +43,16 @@
     display: -ms-flexbox;
     display: flex;
 }
-.footer-wrapper .dock-bar .dock-item.data-v-7165de9e {
+.footer-wrapper .dock-bar .dock-item.data-v-7c892e03 {
       width: 25%;
       text-align: center;
       line-height: 51px;
 }
-.footer-wrapper .dock-bar .dock-item .icon.iconfont.data-v-7165de9e {
+.footer-wrapper .dock-bar .dock-item .icon.iconfont.data-v-7c892e03 {
         font-size: 28px;
         color: #A2A2A2;
 }
-.footer-wrapper .dock-bar .dock-item .icon.iconfont.checked.data-v-7165de9e {
+.footer-wrapper .dock-bar .dock-item .icon.iconfont.checked.data-v-7c892e03 {
         color: #101010;
 }
 

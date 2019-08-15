@@ -7,6 +7,9 @@
 </template>
 
 <script>
+	
+	import Task from '@/common/model/Task'	
+	
 	import BaseHeader from './components/Header';
 	import BaseInfo from './components/Info';
 	import BaseDock from './components/Dock';
@@ -22,10 +25,25 @@
 		},
 		data() {
 			return {
-				
+				taskId: '',
+				task: new Task()
 			}
 		},
-		mounted () {
+		onLoad (taskId) {
+			if (taskId.hasOwnProperty('taskId')) {
+				this.taskId = taskId;
+				uni.getStorage({
+					key: 'taskData',
+					success (res) {
+						this.$store.dispatch('changeTask', res.data[newValue])
+					},
+					fail () {
+						console.log('init taskBase fail')
+					}
+				})
+			}
+		},
+		methods: {
 			
 		}
 	}

@@ -12,5 +12,6 @@
     "backgroundColorTop": "#EEEEEE",
     "backgroundColorBottom": "#EEEEEE"
   },
-  "usingComponents": {}
+  "usingComponents": {},
+  "sitemapLocation": "sitemap91.json"
 }
