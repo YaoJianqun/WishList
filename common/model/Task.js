@@ -12,7 +12,7 @@ class Task {
 		//任务宣言
 		this.declaration = obj.declaration ? obj.declaration : '';
 		//任务图标
-		this.icon = obj.icon ? obj.icon : '';
+		this.icon = obj.icon ? obj.icon : 'iconcutlery';
 		//任务颜色
 		this.color = obj.color ? obj.color : 'warning';
 		//任务目标数量

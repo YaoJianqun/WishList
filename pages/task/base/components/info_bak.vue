@@ -1,11 +1,11 @@
 <template>
 	<view class="info-wrapper">
 		<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scroll="scroll">
+			<view class="task-icon sel" v-if="!task.icon" @click="openPopup">+</view>
+			<view class="task-icon" v-if="task.icon" @click="selIcon">
+				<view class="icon iconfont" :class="[task.icon,task.color]"></view>
+			</view>
 			<view class="task-form">
-				<view class="task-icon sel" v-if="!task.icon" @click="selIcon">+</view>
-				<view class="task-icon" v-if="task.icon" @click="selIcon">
-					<view class="icon iconfont" :class="[task.icon,task.color]"></view>
-				</view>
 				<view class="uni-form-item uni-column">
 					<view class="title">名称 : </view>
 					<input class="uni-input" type="text" placeholder="请输入任务名称" v-model="task.name"/>
@@ -22,22 +22,22 @@
 				</view>
 				<view class="uni-form-item uni-column">
 					<view class="title">颜色 : </view>
-					<view class="color-list" @click="handleColorClick($event)">
-						<view :class="['task-color bgcolor warning',isColorSel('warning')]" data-color="warning"></view>
-						<view :class="['task-color bgcolor parimary',isColorSel('primary')]" data-color="primary"></view>
-						<view :class="['task-color bgcolor success',isColorSel('success')]" data-color="success"></view>
-						<view :class="['task-color bgcolor danger',isColorSel('danger')]" data-color="danger"></view>
-						<view :class="['task-color bgcolor pink',isColorSel('pink')]" data-color="pink"></view>
-						<view :class="['task-color bgcolor purple',isColorSel('purple')]" data-color="purple"></view>
-						<view :class="['task-color bgcolor info',isColorSel('info')]" data-color="info"></view>
-						<view :class="['task-color bgcolor grey',isColorSel('grey')]" data-color="grey"></view>
-						<view :class="['task-color bgcolor black',isColorSel('black')]" data-color="black"></view>
+					<view class="color-list" @click="handleColorClick">
+						<view :class="['task-color bgcolor warning',isColorSel('warning')]"></view>
+						<view :class="['task-color bgcolor parimary',isColorSel('parimary')]"></view>
+						<view :class="['task-color bgcolor parimary',isColorSel('success')]"></view>
+						<view :class="['task-color bgcolor danger',isColorSel('danger')]"></view>
+						<view :class="['task-color bgcolor pink',isColorSel('pink')]"></view>
+						<view :class="['task-color bgcolor purple',isColorSel('purple')]"></view>
+						<view :class="['task-color bgcolor info',isColorSel('info')]"></view>
+						<view :class="['task-color bgcolor grey',isColorSel('grey')]"></view>
+						<view :class="['task-color bgcolor black',isColorSel('black')]"></view>
 					</view>
 				</view>
 			</view>
 		</scroll-view>
 		<view :class="['tab bdcolor', task.color]"></view>
-		<uni-popup ref="popup" custom type="bottom">
+		<uni-popup ref="popup" custom="true" type="bottom">
 			
 			<view class="icon-wrapper">
 				<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-iconList" @scroll="scroll">
@@ -96,11 +96,8 @@
 			}
 		},
 		methods: {
-			handleColorClick (e) {
-				let color = e.target.dataset.color;
-				if (color) {
-					this.task.color = color;
-				};
+			handleColorClick () {
+				console.log(arguments)
 			},
 			handleIconClick (icon) {
 				this.task.icon = icon;
@@ -124,7 +121,7 @@
 				if(this.task.color === color) return 'sel';
 			}
 		},
-		created () {
+		mounted () {
 			 this.task = this.$store.state.task;
 		}
 	}
@@ -151,7 +148,7 @@
 				text-align: center;
 				border: 2rpx solid #BBB;
 				border-radius: 20rpx;
-				margin: 62rpx auto 60rpx;
+				margin: 72rpx auto 60rpx;
 				&.sel {
 					color: #8A8A8A;
 					background-color: #CDCDCD;
@@ -161,9 +158,9 @@
 				}
 			}
 			.task-form {
-				padding: 40rpx 40rpx;
+				padding: 40rpx;
 				.uni-form-item {
-					margin-bottom: 30rpx;
+					margin-bottom: 40rpx;
 				}
 				.title {
 					font-size: 32rpx;
@@ -193,7 +190,6 @@
 					margin-top: 32rpx;
 					margin-bottom: 16rpx;
 					.task-color {
-						box-sizing: border-box;
 						width: 32rpx;
 						height: 32rpx;
 						line-height: 32rpx;
@@ -218,6 +214,8 @@
 			top: 0;
 			left: 0;
 		}
+		
+			
 		.icon-wrapper {
 			margin: 40rpx 40rpx;
 			border-radius: 20rpx;
