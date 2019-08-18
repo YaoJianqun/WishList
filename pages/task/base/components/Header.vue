@@ -3,8 +3,9 @@
 		<view class="back" @click="handleBackClick">
 			<uni-icon type="back" color="#101010" size="24" />
 		</view>
+		<uni-icon type="back" color="#101010" size="24" />
 		<view class="title">
-			新任务
+			新任务<uni-icon type="back" color="#101010" size="24" />
 		</view>
 	</view>
 </template>
@@ -27,8 +28,8 @@
 
 <style lang="scss" scoped>
 	.header-wrapper {
-		display: flex;
-		align-items: center;
+		/*display: flex;
+		align-items: center;*/
 		height: 100rpx;
 		font-size: 38rpx;
 		margin: 118rpx 40rpx 30rpx;

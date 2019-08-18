@@ -18,10 +18,3 @@ let importTask = function (taskData) {
 }
 
 export {setTask, delTask, importTask};
-
-/*export delTask;
-
-export function importTask (taskData) {
-	taskData.setTask = setTask;
-	taskData.delTask = delTask;
-}*/

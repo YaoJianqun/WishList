@@ -8,16 +8,24 @@
 </template>
 
 <script>
+	
+	import { addTaskData } from '@/common/controller/TaskDataController.js'
+	
 	export default {
 		name: 'BaseDock',
 		methods: {
 			handleNextClick () {
-				uni.navigateTo({
-					url: '../../../pages/task/detail/TaskDetail'
-				});
+				let temp_task = this.$store.state.task;
+				addTaskData(temp_task);
+				this.redirectTo();
 			},
 			handleCancelClick () {
-				
+				this.redirectTo();
+			},
+			redirectTo () {
+				uni.redirectTo({
+					url: '../../../pages/task/list/TaskList'
+				})
 			}
 		}
 	}

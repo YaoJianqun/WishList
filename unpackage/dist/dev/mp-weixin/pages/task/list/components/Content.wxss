@@ -24,13 +24,13 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.scroll-Y.data-v-2062bcd9 {
+.scroll-Y.data-v-0362fb44 {
   background-color: #EEE;
   position: absolute;
   top: 238rpx;
   bottom: 200rpx;
 }
-.scroll-Y .task-item.data-v-2062bcd9 {
+.scroll-Y .task-item.data-v-0362fb44 {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -46,27 +46,27 @@
     margin: 0 30rpx 30rpx;
     background-color: #fff;
 }
-.scroll-Y .task-item .iconfont.data-v-2062bcd9 {
+.scroll-Y .task-item .iconfont.data-v-0362fb44 {
       width: 80rpx;
       height: 180rpx;
       line-height: 180rpx;
       font-size: 80rpx;
 }
-.scroll-Y .task-item .task-info.data-v-2062bcd9 {
+.scroll-Y .task-item .task-info.data-v-0362fb44 {
       height: 130rpx;
       margin-left: 60rpx;
 }
-.scroll-Y .task-item .task-info .title.data-v-2062bcd9 {
+.scroll-Y .task-item .task-info .title.data-v-0362fb44 {
         line-height: 70rpx;
         font-weight: bold;
         font-size: 40rpx;
 }
-.scroll-Y .task-item .task-info .info.data-v-2062bcd9 {
+.scroll-Y .task-item .task-info .info.data-v-0362fb44 {
         line-height: 50rpx;
         font-size: 32rpx;
         color: #9B9B9B;
 }
-.progress.data-v-2062bcd9 {
+.progress.data-v-0362fb44 {
   height: 0rpx;
   border-bottom: 12rpx solid #13CDBB;
   border-bottom-left-radius: 12rpx;
@@ -75,10 +75,10 @@
   bottom: 0;
   left: 0;
 }
-.progress.completed.data-v-2062bcd9, .bgprogress.data-v-2062bcd9 {
+.progress.completed.data-v-0362fb44, .bgprogress.data-v-0362fb44 {
   border-bottom-right-radius: 12rpx;
 }
-.bgprogress.data-v-2062bcd9 {
+.bgprogress.data-v-0362fb44 {
   width: 100%;
   z-index: 1;
   opacity: 0.2;
