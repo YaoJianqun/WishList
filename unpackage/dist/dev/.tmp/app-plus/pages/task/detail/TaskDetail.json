@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "detail-header": "/pages/task/detail/components/Header",
-    "detail-info": "/pages/task/detail/components/Info",
-    "detail-dock": "/pages/task/detail/components/Dock"
-  }
-}
