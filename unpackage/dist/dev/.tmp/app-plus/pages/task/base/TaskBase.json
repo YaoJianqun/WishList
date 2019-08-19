@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "base-header": "/pages/task/base/components/Header",
-    "base-info": "/pages/task/base/components/Info",
-    "base-dock": "/pages/task/base/components/Dock"
-  }
-}

@@ -1,2 +1,0 @@
-setCssToHead(["@charset \x22UTF-8\x22;\n.",[1],"wrapper.",[1],"data-v-7cc92108 { overflow-y: hidden; }\n",],undefined,{path:"./pages/task/base/TaskBase.wxss"})();
-document.dispatchEvent(new CustomEvent("generateFuncReady", { detail: { generateFunc: $gwx('./pages/task/base/TaskBase.wxml') } }));
