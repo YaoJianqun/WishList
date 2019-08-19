@@ -75,7 +75,6 @@
 			return {
 				iconList,
 				oldIcon: '',
-				//task: {},
 				scrollTop: 0,
 				old: {
 					scrollTop: 0
@@ -88,6 +87,7 @@
 			}),
 			happy_coin: {
 				get: function () {
+					if (!this.task) return '';
 					return this.task.happy_coin == 0 ? '' : this.task.happy_coin
 				},
 				set: function (newValue) {
@@ -120,13 +120,8 @@
 				this.old.scrollTop = e.detail.scrollTop
 			},
 			isColorSel (color) {
-				if(this.task.color === color) return 'sel';
+				if(this.task && this.task.color === color) return 'sel';
 			}
-		},
-		created () {
-			/* this.task = this.$store.state.task;
-			 console.log(this.$store.state.task)
-			 console.log(this.$store.state)*/
 		}
 	}
 </script>

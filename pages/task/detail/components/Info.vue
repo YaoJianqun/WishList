@@ -90,7 +90,7 @@
 											<view class="flex">
 												<view class="item bgcolor"
 															:data-repeat_count="item + 1" 
-															:class="[task.repeat_count == item ? RepeatCountSel : '']"
+															:class="[task.repeat_count == (item+1) ? RepeatCountSel : '']"
 															v-for="item in 6"
 															:key="item"
 															v-text="item + 1"
@@ -104,7 +104,7 @@
 												<view class="flex">
 													<view class="item bgcolor"
 																:data-repeat_count="item + 1" 
-																:class="[task.repeat_count == item ? RepeatCountSel : '']"
+																:class="[task.repeat_count == (item+1) ? RepeatCountSel : '']"
 																v-for="item in 31"
 																:key="item"
 																v-text="item + 1"
