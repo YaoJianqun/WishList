@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 <view class="header-wrapper data-v-e2707260"><view data-event-opts="{{[['tap',[['handleBackClick',['$event']]]]]}}" class="back data-v-e2707260" bindtap="__e"><view class="icon iconfont iconleft data-v-e2707260"></view></view><view class="title data-v-e2707260">新任务</view></view>
+=======
+<view class="header-wrapper data-v-6e54b1eb"><view data-event-opts="{{[['tap',[['handleBackClick',['$event']]]]]}}" class="back data-v-6e54b1eb" bindtap="__e"><uni-icon vue-id="1" type="back" color="#101010" size="24" class="data-v-6e54b1eb" bind:__l="__l"></uni-icon></view><view class="title data-v-6e54b1eb">新任务</view></view>
+>>>>>>> f081864795cfce5f3cc2724ff3ef4b9092721aa1

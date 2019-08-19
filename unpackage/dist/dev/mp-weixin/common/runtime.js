@@ -104,11 +104,19 @@
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
+<<<<<<< HEAD
 /******/ 		var cssChunks = {"pages/task/list/components/Content":1,"pages/task/list/components/Dock":1,"pages/task/list/components/Header":1,"pages/task/base/components/Info":1,"pages/task/base/components/Dock":1,"pages/task/base/components/Header":1,"pages/task/detail/components/Info":1,"pages/task/detail/components/Dock":1,"pages/task/detail/components/Header":1,"components/uni-popup/uni-popup":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
 /******/ 				var href = "" + ({"pages/task/list/components/Content":"pages/task/list/components/Content","pages/task/list/components/Dock":"pages/task/list/components/Dock","pages/task/list/components/Header":"pages/task/list/components/Header","pages/task/base/components/Info":"pages/task/base/components/Info","pages/task/base/components/Dock":"pages/task/base/components/Dock","pages/task/base/components/Header":"pages/task/base/components/Header","pages/task/detail/components/Info":"pages/task/detail/components/Info","pages/task/detail/components/Dock":"pages/task/detail/components/Dock","pages/task/detail/components/Header":"pages/task/detail/components/Header","components/uni-popup/uni-popup":"components/uni-popup/uni-popup"}[chunkId]||chunkId) + ".wxss";
+=======
+/******/ 		var cssChunks = {"pages/task/list/components/Content":1,"pages/task/list/components/Dock":1,"pages/task/list/components/Header":1,"pages/task/base/components/Info":1,"pages/task/base/components/Dock":1,"pages/task/base/components/Header":1,"pages/task/detail/components/Dock":1,"pages/task/detail/components/Info":1,"pages/task/detail/components/Header":1,"components/uni-icon/uni-icon":1,"components/uni-popup/uni-popup":1};
+/******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
+/******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
+/******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
+/******/ 				var href = "" + ({"pages/task/list/components/Content":"pages/task/list/components/Content","pages/task/list/components/Dock":"pages/task/list/components/Dock","pages/task/list/components/Header":"pages/task/list/components/Header","pages/task/base/components/Info":"pages/task/base/components/Info","pages/task/base/components/Dock":"pages/task/base/components/Dock","pages/task/base/components/Header":"pages/task/base/components/Header","pages/task/detail/components/Dock":"pages/task/detail/components/Dock","pages/task/detail/components/Info":"pages/task/detail/components/Info","pages/task/detail/components/Header":"pages/task/detail/components/Header","components/uni-icon/uni-icon":"components/uni-icon/uni-icon","components/uni-popup/uni-popup":"components/uni-popup/uni-popup"}[chunkId]||chunkId) + ".wxss";
+>>>>>>> f081864795cfce5f3cc2724ff3ef4b9092721aa1
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
