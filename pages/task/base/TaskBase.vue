@@ -35,7 +35,7 @@
 				uni.getStorage({
 					key: 'taskData',
 					success (res) {
-						this.$store.dispatch('changeTask', res.data[newValue])
+						this.$store.dispatch('changeTask', res.data[newValue]) 
 					},
 					fail () {
 						console.log('init taskBase fail')
