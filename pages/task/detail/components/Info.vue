@@ -47,26 +47,28 @@
 				
 				<!-- 频率 ration -->
 				<transition name="compoent">
-				<view class="uni-form-item uni-column" v-if="typeIsTask">
+				<view class="uni-form-item uni-column" v-if="typeIsTask" @click="handleRationClick($event)">
 					<view class="title">{{showWeek ? '星期 : ' : '时期 : '}}</view>
 					<scroll-view class="circle-wrapper ration" :scroll-left="scrollTop" scroll-x="true" @scroll="scroll">
 							<transition name="week">
-								<view v-if="showWeek">
+								<view v-if="showWeek" class="inline-block">
 									<view class="item iconfont bdcolor"
-												:class="[task.color]"
+												:class="[task.color, {'bgcolor sel': task.ration.indexOf(item.key) > -1}]"
 												v-for="item in weekList"
 												:key="item.key+'-ration-week'"
+												:data-ration="item.key"
 									>
-										{{item.value}}
+										{{item.key}}
 									</view>
 								</view>
 							</transition>
 							<transition name="month">
-								<view v-if="!showWeek">
+								<view v-if="!showWeek" class="inline-block">
 									<view class="item iconfont bdcolor"
-												:class="[task.color]"
+												:class="[task.color, {'bgcolor sel': task.ration.indexOf(item.key) > -1}]"
 												v-for="item in monthList"
 												:key="item.key+'-ration-month'"
+												:data-ration="item.key"
 									>
 										{{item.value}}
 									</view>
@@ -81,25 +83,37 @@
 					<view class="uni-form-item uni-column" v-if="!typeIsTask">
 						<view class="title">每{{frequencyList[task.frequency].value + ' ' + task.repeat_count}} 次 : </view>
 						<view class=" iconfont" :class="task.color" @click="handleRepeatCountClick">
-							<view class="count-wrapper" v-if="task.frequency === 'week'">
-								<view class="item bgcolor"
-											:data-repeat_count="item" 
-											:class="[task.repeat_count == item ? RepeatCountSel : '']"
-											v-for="item in 6"
-											:key="item + '-repeat_count'"
-											v-text="item"
-								>
-								</view>
-							</view>
-							<view class="count-wrapper" v-if="task.frequency === 'month'">
-								<view class="item bgcolor"
-											:data-repeat_count="item" 
-											:class="[task.repeat_count == item ? RepeatCountSel : '']"
-											v-for="item in 31"
-											:key="item + '-repeat_count'"
-											v-text="item"
-								>
-								</view>
+							<view class="count-wrapper">
+								<scroll-view class="circle-wrapper ration" :scroll-left="scrollTop" scroll-x="true" @scroll="scroll">
+									<transition name="week">
+										<view class="inline-block" v-if="task.frequency !== 'month'">
+											<view class="flex">
+												<view class="item bgcolor"
+															:data-repeat_count="item" 
+															:class="[task.repeat_count == item ? RepeatCountSel : '']"
+															v-for="item in 6"
+															:key="item + '-repeat_count'"
+															v-text="item"
+												>
+												</view>
+											</view>
+										</view>
+									</transition>
+									<transition name="month">
+											<view class="inline-block" v-if="task.frequency === 'month'">
+												<view class="flex">
+													<view class="item bgcolor"
+																:data-repeat_count="item" 
+																:class="[task.repeat_count == item ? RepeatCountSel : '']"
+																v-for="item in 31"
+																:key="item + '-repeat_count'"
+																v-text="item"
+													>
+													</view>
+												</view>
+											</view>
+									</transition>
+								</scroll-view>
 							</view>
 						</view>
 					</view>
@@ -107,19 +121,16 @@
 				<view class="uni-form-item uni-column">
 					<view class="title">提醒 : </view>
 					<scroll-view class="circle-wrapper" :scroll-left="scrollRight" scroll-x="true" @scroll="scroll">
-							<view class="item iconfont bdcolor" :class="[task.color]">B</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">C</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">B</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">C</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">B</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">C</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">B</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">C</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">B</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">C</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">B</view>
-							<view class="item iconfont bdcolor" :class="[task.color]">C</view>
+							<picker mode="time" start="00:00" end="24:00" @change="bindRemindChangeChange">
+							<view class="item iconfont bdcolor" 
+										:class="[task.color]"
+										v-for="item in task.remind"
+										:key="item"
+										v-text="item"
+							>
+							</view>
 							<view class="add item bgcolor bdcolor" :class="[task.color]">+</view>
+							</picker>
 					</scroll-view>
 				</view>
 				<view class="uni-form-item uni-column">
@@ -230,6 +241,17 @@
 			}
 		},
 		methods: {
+			bindRemindChangeChange (e) {
+				if (e.type === 'change' && this.task.remind.indexOf(e.detail.value) < 0)
+					this.task.remind.push(e.detail.value);
+			},
+			handleRationClick (e) {
+				let temp_ration = e.target.dataset.ration;
+				if (temp_ration && this.task.ration.indexOf(temp_ration) < 0)
+					this.task.ration.push(temp_ration);
+				else
+					this.task.ration.splice(this.task.ration.indexOf(temp_ration), 1);
+			},
 			handleRepeatCountClick (e) {
 				let temp_count = e.target.dataset.repeat_count;
 				if (temp_count) this.task.repeat_count = temp_count;
@@ -367,23 +389,28 @@
 					}
 				}
 				.count-wrapper {
-					&.remind {justify-content: flex-start;}
 					margin: 0 40rpx;
-					display: flex;
-					justify-content: space-around;
-					.item {
-						width: 72rpx;
-						text-align: center;
-						line-height: 72rpx;
-						border-radius: 36rpx;
-						&.sel {
-							color: #fff;
+					height: 72rpx;
+					white-space: nowrap;
+					.flex {
+						display: flex;
+						justify-content: space-around;
+						.item {
+							width: 72rpx;
+							text-align: center;
+							line-height: 72rpx;
+							border-radius: 36rpx;
+							&.sel {
+								color: #fff;
+							}
 						}
 					}
 				}
 				.circle-wrapper {
 					white-space: nowrap;
-					font-size: 28rpx;
+					uni-picker {
+						display: inline-block;
+					}
 					.item {
 						display: inline-block;
 						width: 72rpx;
@@ -392,7 +419,13 @@
 						border: 1px solid;
 						border-radius: 41rpx;
 						margin-right: 20rpx;
+						
+						font-size: 24rpx;
+						&.sel {
+							color: #fff;
+						}
 						&.add {
+							font-size: 36rpx;
 							color: #fff;
 						}
 					}
@@ -477,6 +510,10 @@
 				
 			}
 		}
+	}
+	
+	.inline-block {
+		display: inline-block;
 	}
 
 	/* 动态组件动画 */
