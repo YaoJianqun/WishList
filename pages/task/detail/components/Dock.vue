@@ -9,14 +9,15 @@
 
 <script>
 	
-	import { addTaskData } from '@/common/controller/TaskDataController.js'
+	import { addOrUpdateTaskData } from '@/common/controller/TaskDataController.js'
 	
 	export default {
 		name: 'BaseDock',
 		methods: {
 			handleNextClick () {
 				let temp_task = this.$store.state.task;
-				addTaskData(temp_task);
+				addOrUpdateTaskData(temp_task);
+				let taskData = uni.getStorageSync('taskData');
 				this.redirectTo();
 			},
 			handleCancelClick () {

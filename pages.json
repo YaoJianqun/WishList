@@ -1,8 +1,26 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{"path": "pages/task/list/TaskList"},
-		{"path": "pages/task/base/TaskBase"},
-		{"path": "pages/task/detail/TaskDetail"}
+		{
+			"path": "pages/task/base/TaskBase",
+			"style": {
+				"disableScroll":true
+			},
+			"app-plus":{
+				// 将回弹属性关掉
+				"bounce":"none"
+			}
+		},
+		{
+			"path": "pages/task/detail/TaskDetail",
+			"style": {
+				"disableScroll":true
+			},
+			"app-plus":{
+				// 将回弹属性关掉
+				"bounce":"none"
+			}
+		}
 	],
 	"globalStyle": {
 		"navigationStyle": "custom",

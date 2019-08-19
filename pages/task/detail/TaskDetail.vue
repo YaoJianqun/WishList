@@ -24,9 +24,6 @@
 			return {
 				
 			}
-		},
-		mounted () {
-			
 		}
 	}
 </script>

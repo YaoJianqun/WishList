@@ -38,7 +38,6 @@
 		</scroll-view>
 		<view :class="['tab bdcolor', task.color]"></view>
 		<uni-popup ref="popup" custom type="bottom">
-			
 			<view class="icon-wrapper">
 				<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-iconList" @scroll="scroll">
 					<view class="iconList">
@@ -56,12 +55,12 @@
 					<button type="primary" class="operate-item bgcolor danger" @click="changeIcon(false)">取消</button>
 				</view>
 			</view>
-			
 		</uni-popup>
 	</view>
 </template>
 
 <script>
+	import { mapState } from 'vuex'
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	
 	import iconList from '@/static/data/IconList'
@@ -76,7 +75,7 @@
 			return {
 				iconList,
 				oldIcon: '',
-				task: {},
+				//task: {},
 				scrollTop: 0,
 				old: {
 					scrollTop: 0
@@ -84,6 +83,9 @@
 			}
 		},
 		computed: {
+			...mapState({
+				task: state => state.task
+			}),
 			happy_coin: {
 				get: function () {
 					return this.task.happy_coin == 0 ? '' : this.task.happy_coin
@@ -115,7 +117,6 @@
 				this.$refs.popup.close()
 			},
 			scroll: function(e) {
-				console.log(e)
 				this.old.scrollTop = e.detail.scrollTop
 			},
 			isColorSel (color) {
@@ -123,7 +124,9 @@
 			}
 		},
 		created () {
-			 this.task = this.$store.state.task;
+			/* this.task = this.$store.state.task;
+			 console.log(this.$store.state.task)
+			 console.log(this.$store.state)*/
 		}
 	}
 </script>

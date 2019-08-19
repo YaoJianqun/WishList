@@ -25,23 +25,25 @@
 		},
 		data() {
 			return {
-				taskId: '',
-				task: new Task()
+				taskId: ''
 			}
 		},
-		onLoad (taskId) {
-			if (taskId.hasOwnProperty('taskId')) {
-				this.taskId = taskId;
+		onLoad (params) {
+			if (params.hasOwnProperty('taskId')) {
+				this.taskId = params.taskId;
+				let _this = this;
 				uni.getStorage({
 					key: 'taskData',
 					success (res) {
-						let temp_task = res.data[taskId];
-						this.$store.dispatch('changeTask', res.data[taskId])
+						let temp_task = res.data.taskObj[this.taskId];
+						_this.$store.dispatch('changeTask', res.data.taskObj[this.taskId])
 					},
 					fail () {
 						console.log('init taskBase fail')
 					}
 				})
+			} else {
+				this.$store.dispatch('changeTask', new Task());
 			}
 		},
 		methods: {

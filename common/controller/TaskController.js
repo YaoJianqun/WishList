@@ -1,12 +1,14 @@
 let setTask = function (task) {
-	this.push(task.id);
-	this[task.id] = task;
+	if (this.taskIdArray.indexOf(task.id) < 0) {
+		this.taskIdArray.push(task.id);
+	}
+	this.taskObj[task.id] = task;
 }
 
 let delTask = function (task_id) {
-	let task_index = this.indexOf(task_id);
+	let task_index = this.taskIdArray.indexOf(task_id);
 	if (task_index > -1) {
-		this.splice(task_index, 1);
+		this.taskIdArray.splice(task_index, 1);
 		delete this[task_id];
 	}
 }

@@ -20,14 +20,14 @@
 						<view class="item" 
 									:class="item.key" 
 									:data-frequency="item.key"
-									:key="item.key"
+									:key="getKey(item.key)"
 									v-for="item in frequencyList"
 						>{{item.value}}</view>
 						<view class="frequency bgitem bgcolor" :class="[task.color, task.frequency]" v-text="frequency"></view>
 					</view>
 				</view>
 				
-				<!-- 频率 type -->
+				<!-- 标准类型 type -->
 				<transition name="compoent">
 					<view class="uni-form-item uni-column" v-if="frequencyIsNotDay">
 						<view class="title">标准类型 : </view>
@@ -36,9 +36,9 @@
 										:class="item.key"
 										:data-type="item.key"
 										v-for="item in typeList"
-										:key="item.key"
+										:key="getKey(item.key)"
 							>
-								每{{frequencyList[task.frequency].value + item.value}}
+								每{{frequency + item.value}}
 							</view>
 							<view class="type bgcolor bgitem" :class="[task.color, task.type]" v-text="type"></view>
 						</view>
@@ -55,10 +55,10 @@
 									<view class="item iconfont bdcolor"
 												:class="[task.color, {'bgcolor sel': task.ration.indexOf(item.key) > -1}]"
 												v-for="item in weekList"
-												:key="item.key+'-ration-week'"
+												:key="getKey(item.key)"
 												:data-ration="item.key"
 									>
-										{{item.key}}
+										{{item.value}}
 									</view>
 								</view>
 							</transition>
@@ -67,7 +67,7 @@
 									<view class="item iconfont bdcolor"
 												:class="[task.color, {'bgcolor sel': task.ration.indexOf(item.key) > -1}]"
 												v-for="item in monthList"
-												:key="item.key+'-ration-month'"
+												:key="getKey(item.key)"
 												:data-ration="item.key"
 									>
 										{{item.value}}
@@ -81,7 +81,7 @@
 				<!-- 频率 repeat_count -->
 				<transition name="compoent">
 					<view class="uni-form-item uni-column" v-if="!typeIsTask">
-						<view class="title">每{{frequencyList[task.frequency].value + ' ' + task.repeat_count}} 次 : </view>
+						<view class="title">每{{frequency + ' ' + task.repeat_count}} 次 : </view>
 						<view class=" iconfont" :class="task.color" @click="handleRepeatCountClick">
 							<view class="count-wrapper">
 								<scroll-view class="circle-wrapper ration" :scroll-left="scrollTop" scroll-x="true" @scroll="scroll">
@@ -89,11 +89,11 @@
 										<view class="inline-block" v-if="task.frequency !== 'month'">
 											<view class="flex">
 												<view class="item bgcolor"
-															:data-repeat_count="item" 
+															:data-repeat_count="item + 1" 
 															:class="[task.repeat_count == item ? RepeatCountSel : '']"
 															v-for="item in 6"
-															:key="item + '-repeat_count'"
-															v-text="item"
+															:key="item"
+															v-text="item + 1"
 												>
 												</view>
 											</view>
@@ -103,11 +103,11 @@
 											<view class="inline-block" v-if="task.frequency === 'month'">
 												<view class="flex">
 													<view class="item bgcolor"
-																:data-repeat_count="item" 
+																:data-repeat_count="item + 1" 
 																:class="[task.repeat_count == item ? RepeatCountSel : '']"
 																v-for="item in 31"
-																:key="item + '-repeat_count'"
-																v-text="item"
+																:key="item"
+																v-text="item + 1"
 													>
 													</view>
 												</view>
@@ -125,7 +125,7 @@
 							<view class="item iconfont bdcolor" 
 										:class="[task.color]"
 										v-for="item in task.remind"
-										:key="item"
+										:key="getKey(item)"
 										v-text="item"
 							>
 							</view>
@@ -158,8 +158,9 @@
 					<view class="unitList">
 						<view class="unit-item icon iconfont bdcolor"
 									v-for="unit of unitList"
-									:key="unit"
-									@click="handleUnitClick(unit)"
+									:data-unit="unit"
+									:key="getKey(unit)"
+									@click="handleUnitClick($event)"
 									:class="[unit === task.unit ? task.color : '']"
 									v-text="unit"
 						>
@@ -177,7 +178,8 @@
 </template>
 
 <script>
-	import uniPopup from "@/components/uni-popup/uni-popup.vue"
+	import uniPopup from '@/components/uni-popup/uni-popup.vue'
+	import getUUID from '@/common/util/UUID'
 	
 	import { unitList, frequencyList, typeList, weekList, monthList} from '@/static/data/TaskEnum'
 	
@@ -249,7 +251,7 @@
 				let temp_ration = e.target.dataset.ration;
 				if (temp_ration && this.task.ration.indexOf(temp_ration) < 0)
 					this.task.ration.push(temp_ration);
-				else
+				else if (temp_ration)
 					this.task.ration.splice(this.task.ration.indexOf(temp_ration), 1);
 			},
 			handleRepeatCountClick (e) {
@@ -264,8 +266,9 @@
 				let temp_type = e.target.dataset.type;
 				if (temp_type) this.task.type = temp_type;
 			},
-			handleUnitClick (unit) {
-				this.task.unit = unit;
+			handleUnitClick (e) {
+				let temp_unit = e.target.dataset.unit;
+				if (temp_unit) this.task.unit = temp_unit;
 			},
 			changeUnit (isChange) {
 				if (!isChange) this.task.unit = this.oldUnit;
@@ -277,6 +280,9 @@
 			},
 			closePopup(){
 				this.$refs.popup.close()
+			},
+			getKey (id) {
+				return (id + '-' + getUUID(4, 16));
 			},
 			scroll: function(e) {
 				this.old.scrollTop = e.detail.scrollTop

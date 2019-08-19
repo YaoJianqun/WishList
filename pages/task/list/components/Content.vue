@@ -4,9 +4,11 @@
 		<view class="task-item"
 					v-for="task of taskList"
 					:key="task.id"
-					@touchstart=""
-					@touchmove=""
-					@touchend=""
+					:data-taskid="task.id"
+					@click="handleTaskClick(task.id)"
+					@touchstart.prevent="handleTouchStart"
+					@touchmove="handleTouchMove"
+					@touchend="handleTouchEnd"
 		>
 			<view class="icon iconfont" :class="[task.icon,task.color]"></view>
 			<view class="task-info">
@@ -24,27 +26,88 @@
 </template>
 
 <script>
+	
+	import { mapState } from 'vuex'
+	
 	export default {
 		name: 'TaskListContent',
-		props: {
-			taskList: Array
-		},
 		data() {
 			return {
+				screenWidth: uni.getSystemInfoSync().windowWidth,
+				touchStatus: false,
+				timer: null,
+				startX: 0,
 				scrollTop: 0,
 				old: {
 					scrollTop: 0
 				}
-				
 			}
 		},
 		computed: {
-			
+			...mapState({
+				taskData: state => state.taskData
+			}),
+			taskList () {
+				let temp_taskList = [];
+				if (this.taskData.taskIdArray)
+					for (let id of this.taskData.taskIdArray) {
+						temp_taskList.push(this.taskData.taskObj[id]);
+					}
+				return temp_taskList;
+			}
 		},
 		methods: {
-			scroll: function(e) {
-				console.log(e)
-				this.old.scrollTop = e.detail.scrollTop
+			handleTouchStart (e) {
+			  this.touchStatus = true;
+				this.startX = e.touches[0].clientX;
+			},
+			handleTouchMove (e) {
+			  if (this.touchStatus) {
+			    if (this.timer) {
+			      clearTimeout(this.timer)
+			    }
+			    this.timer = setTimeout(() => {
+			      const touchX = e.touches[0].clientX;
+						this.moveProgress.bind(this)(e);
+			    }, 16)
+			  }
+			},
+			moveProgress (e) {
+				const touchX = e.touches[0].clientX;
+				const movePercent = (touchX - this.startX) / (this.screenWidth - 30) * 0.8;
+				//获取当前任务
+				let taskid = e.currentTarget.dataset.taskid;
+				let task = this.taskData.taskObj[taskid];
+				
+				//获取任务目标数量
+				let target_count = task.target_count;
+				//计算单步移动数量
+				let onStepCount = Math.floor(target_count / 40);
+				//真实移动数量
+				let moveCount = onStepCount;
+				
+				
+				if (onStepCount < Math.floor(task.target_count * movePercent))
+					moveCount = Math.floor(task.target_count * movePercent) - (Math.floor(task.target_count * movePercent)%onStepCount)
+				if (movePercent < 0)
+					moveCount = Math.floor(task.target_count * movePercent) + (Math.abs(Math.floor(task.target_count * movePercent))%onStepCount) 
+					
+				
+				task.completed_count += moveCount;
+				if (task.completed_count > task.target_count)
+					task.completed_count = task.target_count
+				if (task.completed_count < 0)
+					task.completed_count = 0
+				this.startX = touchX;
+			},
+			handleTouchEnd () {
+			  this.touchStatus = false
+			},
+			handleTaskClick (taskId) {
+				
+				uni.navigateTo({
+					url: '../../../pages/task/base/TaskBase?taskId=' + taskId
+				});
 			},
 			handleTaskCompletedClick () {
 				
@@ -62,6 +125,9 @@
 				}
 				completed *= 100;
 				return completed + '%';
+			},
+			scroll: function(e) {
+				this.old.scrollTop = e.detail.scrollTop
 			}
 		}
 	}

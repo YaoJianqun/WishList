@@ -1,7 +1,7 @@
 <template>
 	<view class="wrapper">
 		<task-list-header></task-list-header>
-		<task-list-content :taskList="taskList"></task-list-content>
+		<task-list-content></task-list-content>
 		<task-list-dock></task-list-dock>
 	</view>
 </template>
@@ -18,26 +18,15 @@
 			TaskListContent,
 			TaskListDock
 		},
-		data() {
-			return {
-				taskList: []
-			}
-		},
-		mounted () {
-			//this.getListData()
-			this.taskList = [];
+		onLoad () {
+			let taskData = this.getListData();
+			this.$store.dispatch('changeTaskData', taskData);
 		},
 		methods: {
-			/*getListData () {
-				uni.request({
-						url: '/static/data/task.json', 
-						success: (res) => {
-							if(res.data.code.toLocaleUpperCase() === 'SUCCESS'){
-								this.taskList = res.data.result;
-							}
-						}
-				});
-			}*/
+			getListData () {
+				let taskData = uni.getStorageSync('taskData');
+				return taskData;
+			}
 		}
 	}
 </script>

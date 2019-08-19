@@ -1,13 +1,12 @@
 <script>
 	export default {
 		onLaunch: function() {
-			console.log('App Launch');
 			uni.getStorageInfo({
 				success: function (res) {
 					if (res.keys.indexOf('taskData') < 0) {
 						uni.setStorage({
 							key: 'taskData',
-							data: JSON.stringify([]),
+							data: {'taskIdArray': [], 'taskObj': {}},
 							success: function () {
 								console.log('init taskData success');
 							}
