@@ -166,16 +166,13 @@
 </template>
 
 <script>
-	import uniIcon from '@/components/uni-icon/uni-icon.vue'
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	
-	//import unitList from '@/static/data/UnitList'
 	import { unitList, frequencyList, typeList, weekList, monthList} from '@/static/data/TaskEnum'
 	
 	export default {
 		name: 'BaseInfo',
 		components: {
-			uniIcon,
 			uniPopup
 		},
 		data() {

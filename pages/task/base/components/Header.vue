@@ -1,7 +1,7 @@
 <template>
 	<view class="header-wrapper">
 		<view class="back" @click="handleBackClick">
-			<uni-icon type="back" color="#101010" size="24" />
+			<view class="icon iconfont iconleft"></view>
 		</view>
 		<view class="title">
 			新任务
@@ -10,13 +10,9 @@
 </template>
 
 <script>
-	import uniIcon from '@/components/uni-icon/uni-icon.vue'
 	
 	export default {
 		name: 'BaseHeader',
-		components: {
-			uniIcon
-		},
 		methods: {
 			handleBackClick () {
 				uni.navigateBack();
@@ -35,10 +31,17 @@
 		padding: 0 40rpx;
 		background-color: #fff;
 		border-radius: 20rpx;
+		.iconleft {
+			width: 100rpx;
+			height: 100rpx;
+			line-height: 100rpx;
+			font-size: 38rpx;
+			color: #101010;
+		}
 		.title {
 			width: 100%;
 			line-height: 100rpx;
-			margin-left: -48rpx;
+			margin-left: -50rpx;
 			text-align: center;
 		}
 	}

@@ -40,10 +40,17 @@
   background-color: #fff;
   border-radius: 20rpx;
 }
+.header-wrapper .iconleft.data-v-13fbc150 {
+    width: 100rpx;
+    height: 100rpx;
+    line-height: 100rpx;
+    font-size: 38rpx;
+    color: #101010;
+}
 .header-wrapper .title.data-v-13fbc150 {
     width: 100%;
     line-height: 100rpx;
-    margin-left: -48rpx;
+    margin-left: -50rpx;
     text-align: center;
 }
 
