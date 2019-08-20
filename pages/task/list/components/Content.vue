@@ -119,6 +119,8 @@
 			},
 			editTask (e) {
 				
+				if (!this.touchStatus) return;
+				
 				let taskid = e.currentTarget.dataset.taskid;
 				let task = this.taskData.taskObj[taskid];
 				
@@ -136,6 +138,8 @@
 			},
 			moveProgress (e) {
 				
+				if (!this.touchStatus) return;
+				
 				//获取当前位置
 				const touchX = e.touches[0].clientX;
 				//计算滚动条比例
@@ -147,28 +151,28 @@
 				//获取任务目标数量
 				let target_count = task.target_count;
 				//计算单步移动数量
-				let min_step = target_count * 0.05;
-				min_step > 5 ? min_step = (min_step - min_step%5) : '';
-				//计算单步移动数量
-				let onStepCount = Math.floor(target_count / min_step);
-				//真实移动数量
-				let moveCount = onStepCount;
+				let oneStepCount = Math.floor(target_count * 0.05);
+				oneStepCount > 5 ? oneStepCount = (oneStepCount - oneStepCount%5) : '';
 				
+				//真实移动数量
+				let moveCount = oneStepCount;
 				
 				//依据移动比例计算真实移动数量
 				let temp_moveCount = Math.floor(task.target_count * movePercent);
 				
-				if (onStepCount < Math.abs(temp_moveCount))
+				if (oneStepCount < Math.abs(temp_moveCount)) {
 					if (temp_moveCount > 0)
-						moveCount = temp_moveCount - (temp_moveCount%onStepCount);
+						moveCount = temp_moveCount - (temp_moveCount%oneStepCount);
 					else
-						moveCount = temp_moveCount + (Math.abs(temp_moveCount)%onStepCount);
-				else
-					//if (temp_moveCount < 0) moveCount *= -1;
-					moveCount = 0;
+						moveCount = temp_moveCount + (Math.abs(temp_moveCount)%oneStepCount);
+				} else {
+					moveCount = oneStepCount;
+					if (temp_moveCount < 0)
+							moveCount *= -1;
+				}
 				
 				//排除
-				if (moveCount >= target_count * 0.1) {
+				if (moveCount >= target_count * 0.2) {
 					this.handleTouchEnd();
 					return;
 				};
