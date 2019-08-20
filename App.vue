@@ -15,6 +15,13 @@
 				},
 				fail: function () {
 					console.log('getStorageInfo fail', arguments)
+					uni.setStorage({
+						key: 'taskData',
+						data: {'taskIdArray': [], 'taskObj': {}},
+						success: function () {
+							console.log('init taskData success');
+						}
+					})
 				},
 				complete: function () {console.log('init appData complete')}
 			})

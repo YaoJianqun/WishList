@@ -7,12 +7,19 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
+	
 	import TaskListHeader from './components/Header'
 	import TaskListContent from './components/Content'
 	import TaskListDock from './components/Dock'
 	
 	export default {
 		name: 'TaskList',
+		computed: {
+			...mapState({
+				taskData: state => state.taskData
+			})
+		},
 		components: {
 			TaskListHeader,
 			TaskListContent,
@@ -27,6 +34,16 @@
 				let taskData = uni.getStorageSync('taskData');
 				return taskData;
 			}
+		},
+		onHide () {
+			let taskData = this.taskData;
+			uni.setStorage({
+				key: 'taskData',
+				data: taskData,
+				success: function () {
+					console.log('save taskData success');
+				}
+			})
 		}
 	}
 </script>

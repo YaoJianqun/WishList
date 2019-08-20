@@ -1,11 +1,11 @@
 <template>
-	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll">
+	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll" @click="handleScrollClick">
 		
 		<view class="task-item"
 					v-for="task of taskList"
 					:key="task.id"
 					:data-taskid="task.id"
-					@click="handleTaskClick(task.id)"
+					:style="menuMoveTask == task.id ? itemMoveStyle : ''"
 					@touchstart.prevent="handleTouchStart"
 					@touchmove="handleTouchMove"
 					@touchend="handleTouchEnd"
@@ -20,15 +20,14 @@
 			</label>
 			<view class="progress bdcolor" :class="[task.color, {'completed': isCompleted(task)}]" :style="{width:taskProgress(task)}"></view>
 			<view class="progress bgprogress bdcolor" :class="task.color"></view>
-			<view class="task-menu task-edit bgcolor warning">
+			<view class="task-menu task-edit bgcolor warning" @click.stop="handleTaskClick(task.id)">
 				<view class="menu-icon icon iconfont iconpencil"></view>
 				<view class="menu-title">编辑</view>
 			</view>
-			<view class="task-menu task-delete bgcolor danger">
+			<view class="task-menu task-delete bgcolor danger" :style="menuMoveTask == task.id ? deleteMoveStyle : ''">
 				<view class="menu-icon icon iconfont icontrash"></view>
 				<view class="menu-title">删除</view>
 			</view>
-			
 		</view>
 	</scroll-view>
 </template>
@@ -41,11 +40,17 @@
 		name: 'TaskListContent',
 		data() {
 			return {
-				screenWidth: uni.getSystemInfoSync().windowWidth,
-				touchStatus: false,
-				timer: null,
-				scrollDirection: null,
 				startX: 0,
+				startLeftX: 0,
+				startRightX: 0,
+				timer: null,
+				menuMoveTask: '',
+				menuState: false,
+				menuMoveCount: 0,
+				touchStatus: false,
+				scrollDirection: '',
+				screenWidth: uni.getSystemInfoSync().windowWidth,
+				
 				scrollTop: 0,
 				old: {
 					scrollTop: 0
@@ -53,6 +58,14 @@
 			}
 		},
 		computed: {
+			itemMoveStyle () {
+				return 'right:' + Math.abs(this.menuMoveCount) + 'rpx;';
+			},
+			deleteMoveStyle () {
+				let moveCount = -210;
+				if (this.menuMoveCount < -210) moveCount = this.menuMoveCount;
+				return 'right:' + moveCount + 'rpx;'; 
+			},
 			...mapState({
 				taskData: state => state.taskData
 			}),
@@ -66,39 +79,67 @@
 			}
 		},
 		methods: {
+			handleScrollClick () {
+					this.menuMoveCount = 0;
+					this.menuMoveTask = '';
+					this.menuState = false;
+			},
 			handleTouchStart (e) {
 			  this.touchStatus = true;
 				this.startX = e.touches[0].clientX;
 			},
 			handleTouchMove (e) {
+				//判断是否为滑动状态
 			  if (this.touchStatus) {
+					//判断是否存在timer，如果有清除未执行timer
 			    if (this.timer) {
 			      clearTimeout(this.timer)
 			    }
+					//创建timer延迟16ms执行
 			    this.timer = setTimeout(() => {
+						//获取当前用户滑动位置
 			      const touchX = e.touches[0].clientX;
-						if (touchX !== this.startX && this.scrollDirection == null) {
-							if (touchX > this.startX)
-								this.scrollDirection = true;
-							else
-								this.scrollDirection = false;
+						//判断如果当前滑动位置与起始位置不同，且滑动方向未空对象
+						if (touchX !== this.startX && this.scrollDirection === ''){
+							//依据起始位置与当前位置大小判断滑动方向
+							touchX > this.startX ? this.scrollDirection = 'left' : this.scrollDirection = 'right';
+							if (this.scrollDirection === 'left') {
+								this.startLeftX = this.startX;
+							} else {
+								this.menuState = true;
+								this.startRightX = this.startX;
+							}
 						}
 						
-						if (this.scrollDirection)
-							this.moveProgress.bind(this)(e);
-						else
-							this.editTask.bind(this)(e);
-							
-						return;
+						//依据滑动方向与右滑菜单判断执行函数 moveProgress:为改变进度条大小 editTask:为弹出菜单
+						this.scrollDirection === 'left'&&!this.menuState ? this.moveProgress(e) : this.editTask(e);
+						
 			    }, 16)
 			  }
 			},
 			editTask (e) {
-				console.log('edittask')
+				
+				let taskid = e.currentTarget.dataset.taskid;
+				let task = this.taskData.taskObj[taskid];
+				
+				const touchX = e.touches[0].clientX;
+				let defferenceCount = touchX - this.startRightX;
+				if (defferenceCount > 0) defferenceCount = 0;
+				let movePercent = defferenceCount / 140;
+				
+				let temp_moveCount = Math.floor(420 * movePercent);
+				
+				if (temp_moveCount < -420) temp_moveCount = -420;
+				
+				this.menuMoveTask = taskid;
+				this.menuMoveCount = temp_moveCount;
 			},
 			moveProgress (e) {
+				
+				//获取当前位置
 				const touchX = e.touches[0].clientX;
-				const movePercent = (touchX - this.startX) / (this.screenWidth - 30);
+				//计算滚动条比例
+				let movePercent = (touchX - this.startLeftX) / this.screenWidth;
 				//获取当前任务
 				let taskid = e.currentTarget.dataset.taskid;
 				let task = this.taskData.taskObj[taskid];
@@ -106,29 +147,56 @@
 				//获取任务目标数量
 				let target_count = task.target_count;
 				//计算单步移动数量
-				let onStepCount = Math.floor(target_count / 50);
+				let min_step = target_count * 0.05;
+				min_step > 5 ? min_step = (min_step - min_step%5) : '';
+				//计算单步移动数量
+				let onStepCount = Math.floor(target_count / min_step);
 				//真实移动数量
 				let moveCount = onStepCount;
 				
+				
+				//依据移动比例计算真实移动数量
 				let temp_moveCount = Math.floor(task.target_count * movePercent);
-				if (onStepCount < temp_moveCount)
-					moveCount = temp_moveCount - (temp_moveCount%onStepCount)
-				if (movePercent < 0) {
-					moveCount = temp_moveCount + (Math.abs(temp_moveCount)%onStepCount)
-					if (moveCount === 0) moveCount = -onStepCount;
-				}
-					
+				
+				if (onStepCount < Math.abs(temp_moveCount))
+					if (temp_moveCount > 0)
+						moveCount = temp_moveCount - (temp_moveCount%onStepCount);
+					else
+						moveCount = temp_moveCount + (Math.abs(temp_moveCount)%onStepCount);
+				else
+					//if (temp_moveCount < 0) moveCount *= -1;
+					moveCount = 0;
+				
+				//排除
+				if (moveCount >= target_count * 0.1) {
+					this.handleTouchEnd();
+					return;
+				};
+				
 				task.completed_count += moveCount;
+				
 				if (task.completed_count > task.target_count)
 					task.completed_count = task.target_count
-				if (task.completed_count < 0)
+				else if (task.completed_count < 0)
 					task.completed_count = 0
-				this.startX = touchX;
+				
+				this.startLeftX = touchX;
 			},
 			handleTouchEnd () {
+				
+				if (this.timer) {
+				  clearTimeout(this.timer);
+				}
+				
 			  this.touchStatus = false;
-				this.startX = 0;
-				this.scrollDirection = null;
+				this.startRightX = this.startLeftX = this.startX = 0;
+				if (this.scrollDirection === 'right')
+					this.menuMoveCount < -300 ? this.menuMoveCount = -420 : this.menuMoveCount = 0;
+					
+				this.scrollDirection = '';
+				
+				if (this.menuMoveCount === -420) this.menuState = true;
+				if (this.menuMoveCount === 0) this.menuState = false;
 			},
 			handleTaskClick (taskId) {
 				uni.navigateTo({
@@ -198,7 +266,8 @@
 					color: #9B9B9B;
 				}
 			}
-			right: 420rpx;
+			right: 0rpx;
+			transition: right 0.4s;
 			.task-menu {
 				position: absolute;
 				right: -210rpx;
@@ -225,7 +294,7 @@
 				}
 				&.task-delete {
 					z-index: 1;
-					right: -420rpx;
+					transition: right 0.4s;
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 let setTask = function (task) {
-	if (this.taskIdArray.indexOf(task.id) < 0) {
+	if (this.taskIdArray && this.taskIdArray.indexOf(task.id) < 0) {
 		this.taskIdArray.push(task.id);
 	}
 	this.taskObj[task.id] = task;
