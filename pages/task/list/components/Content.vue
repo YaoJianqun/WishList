@@ -114,7 +114,7 @@
 						//依据滑动方向与右滑菜单判断执行函数 moveProgress:为改变进度条大小 editTask:为弹出菜单
 						this.scrollDirection === 'left'&&!this.menuState ? this.moveProgress(e) : this.editTask(e);
 						
-			    }, 16)
+			    }, 8)
 			  }
 			},
 			editTask (e) {
@@ -143,7 +143,7 @@
 				//获取当前位置
 				const touchX = e.touches[0].clientX;
 				//计算滚动条比例
-				let movePercent = (touchX - this.startLeftX) / this.screenWidth;
+				let movePercent = (touchX - this.startLeftX) / (this.screenWidth * 0.5);
 				//获取当前任务
 				let taskid = e.currentTarget.dataset.taskid;
 				let task = this.taskData.taskObj[taskid];
@@ -151,28 +151,18 @@
 				//获取任务目标数量
 				let target_count = task.target_count;
 				//计算单步移动数量
-				let oneStepCount = Math.floor(target_count * 0.05);
-				oneStepCount > 5 ? oneStepCount = (oneStepCount - oneStepCount%5) : '';
+				let oneStepCount = this.computeStepCount(target_count);
+				let CountPercent = oneStepCount / target_count;
+				
+				if (Math.abs(movePercent) < CountPercent) return;
+				
+				movePercent > 0 ? oneStepCount : oneStepCount *= -1;
 				
 				//真实移动数量
 				let moveCount = oneStepCount;
 				
-				//依据移动比例计算真实移动数量
-				let temp_moveCount = Math.floor(task.target_count * movePercent);
-				
-				if (oneStepCount < Math.abs(temp_moveCount)) {
-					if (temp_moveCount > 0)
-						moveCount = temp_moveCount - (temp_moveCount%oneStepCount);
-					else
-						moveCount = temp_moveCount + (Math.abs(temp_moveCount)%oneStepCount);
-				} else {
-					moveCount = oneStepCount;
-					if (temp_moveCount < 0)
-							moveCount *= -1;
-				}
-				
-				//排除
-				if (moveCount >= target_count * 0.2) {
+				//排除未执行touchEnd时意外触发touchMove的情况
+				if (movePercent > 0.2 && target_count > 10) {
 					this.handleTouchEnd();
 					return;
 				};
@@ -201,6 +191,25 @@
 				
 				if (this.menuMoveCount === -420) this.menuState = true;
 				if (this.menuMoveCount === 0) this.menuState = false;
+			},
+			computeStepCount (totalCount) {
+				
+				let oneStepCount = 1;
+				
+				let temp_stepCount = totalCount * 0.05;
+				
+				if (totalCount >= 10000) {
+					oneStepCount = temp_stepCount - temp_stepCount%50
+				} else if (totalCount >= 1000 && totalCount < 10000) {
+					oneStepCount = 100
+				} else if (totalCount >= 200 && totalCount < 1000) {
+					oneStepCount = 50
+				} else if (totalCount > 20) {
+					oneStepCount = 10;
+				}
+				
+				return oneStepCount;
+				
 			},
 			handleTaskClick (taskId) {
 				uni.navigateTo({

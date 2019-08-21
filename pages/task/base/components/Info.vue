@@ -61,9 +61,9 @@
 
 <script>
 	import { mapState } from 'vuex'
-	import uniPopup from "@/components/uni-popup/uni-popup.vue"
+	import uniPopup from "@/components/uni-popup/uni-popup"
 	
-	import iconList from '@/static/data/IconList'
+	import { iconList } from '@/static/data/TaskEnum'
 	import Task from '@/common/model/Task'
 	
 	export default {

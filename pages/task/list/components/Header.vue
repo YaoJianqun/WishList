@@ -1,7 +1,12 @@
 <template>
 	<view class="header-wrapper">
-		<view class="title">任务</view>
-		<view class="button-add" @click="handleAddTaskClick">+</view>
+		<view class="title">
+			任务
+			<view class="icon iconfont iconcaret-down menu-down"></view>
+		</view>
+		<view class="button-add" @click="handleAddTaskClick">
+			<view class="icon iconfont iconplus1 add-icon"></view>
+		</view>
 	</view>
 </template>
 
@@ -29,18 +34,29 @@
 		.title {
 			margin-left: 40rpx;
 			line-height: 120rpx;
+			.menu-down {
+				display: inline;
+				font-size: 48rpx;
+				margin-left: 10rpx;
+				margin-bottom: 30rpx;
+			}
 		}
 		.button-add {
 			width: 68rpx;
 			height: 68rpx;
-			line-height: 56rpx;
-			border-radius: 40rpx;
+			line-height: 68rpx;
+			border-radius: 34rpx;
 			margin-top: 26rpx;
 			margin-right: 60rpx;
 			background-color: #fff;
-			text-align: center;
 			color: #393939;
-			text-decoration: none;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			.add-icon {
+				font-size: 42rpx;
+				font-weight: bold;
+			}
 		}
 	}
 </style>

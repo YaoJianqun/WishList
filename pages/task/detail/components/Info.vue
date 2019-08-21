@@ -58,7 +58,7 @@
 												:key="getKey(item.key)"
 												:data-ration="item.key"
 									>
-										{{item.value}}
+										{{item.value}} 
 									</view>
 								</view>
 							</transition>

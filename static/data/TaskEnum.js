@@ -17,19 +17,19 @@ typeList['count'] = {key: 'count',value: '定次'};
 
 //时期星期枚举
 let weekList = [
-	{key: '1',value: '周一'}, {key: '2',value: '周二'},
-	{key: '3',value: '周三'}, {key: '4',value: '周四'},
-	{key: '5',value: '周五'}, {key: '6',value: '周六'},
-	{key: '7',value: '周日'}
+	{key: 1,value: '周一'}, {key: 2,value: '周二'},
+	{key: 3,value: '周三'}, {key: 4,value: '周四'},
+	{key: 5,value: '周五'}, {key: 6,value: '周六'},
+	{key: 7,value: '周日'}
 ];
 
-weekList['w1'] = {key: '1',value: '周一'};
-weekList['w2'] = {key: '2',value: '周二'};
-weekList['w3'] = {key: '3',value: '周三'};
-weekList['w4'] = {key: '4',value: '周四'};
-weekList['w5'] = {key: '5',value: '周五'};
-weekList['w6'] = {key: '6',value: '周六'};
-weekList['w7'] = {key: '7',value: '周日'};
+weekList['w1'] = {key: 1,value: '周一'};
+weekList['w2'] = {key: 2,value: '周二'};
+weekList['w3'] = {key: 3,value: '周三'};
+weekList['w4'] = {key: 4,value: '周四'};
+weekList['w5'] = {key: 5,value: '周五'};
+weekList['w6'] = {key: 6,value: '周六'};
+weekList['w7'] = {key: 7,value: '周日'};
 
 //时期月枚举
 let monthList = [

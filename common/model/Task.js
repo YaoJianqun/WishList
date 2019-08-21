@@ -24,7 +24,7 @@ class Task {
 		//频率
 		this.frequency = obj.frequency ? obj.frequency : 'day';
 		//任务定量执行时间
-		this.ration = obj.ration ? obj.ration : [];
+		this.ration = obj.ration ? obj.ration : [1,2,3,4,5,6,7];
 		//标准类型
 		this.type = obj.type ? obj.type : 'task';
 		//任务重复次数
