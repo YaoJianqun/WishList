@@ -1,7 +1,7 @@
 <template>
 	<view class="header-wrapper">
-		<view class="title">
-			任务
+		<view class="title" @click="handleTitleClick">
+			{{titleContent}}
 			<view class="icon iconfont iconcaret-down menu-down"></view>
 		</view>
 		<view class="button-add" @click="handleAddTaskClick">
@@ -13,7 +13,23 @@
 <script>
 	export default {
 		name: 'TaskListHeader',
+		data () {
+			return {
+				pageState: 'today'
+			}
+		},
+		computed: {
+			titleContent () {
+				let temp_text = '今日';
+				this.pageState === 'today' ? temp_text = '今日' : temp_text = '全部';
+				return temp_text;
+			}
+		},
 		methods: {
+			handleTitleClick () {
+				this.pageState === 'today' ? this.pageState = 'all' : this.pageState = 'today';
+				this.$emit('pageStateChange', this.pageState);
+			},
 			handleAddTaskClick () {
 				uni.navigateTo({
 					url: '../../../pages/task/base/TaskBase'

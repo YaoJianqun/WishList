@@ -1,7 +1,7 @@
 <template>
 	<view class="wrapper">
-		<task-list-header></task-list-header>
-		<task-list-content></task-list-content>
+		<task-list-header @pageStateChange="pageStateChange"></task-list-header>
+		<task-list-content :pageState="pageState"></task-list-content>
 		<task-list-dock></task-list-dock>
 	</view>
 </template>
@@ -15,6 +15,11 @@
 	
 	export default {
 		name: 'TaskList',
+		data () {
+			return {
+				pageState: 'today'
+			}
+		},
 		computed: {
 			...mapState({
 				taskData: state => state.taskData
@@ -30,6 +35,9 @@
 			this.$store.dispatch('changeTaskData', taskData);
 		},
 		methods: {
+			pageStateChange (pageState) {
+				this.pageState = pageState;
+			},
 			getListData () {
 				let taskData = uni.getStorageSync('taskData');
 				return taskData;

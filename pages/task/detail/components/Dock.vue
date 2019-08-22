@@ -17,7 +17,6 @@
 			handleNextClick () {
 				let temp_task = this.$store.state.task;
 				addOrUpdateTaskData(temp_task);
-				let taskData = uni.getStorageSync('taskData');
 				this.redirectTo();
 			},
 			handleCancelClick () {

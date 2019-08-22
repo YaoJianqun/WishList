@@ -1,5 +1,13 @@
 <script>
+	
+	import { mapState } from 'vuex'
+	
 	export default {
+		computed: {
+			...mapState({
+				taskData: state => state.taskData
+			})
+		},
 		onLaunch: function() {
 			uni.getStorageInfo({
 				success: function (res) {
@@ -32,6 +40,14 @@
 		},
 		onHide: function() {
 			console.log('App Hide')
+			let taskData = this.taskData;
+			uni.setStorage({
+				key: 'taskData',
+				data: taskData,
+				success: function () {
+					console.log('App Hide - save taskData success');
+				}
+			})
 		}
 	}
 </script>
