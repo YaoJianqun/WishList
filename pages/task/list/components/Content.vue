@@ -9,6 +9,7 @@
 					@touchstart.prevent="handleTouchStart"
 					@touchmove="handleTouchMove"
 					@touchend="handleTouchEnd"
+					@click="handleTaskClick(task.id)"
 		>
 			<view class="task-icon icon iconfont" :class="[task.icon,task.color]"></view>
 			<view class="task-info">
@@ -105,6 +106,11 @@
 			}
 		},
 		methods: {
+			handleTaskClick (taskId) {
+				uni.navigateTo({
+					url: '../../../pages/task/tally/TaskTally?taskId=' + taskId
+				});
+			},
 			handleScrollClick () {
 					this.menuMoveCount = 0;
 					this.menuMoveTask = '';

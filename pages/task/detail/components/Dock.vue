@@ -36,8 +36,8 @@
 		width: 100%;
 		position: fixed;
 		bottom: 0;
-		padding-top: 15px;
-		padding-bottom: 34px;
+		padding-top: 30rpx;
+		padding-bottom: 68rpx;
 		.dock {
 			display: flex;
 			justify-content: space-between;
