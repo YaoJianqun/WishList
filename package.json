@@ -1,0 +1,17 @@
+{
+  "name": "WishList",
+  "version": "1.0.0",
+  "description": "基于愿望清单的ToDoList，依据愿望为完成任务提供正向的动力支撑",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@yaojq-github:YaoJianqun/WishList.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}
