@@ -10,6 +10,8 @@ let addOrUpdateTaskData = function (task) {
 			console.log('addOrUpdate taskData success');
 		}
 	})
+	taskData = uni.getStorageSync('taskData');
+	console.log(taskData)
 }
 
 let deleteTaskData = function (taskId) {

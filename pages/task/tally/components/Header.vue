@@ -12,11 +12,11 @@
 <script>
 	
 	export default {
-		name: 'BaseHeader',
+		name: 'TallyHeader',
 		props: {
 			taskName: {
-				type: 'String',
-				default: '任务'
+				type: String,
+				default: '今日'
 			}
 		},
 		methods: {

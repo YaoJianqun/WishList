@@ -19,6 +19,8 @@ class Task {
 		this.target_count = obj.target_count ? obj.target_count : 0;
 		//任务完成数量
 		this.completed_count = obj.completed_count ? obj.completed_count : 0;
+		//当单位为时间时,补充完成数量
+		this.completed_milliseconds = obj.completed_milliseconds ? obj.completed_milliseconds : 0;
 		//任务单位
 		this.unit = obj.unit ? obj.unit : '次';
 		//频率

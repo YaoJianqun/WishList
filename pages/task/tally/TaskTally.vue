@@ -2,7 +2,6 @@
 	<view class="wrapper">
 		<base-header :taskName="taskName"></base-header>
 		<base-info></base-info>
-		<base-dock></base-dock>
 	</view>
 </template>
 
@@ -13,10 +12,10 @@
 	import BaseHeader from './components/Header';
 	import BaseInfo from './components/Info';
 	
-	//console.log(new task_test());
+	import { addOrUpdateTaskData } from '@/common/controller/TaskDataController.js'
 	
 	export default {
-		name: 'TaskBase',
+		name: 'TaskTally',
 		components: {
 			BaseHeader,
 			BaseInfo
@@ -27,10 +26,15 @@
 				taskName: ''
 			}
 		},
+		methods: {
+			saveTask () {
+				let temp_task = this.$store.state.task;
+				console.log('save',temp_task)
+				addOrUpdateTaskData(temp_task);
+			}
+		},
 		onLoad (params) {
-			
 			let task = null;
-			
 			if (params.hasOwnProperty('taskId')) {
 				let _this = this;
 				this.taskId = params.taskId;
@@ -40,12 +44,15 @@
 						let temp_task = res.data.taskObj[params.taskId];
 						_this.$store.dispatch('changeTask', temp_task)
 						_this.taskName = temp_task.name;
-					},
-					fail () {
-						console.log('init taskBase fail')
 					}
 				})
 			} 
+		},
+		onBackPress () {
+			this.saveTask();
+		},
+		onHide () {
+			this.saveTask();
 		}
 	}
 </script>
