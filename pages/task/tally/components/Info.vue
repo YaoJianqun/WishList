@@ -164,8 +164,9 @@
 					} else if (this.task.unit === '时') {
 						this.task.completed_count = Math.floor(this.completedMilliSeconds/1000/3600);
 						this.task.completed_milliseconds = Math.floor((this.completedMilliSeconds - this.task.completed_count*3600*1000));
-					} else 
+					} else {
 						this.task.completed_count = this.completedMilliSeconds/1000;
+					}
 				}
 			},
 			addBalls (renderStartX, renderStartY, number) {

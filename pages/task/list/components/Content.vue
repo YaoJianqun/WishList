@@ -87,7 +87,7 @@
 				if (this.taskData.taskIdArray) {
 					let nowDate = new Date();
 					let weekDay = nowDate.getDay();
-					weekDay === 0 ? 7 : weekDay;
+					weekDay === 0 ? weekDay = 7 : weekDay;
 					let toDay = nowDate.getDate();
 					let monthSection = 10;
 					

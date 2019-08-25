@@ -28,12 +28,15 @@
 		},
 		methods: {
 			saveTask () {
+				clearInterval();
 				let temp_task = this.$store.state.task;
-				console.log('save',temp_task)
+				this.$store.state.taskData[temp_task.id] = temp_task;
 				addOrUpdateTaskData(temp_task);
+				
 			}
 		},
 		onLoad (params) {
+			console.log(uni.getStorageSync('taskData').taskObj)
 			let task = null;
 			if (params.hasOwnProperty('taskId')) {
 				let _this = this;
@@ -46,7 +49,7 @@
 						_this.taskName = temp_task.name;
 					}
 				})
-			} 
+			}
 		},
 		onBackPress () {
 			this.saveTask();

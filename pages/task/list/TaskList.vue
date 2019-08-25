@@ -48,7 +48,8 @@
 			uni.setStorage({
 				key: 'taskData',
 				data: taskData,
-				success: function () {
+				success: function (e) {
+					let taskData = uni.getStorageSync('taskData');
 					console.log('save taskData success');
 				}
 			})
