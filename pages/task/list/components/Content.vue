@@ -107,9 +107,14 @@
 		},
 		methods: {
 			handleTaskClick (taskId) {
-				uni.navigateTo({
-					url: '../../../pages/task/tally/TaskTally?taskId=' + taskId
-				});
+				if (!this.menuState) {
+					uni.navigateTo({
+						url: '../../../pages/task/tally/TaskTally?taskId=' + taskId
+					});
+				} else {
+					this.menuMoveCount = 0;
+					this.menuState = !this.menuState;
+				}
 			},
 			handleScrollClick () {
 					this.menuMoveCount = 0;
@@ -120,12 +125,9 @@
 			  this.touchStatus = true;
 				this.scrollDirection = '';
 				this.startX = e.touches[0].clientX;
-				
-				if (this.menuState) this.handleScrollClick();
-				
+				if (!this.menuState) this.handleScrollClick();
 			},
 			handleTouchMove (e) {
-				
 				//判断是否为滑动状态
 			  if (this.touchStatus && this.startX !== 0) {
 					//判断是否存在timer，如果有清除未执行timer
@@ -134,6 +136,8 @@
 			    }
 					//创建timer延迟16ms执行
 			    this.timer = setTimeout(() => {
+						
+						if (this.menuState) this.editTask(e);
 						
 						//获取当前用户滑动位置
 			      const touchX = e.touches[0].clientX;
@@ -154,6 +158,9 @@
 							
 			    }, 16)
 			  }
+			},
+			moveTaskMenu () {
+				
 			},
 			editTask (e) {
 				
@@ -189,7 +196,6 @@
 				let task = this.taskData.taskObj[taskid];
 				let target_count = task.target_count;
 				
-				
 				//计算单步移动数量
 				let oneStepCount = this.computeStepCount(target_count);
 				//计算单步数量占比
@@ -198,17 +204,15 @@
 				//如果移动宽度比例小于滑动宽度比例则无操作
 				if (Math.abs(movePercent) < CountPercent) return;
 				
-				
 				//movePercent > 0 ? oneStepCount : oneStepCount *= -1;
 				
 				//真实移动数量
 				let moveCount = Math.floor(movePercent / CountPercent) * oneStepCount;
-				
 				//排除未执行touchEnd时意外触发touchMove的情况
-				if (movePercent > 0.2 && target_count > 10) {
+				/*if (movePercent > 0.3 && target_count > 10) {
 					this.handleTouchEnd();
 					return;
-				};
+				};*/
 				
 				task.completed_count += moveCount;
 				
@@ -259,7 +263,6 @@
 			handleDelTaskClick (taskId) {
 				let taskIndex = this.taskData.taskIdArray.indexOf(taskId);
 				if (taskIndex > -1) {
-					console.log('delete')
 					this.taskData.taskIdArray.splice(taskIndex, 1);
 					deleteTaskData(taskId);
 				}

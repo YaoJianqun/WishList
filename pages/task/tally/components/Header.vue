@@ -10,7 +10,6 @@
 </template>
 
 <script>
-	
 	export default {
 		name: 'TallyHeader',
 		props: {
@@ -21,7 +20,7 @@
 		},
 		methods: {
 			handleBackClick () {
-				uni.navigateBack();
+				this.$emit('navigateBack');
 			}
 		}
 	}

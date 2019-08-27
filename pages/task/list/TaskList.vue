@@ -2,7 +2,7 @@
 	<view class="wrapper">
 		<task-list-header @pageStateChange="pageStateChange"></task-list-header>
 		<task-list-content :pageState="pageState"></task-list-content>
-		<task-list-dock></task-list-dock>
+		<!-- <task-list-dock></task-list-dock> -->
 	</view>
 </template>
 
@@ -43,14 +43,15 @@
 				return taskData;
 			}
 		},
+		onShow() {
+		},
 		onHide () {
 			let taskData = this.taskData;
 			uni.setStorage({
 				key: 'taskData',
 				data: taskData,
 				success: function (e) {
-					let taskData = uni.getStorageSync('taskData');
-					console.log('save taskData success');
+					console.log('task-list save taskData success');
 				}
 			})
 		}

@@ -5,6 +5,20 @@
 		{"path": "pages/task/detail/TaskDetail"},
 		{"path": "pages/task/tally/TaskTally"}
 	],
+	"tabBar": {
+	    "color": "#7A7E83",
+	    "selectedColor": "#3cc51f",
+	    "borderStyle": "black",
+	    "backgroundColor": "#ffffff",
+	    "list": [{
+	        "pagePath": "pages/task/list/TaskList",
+	        
+	        "text": "组件"
+	    }, {
+	        "pagePath": "pages/API/index",
+	        "text": "接口"
+	    }]
+	},
 	"globalStyle": {
 		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black",

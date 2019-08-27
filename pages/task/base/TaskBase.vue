@@ -36,7 +36,6 @@
 					key: 'taskData',
 					success (res) {
 						let temp_task = res.data.taskObj[params.taskId];
-						console.log(temp_task);
 						_this.$store.dispatch('changeTask', temp_task)
 					},
 					fail () {

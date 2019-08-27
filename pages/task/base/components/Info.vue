@@ -10,6 +10,13 @@
 					<view class="title">名称 : </view>
 					<input class="uni-input" type="text" placeholder="请输入任务名称" v-model="task.name"/>
 				</view>
+				<picker mode = selector :range="wishList" range-key="name">
+					<view class="uni-form-item uni-column">
+						<view class="title">愿望 : </view>
+						<view class="uni-input">请选择愿望</view>
+						<!-- <input class="uni-input" type="text" placeholder="请选择愿望" @click.prevent=""/> -->
+					</view>
+				</picker>
 				<view class="uni-form-item uni-column">
 					<view class="title">快乐币 : </view>
 					<input class="uni-input" type="number" placeholder="请输入当前任务快乐币价值" v-model="happy_coin"/>
@@ -74,6 +81,8 @@
 		data() {
 			return {
 				iconList,
+				wishList: [],
+				index: 0,
 				oldIcon: '',
 				scrollTop: 0,
 				old: {
@@ -122,6 +131,34 @@
 			isColorSel (color) {
 				if(this.task && this.task.color === color) return 'sel';
 			}
+		},
+		created() {
+			this.wishList =[
+				{
+					id: 'asdgfdgfafdvsdfg',
+					name: '索尼 WH-1000XM3'
+				},
+				{
+					id: 'asdgfdgfafGTHYHU',
+					name: '苹果 Airpords 2'
+				},
+				{
+					id: 'aqwertdgfafGTHYHU',
+					name: '苹果 MacBook Pro'
+				}
+			];
+			/*uni.getStorage({
+				key: 'wishData',
+				success(res) {
+					let temp_wishlist = res.data.wishData;
+					for (let (item, index) in templist) {
+						
+					}
+				},
+				fail() {
+					this.wishList = [];
+				}
+			})*/
 		}
 	}
 </script>
@@ -147,7 +184,7 @@
 				text-align: center;
 				border: 2rpx solid #BBB;
 				border-radius: 20rpx;
-				margin: 62rpx auto 60rpx;
+				margin: 24rpx auto 22rpx;
 				&.sel {
 					color: #8A8A8A;
 					background-color: #CDCDCD;
@@ -171,6 +208,7 @@
 					font-size: 30rpx;
 					border-bottom: 1px solid #BBBBBB;
 					padding: 0 10rpx;
+					color: rgb(128, 128, 128);
 				}
 				.uni-textarea {
 					height: 200rpx;
@@ -185,17 +223,15 @@
 					flex-wrap: wrap;
 					align-items: center;
 					width: 100%;
-					padding: 0 40rpx;
+					padding: 0 20rpx;
 					margin-top: 32rpx;
 					margin-bottom: 16rpx;
 					.task-color {
 						box-sizing: border-box;
-						width: 32rpx;
-						height: 32rpx;
-						line-height: 32rpx;
+						width: 42rpx;
+						height: 42rpx;
 						border-radius: 50%;
-						margin-right: 80rpx;
-						margin-bottom: 30rpx;
+						margin: 0 20rpx 30rpx;
 						background-color: #007AFF;
 						&.sel {
 							border: 1px solid #101010;

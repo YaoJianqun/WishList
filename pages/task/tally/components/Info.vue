@@ -54,11 +54,13 @@
 				//当前计时器为计时状态时
 				if (this.timerState) {
 					clearInterval(this.timerInterval);
+					this.timerInterval = '';
 				} else {
 					this.timerStart (this.timerContext);
 				}
 				this.timerState = !this.timerState;
 				//uni.vibrateLong()
+				this.$emit('changeInterval', this.timerInterval);
 				uni.vibrateShort()
 			},
 			initTimer (data) {
