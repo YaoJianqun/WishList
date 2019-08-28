@@ -3,7 +3,8 @@
 		{"path": "pages/task/list/TaskList"},
 		{"path": "pages/task/base/TaskBase"},
 		{"path": "pages/task/detail/TaskDetail"},
-		{"path": "pages/task/tally/TaskTally"}
+		{"path": "pages/task/tally/TaskTally"},
+		{"path": "pages/wish/list/WishList"}
 	],
 	"tabBar": {
 	    "color": "#7A7E83",
@@ -13,10 +14,10 @@
 	    "list": [{
 	        "pagePath": "pages/task/list/TaskList",
 	        
-	        "text": "组件"
+	        "text": "任务"
 	    }, {
-	        "pagePath": "pages/API/index",
-	        "text": "接口"
+	        "pagePath": "pages/wish/list/WishList",
+	        "text": "清单"
 	    }]
 	},
 	"globalStyle": {
