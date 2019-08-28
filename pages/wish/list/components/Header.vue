@@ -14,13 +14,13 @@
 		name: 'WishListHeader',
 		data () {
 			return {
-				pageState: 'default'
+				pageTheme: 'default'
 			}
 		},
 		methods: {
 			handleThemeClick () {
-				this.pageState === 'default' ? this.pageState = 'wish-card' : this.pageState = 'default';
-				this.$emit('pageStateChange', this.pageState);
+				this.pageTheme === 'default' ? this.pageTheme = 'card' : this.pageTheme = 'default';
+				this.$emit('pageThemeChange', this.pageTheme);
 			},
 			handleAddWishClick () {
 				uni.navigateTo({

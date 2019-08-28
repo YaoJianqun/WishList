@@ -1,7 +1,7 @@
 <template>
 	<view class="wrapper">
-		<wish-list-header @pageStateChange="pageStateChange"></wish-list-header>
-		<wish-list-content :pageState="pageState"></wish-list-content>
+		<wish-list-header @pageThemeChange="pageThemeChange"></wish-list-header>
+		<wish-list-content :pageTheme="pageTheme"></wish-list-content>
 		<!-- <task-list-dock></task-list-dock> -->
 	</view>
 </template>
@@ -17,7 +17,7 @@
 		name: 'WishList',
 		data () {
 			return {
-				pageState: 'default'
+				pageTheme: 'default'
 			}
 		},
 		computed: {
@@ -35,8 +35,8 @@
 			this.$store.dispatch('changeWishData', wishData);
 		},
 		methods: {
-			pageStateChange (pageState) {
-				this.pageState = pageState;
+			pageThemeChange (pageTheme) {
+				this.pageTheme = pageTheme;
 			},
 			getListData () {
 				let wishData = uni.getStorageSync('wishData');
