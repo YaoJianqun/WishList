@@ -20,19 +20,27 @@
 			})
 		},
 		methods: {
-			handleNextClick () {
-				let temp_wish = this.$store.state.wish;
-				uni.saveFile({
-					tempFilePath: temp_wish.image,
-					success: function (res) {
-						var savedFilePath = res.savedFilePath;
-						temp_wish.image = savedFilePath;
-						addOrUpdateWishData(temp_wish);
-					}
-				});
+			saveWishData (temp_wish) {
+				addOrUpdateWishData(temp_wish);
 				uni.switchTab({
 				    url: '../../wish/list/WishList'
 				});
+			},
+			handleNextClick () {
+				let temp_wish = this.$store.state.wish;
+				let _this = this;
+				if (temp_wish.image) {
+					uni.saveFile({
+						tempFilePath: temp_wish.image,
+						success: function (res) {
+							var savedFilePath = res.savedFilePath;
+							temp_wish.image = savedFilePath;
+							_this.saveWishData(temp_wish);
+						}
+					});
+				} else {
+					this.saveWishData(temp_wish);
+				}
 			},
 			handleCancelClick () {
 				uni.navigateBack();

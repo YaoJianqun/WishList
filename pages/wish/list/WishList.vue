@@ -31,11 +31,17 @@
 			WishListContent,
 			WishListDock
 		},
+		onShow() {
+			this.loadWishData();
+		},
 		onLoad () {
-			let wishData = this.getListData();
-			this.$store.dispatch('changeWishData', wishData);
+			this.loadWishData();
 		},
 		methods: {
+			loadWishData () {
+				let wishData = this.getListData();
+				this.$store.dispatch('changeWishData', wishData);
+			},
 			pageStateChange (pageState) {
 				this.pageState = pageState;
 			},
@@ -43,7 +49,7 @@
 				this.pageTheme = pageTheme;
 			},
 			getListData () {
-				let wishData = uni.getStorageSync('wishData');
+				let wishData = uni.getStorageSync('wishData'); 
 				return wishData;
 			}
 		},
@@ -53,7 +59,7 @@
 				key: 'wishData',
 				data: wishData,
 				success: function (e) {
-					console.log('task-list save wishData success');
+					console.log('wish-list save wishData success');
 				}
 			})
 		}

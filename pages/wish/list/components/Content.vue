@@ -2,7 +2,7 @@
 	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll" @click="handleScrollClick">
 		<view class="wish-list" :class="[pageTheme]">
 			<view class="wish-item"
-						:class="[reverseClass]"
+						:class="[wish.id === menuMoveWish ? reverseClass : '',pageTheme]"
 						v-for="wish in wishList"
 						:key="wish.id"
 						:data-wishid="wish.id"
@@ -43,7 +43,19 @@
 				</view>
 				<!-- 卡片主题菜单 -->
 				<view class="wish-menu" v-if="pageTheme === 'card'">
-					
+					<view class="operate">
+						<view class="edit">
+							<view class="edit-icon icon iconfont iconpencil"></view>
+							<view class="edit-title">编辑</view>
+						</view>
+						<view class="delete">
+							<view class="delete-icon icon iconfont icontrash"></view>
+							<view class="delete-title">删除</view>
+						</view>
+					</view>
+					<view class="cancel">
+						取消
+					</view>
 				</view>
 			</view>
 		</view>
@@ -84,6 +96,7 @@
 		},
 		computed: {
 			reverseClass () {
+				console.log(this.cardMunuState)
 				return this.cardMunuState ? 'reverse' : '';
 			},
 			deleteMoveStyle () {
@@ -118,12 +131,13 @@
 			},
 			handleTouchStart (e) {
 				if (this.pageTheme === 'card') {
+					let wishid = e.currentTarget.dataset.wishid;
 					this.clickTime = Date.now();
 					this.timer = setInterval(function () {
 						let endTime = Date.now();
-						if (endTime - this.clickTime >= 1500) {
+						if (endTime - this.clickTime >= 1000) {
+							this.menuMoveWish = wishid;
 							this.cardMunuState = true;
-							console.log(this.cardMunuState)
 							clearInterval(this.timer);
 						}
 					}.bind(this), 100)
@@ -185,7 +199,11 @@
 				this.menuMoveCount = temp_moveCount;
 			},
 			handleTouchEnd () {
-				if (this.pageTheme === 'card') return;
+				
+				if (this.pageTheme === 'card') {
+					clearInterval(this.timer);
+					return;
+				};
 				
 				this.touchStatus = false;
 				
@@ -229,6 +247,11 @@
 		bottom: 200rpx;
 		.wish-list {
 			.wish-item {
+				transform:rotateY(0);
+				transition: transform .6s;
+				&.card.reverse {
+					transform:rotateY(180deg);
+				}
 				display: flex;
 				align-items: center;
 				position: relative;
@@ -347,8 +370,7 @@
 						position: absolute;
 					}
 					&.reverse {
-						transform:rotateY(180deg);
-						transition: transform .6s;
+						
 						.wish-menu {
 							z-index: 1;
 							width: 100%;
