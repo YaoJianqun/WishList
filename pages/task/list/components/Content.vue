@@ -1,6 +1,5 @@
 <template>
 	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll" @click="handleScrollClick">
-		
 		<view class="task-item"
 					v-for="task of taskList"
 					:key="task.id"

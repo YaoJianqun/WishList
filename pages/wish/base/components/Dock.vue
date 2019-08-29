@@ -1,7 +1,7 @@
 <template>
 	<view class="dock-wrapper">
 		<view class="dock">
-			<view class="item bgcolor success" @click="handleNextClick">下一步</view>
+			<view class="item bgcolor success" @click="handleNextClick">完成</view>
 			<view class="item bgcolor danger" @click="handleCancelClick">取消</view>
 		</view>
 	</view>
@@ -9,23 +9,33 @@
 
 <script>
 	
-	import { addOrUpdateTaskData } from '@/common/controller/TaskDataController'
+	import { mapState } from 'vuex'
+	import { addOrUpdateWishData } from '@/common/controller/WishDataController'
 	
 	export default {
 		name: 'BaseDock',
+		computed: {
+			...mapState({
+				wish: state => state.wish
+			})
+		},
 		methods: {
 			handleNextClick () {
-				let temp_task = this.$store.state.task;
-				addOrUpdateTaskData(temp_task);
-				this.redirectTo();
+				let temp_wish = this.$store.state.wish;
+				uni.saveFile({
+					tempFilePath: temp_wish.image,
+					success: function (res) {
+						var savedFilePath = res.savedFilePath;
+						temp_wish.image = savedFilePath;
+						addOrUpdateWishData(temp_wish);
+					}
+				});
+				uni.switchTab({
+				    url: '../../wish/list/WishList'
+				});
 			},
 			handleCancelClick () {
-				this.redirectTo();
-			},
-			redirectTo () {
-				uni.redirectTo({
-					url: '../../../pages/task/list/TaskList'
-				})
+				uni.navigateBack();
 			}
 		}
 	}
