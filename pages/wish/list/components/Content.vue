@@ -143,7 +143,7 @@
 					this.clickTime = Date.now();
 					this.timer = setInterval(function () {
 						let endTime = Date.now();
-						if (endTime - this.clickTime >= 1000) {
+						if (endTime - this.clickTime >= 800) {
 							this.menuMoveWish = wishid;
 							this.cardMunuState = true;
 							this.menuState = !this.menuState;
