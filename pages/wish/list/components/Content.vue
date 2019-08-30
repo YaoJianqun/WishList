@@ -7,9 +7,9 @@
 						:key="wish.id"
 						:data-wishid="wish.id"
 						:style="menuMoveWish == wish.id ? itemMoveStyle : ''"
-						@touchstart.prevent="handleTouchStart"
-						@touchmove="handleTouchMove"
-						@touchend="handleTouchEnd"
+						@touchstart.stop="handleTouchStart"
+						@touchmove.stop="handleTouchMove"
+						@touchend.stop="handleTouchEnd"
 			>
 				<view class="image-wrapper">
 					<view class="icon iconfont icondiamond1 warning" v-if="!wish.image"></view>
@@ -42,18 +42,27 @@
 					<view class="menu-title">删除</view>
 				</view>
 				<!-- 卡片主题菜单 -->
-				<view class="wish-menu" v-if="pageTheme === 'card'">
+				<view class="wish-menu" v-if="pageTheme === 'card' && menuState">
+					<view class="image-wrapper">
+						<view class="icon iconfont icondiamond1 warning" v-if="!wish.image"></view>
+						<image :mode="'aspectFill'"
+									 class="image"
+									 :src="wish.image"
+									 v-if="wish.image"
+						></image>
+					</view>
+					<view class="title" v-text="wish.name"></view>
 					<view class="operate">
-						<view class="edit">
+						<view class="operate-item edit bgcolor warning">
 							<view class="edit-icon icon iconfont iconpencil"></view>
 							<view class="edit-title">编辑</view>
 						</view>
-						<view class="delete">
+						<view class="operate-item delete bgcolor danger">
 							<view class="delete-icon icon iconfont icontrash"></view>
 							<view class="delete-title">删除</view>
 						</view>
 					</view>
-					<view class="cancel">
+					<view class="cancel bgcolor success">
 						取消
 					</view>
 				</view>
@@ -96,7 +105,6 @@
 		},
 		computed: {
 			reverseClass () {
-				console.log(this.cardMunuState)
 				return this.cardMunuState ? 'reverse' : '';
 			},
 			deleteMoveStyle () {
@@ -138,6 +146,7 @@
 						if (endTime - this.clickTime >= 1000) {
 							this.menuMoveWish = wishid;
 							this.cardMunuState = true;
+							this.menuState = !this.menuState;
 							clearInterval(this.timer);
 						}
 					}.bind(this), 100)
@@ -198,8 +207,8 @@
 				this.menuMoveWish = wishid;
 				this.menuMoveCount = temp_moveCount;
 			},
-			handleTouchEnd () {
-				
+			handleTouchEnd (e) {
+				let wishid = e.currentTarget.dataset.wishid;
 				if (this.pageTheme === 'card') {
 					clearInterval(this.timer);
 					return;
@@ -247,21 +256,18 @@
 		bottom: 200rpx;
 		.wish-list {
 			.wish-item {
-				transform:rotateY(0);
-				transition: transform .6s;
-				&.card.reverse {
-					transform:rotateY(180deg);
-				}
 				display: flex;
 				align-items: center;
 				position: relative;
+				max-width: 100%;
+				min-width: 80%;
 				height: 180rpx;
 				font-size: 32rpx;
 				border-radius: 20rpx;
 				margin: 0 30rpx 30rpx;
 				padding: 0 30rpx 0 30rpx;
 				background-color: #fff;
-				transition: height 0.6s;
+				transition: height 0.6s, max-width 0.6s, min-width 0.6s;
 				.image-wrapper {
 					width: 120rpx;
 					height: 120rpx;
@@ -297,7 +303,7 @@
 					}
 				}
 				right: 0rpx;
-				transition: right 0.4s;
+				transition: height 0.6s, max-width 0.6s, min-width 0.6s, right 0.4s, transform 0.6s;
 				.wish-menu {
 					position: absolute;
 					right: -190rpx;
@@ -327,15 +333,12 @@
 						transition: right 0.4s;
 					}
 				}
-			}
-			&.card {
-				display: flex;
-				flex-wrap: wrap;
-				.wish-item {
+				&.card {
 					z-index: 2;
 					flex-direction: column;
 					box-sizing: border-box;
-					width: 45.5%;
+					max-width: 45.5%;
+					min-width: 45.5%;
 					height: 380rpx;
 					margin: 0 0 30rpx 3%;
 					padding: 30rpx;
@@ -370,15 +373,43 @@
 						position: absolute;
 					}
 					&.reverse {
-						
+						transform:rotateY(180deg);
 						.wish-menu {
+							align-items: center;
 							z-index: 1;
 							width: 100%;
 							height: 100%;
 							background-color: #fff;
+							overflow: hidden;
+							.title {
+								white-space:nowrap;
+								overflow:hidden; 
+								text-overflow:ellipsis;
+								line-height: 70rpx;
+								font-weight: bold;
+								font-size: 32rpx;
+								color: #101010;
+							}
+							.operate {
+								display: flex;
+								align-items: center;
+								.operate-item {
+									display: flex;
+									justify-content: center;
+									align-items: center;
+									flex: 1;
+								}
+							}
+							.cancel {
+								vertical-align: center;
+							}
 						}
 					}
 				}
+			}
+			&.card {
+				display: flex;
+				flex-wrap: wrap;
 			}
 		}
 		.progress {
@@ -395,6 +426,9 @@
 			transform:rotateY(180deg);
 			right: 0;
 			left: auto;
+		}
+		.progress.completed, .bgprogress {
+			border-bottom-right-radius: 12rpx;
 		}
 		.bgprogress {
 			width: 100%;
