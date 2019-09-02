@@ -17,7 +17,11 @@ let setTaskCompleted = function (taskCompleted) {
 	if (wishCompletedState) this.wishCompletedData[taskCompleted.wishId].push(taskCompleted);
 }
 
-export {setTaskCompleted};
+let delTaskCompleted = function (task_id, wish_id) {
+	
+}
+
+export { setTaskCompleted, delTaskCompleted };
 
 /*export delTask;
 

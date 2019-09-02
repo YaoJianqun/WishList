@@ -22,4 +22,17 @@ let addOrUpdateCompletedData = function (task) {
 	})
 }
 
+let deleteCompletedData = function (task) {
+
+	let completedData = uni.getStorageSync('completedData');
+	setWish.bind(completedData)(task.id, task.wishId);
+	uni.setStorage({
+		key: 'completedData',
+		data: completedData,
+		success: function () {
+			console.log('addOrUpdate completedData success');
+		}
+	})
+}
+
 export { addOrUpdateCompletedData };
