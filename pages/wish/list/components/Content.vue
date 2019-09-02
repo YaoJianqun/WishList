@@ -7,9 +7,10 @@
 						:key="wish.id"
 						:data-wishid="wish.id"
 						:style="menuMoveWish == wish.id ? itemMoveStyle : ''"
-						@touchstart.stop="handleTouchStart"
-						@touchmove.stop="handleTouchMove"
-						@touchend.stop="handleTouchEnd"
+						@touchstart="handleTouchStart"
+						@touchmove="handleTouchMove"
+						@touchend="handleTouchEnd"
+						@click.stop="handleWishClick"
 			>
 				<view class="image-wrapper">
 					<view class="icon iconfont icondiamond1 warning" v-if="!wish.image"></view>
@@ -53,18 +54,19 @@
 					</view>
 					<view class="title" v-text="wish.name"></view>
 					<view class="operate">
-						<view class="operate-item edit bgcolor warning">
-							<view class="edit-icon icon iconfont iconpencil"></view>
+						<view class="operate-item bgcolor warning" @click.stop="handleEditWishClick(wish.id)" >
+							<view class="icon iconfont iconpencil"></view>
 							<view class="edit-title">编辑</view>
 						</view>
-						<view class="operate-item delete bgcolor danger">
-							<view class="delete-icon icon iconfont icontrash"></view>
+						<view class="operate-item bgcolor danger" @click.stop="handleDelWishClick(wish.id)">
+							<view class="icon iconfont icontrash"></view>
 							<view class="delete-title">删除</view>
 						</view>
+						<view class="operate-item cancel bgcolor success" @click="handleScrollClick">
+							<view class="cancel-title">取消</view>
+						</view>
 					</view>
-					<view class="cancel bgcolor success">
-						取消
-					</view>
+					
 				</view>
 			</view>
 		</view>
@@ -132,6 +134,12 @@
 			})
 		},
 		methods: {
+			handleWishClick (e) {
+				/*console.log(e.target)
+				if (
+				
+				)*/
+			},
 			handleScrollClick () {
 					this.menuMoveCount = 0;
 					this.menuMoveWish = '';
@@ -233,6 +241,13 @@
 				let wishIndex = this.wishData.wishIdArray.indexOf(wishId);
 				if (wishIndex > -1) {
 					this.wishData.wishIdArray.splice(wishIndex, 1);
+					let wish = this.wishData.wishObj[wishId]
+					uni.removeSavedFile({
+						filePath: wish.image,
+						success() {
+							console.log('delete wish ;image cache');
+						}
+					})
 					deleteWishData(wishId);
 				}
 			},
@@ -376,28 +391,42 @@
 						transform:rotateY(180deg);
 						.wish-menu {
 							align-items: center;
+							justify-content: flex-start;
 							z-index: 1;
 							width: 100%;
 							height: 100%;
 							background-color: #fff;
 							overflow: hidden;
+							.image-wrapper {
+								margin-top: 20rpx;
+								width: 120rpx;
+								height: 120rpx;
+							}
 							.title {
 								white-space:nowrap;
 								overflow:hidden; 
 								text-overflow:ellipsis;
 								line-height: 70rpx;
 								font-weight: bold;
-								font-size: 32rpx;
+								font-size: 36rpx;
 								color: #101010;
 							}
 							.operate {
 								display: flex;
+								flex-wrap: wrap;
 								align-items: center;
+								width: 100%;
 								.operate-item {
 									display: flex;
 									justify-content: center;
 									align-items: center;
-									flex: 1;
+									width: 45.5%;
+									margin-left: 3%;
+									border-radius: 20rpx;
+									&.cancel {
+										margin-top: 16rpx;
+										width: 94%;
+									}
 								}
 							}
 							.cancel {

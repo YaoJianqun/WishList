@@ -18,14 +18,15 @@
 				let temp_task = this.$store.state.task;
 				addOrUpdateTaskData(temp_task);
 				this.redirectTo();
+			
 			},
 			handleCancelClick () {
 				this.redirectTo();
 			},
 			redirectTo () {
-				uni.redirectTo({
-					url: '../../../pages/task/list/TaskList'
-				})
+				uni.switchTab({
+				    url: '../../../pages/task/list/TaskList'
+				});
 			}
 		}
 	}

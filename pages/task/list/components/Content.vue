@@ -43,7 +43,9 @@
 <script>
 	
 	import { mapState } from 'vuex'
-	import { deleteTaskData } from '@/common/controller/TaskDataController.js'
+	import TaskCompleted from '@/common/model/TaskCompleted'
+	import { deleteTaskData } from '@/common/controller/TaskDataController'
+	import { addOrUpdateCompletedData } from '@/common/controller/CompletedDataController'
 	
 	export default {
 		name: 'TaskListContent',
@@ -158,9 +160,6 @@
 			    }, 16)
 			  }
 			},
-			moveTaskMenu () {
-				
-			},
 			editTask (e) {
 				
 				if (!this.touchStatus) return;
@@ -215,7 +214,7 @@
 				
 				task.completed_count += moveCount;
 				
-				if (task.completed_count > target_count)
+				if (task.completed_count > target_count) 
 					task.completed_count = target_count
 				else if (task.completed_count < 0)
 					task.completed_count = 0
@@ -275,13 +274,17 @@
 				let task = this.taskData.taskObj[taskId];
 				if (this.isCompleted(task)) 
 					task.completed_count = 0;
-				else
+				else 
 					task.completed_count = task.target_count;
+					
+				
 			},
 			taskCompleted (task) {
 				return task.completed_count + '/' + task.target_count + task.unit;
 			},
 			isCompleted (task) {
+				//addOrUpdateCompletedData(task);
+				console.log('isCompleted')
 				return task.completed_count >= task.target_count;
 			},
 			taskProgress (task) {

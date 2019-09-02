@@ -17,6 +17,8 @@ class Wish {
 		this.type = obj.type ? obj.type : 'commodity';
 		//是否兑换
 		this.redeem = obj.redeem ? obj.redeem : false;
+		//是否删除
+		this.isDel = obj.isDel ? obj.isDel : false;
 	}
 }
 

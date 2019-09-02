@@ -7,6 +7,8 @@ class Task {
 		this.id = getUUID(18, 16);
 		//任务名称
 		this.name = obj.name ? obj.name : '';
+		//愿望ID
+		this.wishId = obj.wishId ? obj.wishId : '';
 		//任务快乐币价值
 		this.happy_coin = obj.happy_coin ? obj.happy_coin : 0;
 		//任务宣言
@@ -33,6 +35,8 @@ class Task {
 		this.repeat_count = obj.repeat_count ? obj.repeat_count : 1;
 		//任务提醒
 		this.remind = obj.remind ? obj.remind : [];
+		//是否删除
+		this.isDel = obj.isDel ? obj.isDel : false;
 	}
 }
 

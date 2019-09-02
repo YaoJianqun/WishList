@@ -30,6 +30,10 @@
 			TaskListContent,
 			TaskListDock
 		},
+		onShow() {
+			let taskData = this.getListData();
+			this.$store.dispatch('changeTaskData', taskData);
+		},
 		onLoad () {
 			let taskData = this.getListData();
 			this.$store.dispatch('changeTaskData', taskData);
@@ -42,8 +46,6 @@
 				let taskData = uni.getStorageSync('taskData');
 				return taskData;
 			}
-		},
-		onShow() {
 		},
 		onHide () {
 			let taskData = this.taskData;

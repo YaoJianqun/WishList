@@ -14,10 +14,16 @@
 			</view>
 		</view>
 		<view :class="['tab bdcolor', task.color]"></view>
+		<uni-popup ref="popup" :type="'center'" custom="true">
+			<view class="popup-wrapper">
+				恭喜您完成任务！
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
+	import uniPopup from '@/components/uni-popup/uni-popup.vue'
 	import { mapState } from 'vuex'
 	import { commonColor, commonColors } from '@/static/data/commonData'
 	import digit from '@/static/data/digit'
@@ -25,6 +31,9 @@
 	
 	export default {
 		name: 'TallyInfo',
+		components: {
+			uniPopup
+		},
 		data() {
 			return {
 				timerInterval: null,
@@ -50,6 +59,9 @@
 			})
 		},
 		methods: {
+			togglePopup() {
+				this.$refs['popup'].open()
+			},
 			handleOnOffClick () {
 				//当前计时器为计时状态时
 				if (this.timerState) {
@@ -100,6 +112,11 @@
 				ctx.clearRect(0, 0, this.timerCanvasWidth, this.timerCanvasHeight);
 				
 				let timeData = this.getTimeData();
+				
+				if (timeData.hours === 0 && timeData.minutes ===0 && timeData.seconds === 0) {
+					this.handleOnOffClick();
+					this.togglePopup();
+				}
 				
 				let hours = timeData.hours;
 				
@@ -251,9 +268,9 @@
 					totalMilliSeconds = Math.floor(temp_seconds);
 				else if (unit === '分')
 					totalMilliSeconds = Math.floor(temp_seconds * 60);
-				else if (unit === '时')
+				else if (unit === '小时')
 					totalMilliSeconds = Math.floor(temp_seconds * 3600);
-					
+				
 				return totalMilliSeconds;
 			}
 		},
@@ -279,6 +296,13 @@
 		bottom: 68rpx;
 		border-radius: 20rpx;
 		background-color: #fff;
+		.popup-wrapper {
+			padding: 20rpx;
+			border-radius: 20rpx;
+			min-width: 300rpx;
+			min-height: 300rpx;
+			background-color: #fff;
+		}
 		/*overflow: hidden;*/
 		.operate-wrapper {
 			position: absolute;

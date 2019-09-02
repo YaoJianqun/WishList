@@ -9,6 +9,15 @@
 			})
 		},
 		methods: {
+			setCompletedData () {
+				uni.setStorage({
+					key: 'completedData',
+					data: {'taskCompletedData': {}, 'wishCompletedData': {}},
+					success: function () {
+						console.log('init completedData success');
+					}
+				})
+			},
 			setWishData () {
 				uni.setStorage({
 					key: 'wishData',
@@ -54,11 +63,26 @@
 					},
 					complete: function () {console.log('init wishData complete')}
 				})
+			},
+			initCompletedData () {
+				let _this = this;
+				uni.getStorageInfo({
+					success: function (res) {
+						if (res.keys.indexOf('completedData') < 0)
+							_this.setCompletedData();
+					},
+					fail: function () {
+						console.log('getStorageInfo fail', arguments)
+						_this.setCompletedData();
+					},
+					complete: function () {console.log('init completedData complete')}
+				})
 			}
 		},
 		onLaunch: function() {
 			this.initTaskData();
 			this.initWishData();
+			this.initCompletedData();
 		},
 		onShow: function() {
 			console.log('App Show')
