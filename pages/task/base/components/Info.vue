@@ -10,10 +10,10 @@
 					<view class="title">名称 : </view>
 					<input class="uni-input" type="text" placeholder="请输入任务名称" v-model="task.name"/>
 				</view>
-				<picker mode = selector :range="wishList" range-key="name">
+				<picker mode=selector :range="wishList" range-key="name" @change="selWish">
 					<view class="uni-form-item uni-column">
 						<view class="title">愿望 : </view>
-						<view class="uni-input">请选择愿望</view>
+						<view class="uni-input" v-text="wishName === '' ? '请选择愿望' : wishName"></view>
 						<!-- <input class="uni-input" type="text" placeholder="请选择愿望" @click.prevent=""/> -->
 					</view>
 				</picker>
@@ -80,6 +80,7 @@
 		},
 		data() {
 			return {
+				wishName: '',
 				iconList,
 				wishList: [],
 				index: 0,
@@ -105,6 +106,11 @@
 			}
 		},
 		methods: {
+			selWish (e) {
+				let wishIndex = e.detail.value;
+				this.task.wishId = this.wishList[wishIndex].id;
+				this.wishName = this.wishList[wishIndex].name;
+			},
 			handleColorClick (e) {
 				let color = e.target.dataset.color;
 				if (color) {
@@ -133,32 +139,23 @@
 			}
 		},
 		created() {
-			this.wishList =[
-				{
-					id: 'asdgfdgfafdvsdfg',
-					name: '索尼 WH-1000XM3'
-				},
-				{
-					id: 'asdgfdgfafGTHYHU',
-					name: '苹果 Airpords 2'
-				},
-				{
-					id: 'aqwertdgfafGTHYHU',
-					name: '苹果 MacBook Pro'
-				}
-			];
-			/*uni.getStorage({
+			let _this = this;
+			uni.getStorage({
 				key: 'wishData',
 				success(res) {
-					let temp_wishlist = res.data.wishData;
-					for (let (item, index) in templist) {
-						
+					let temp_wishlist = res.data.wishObj;
+					for (let id in temp_wishlist) {
+						let temp_wish = temp_wishlist[id];
+						if (!temp_wish.redeem) {
+							_this.wishList.push({id: temp_wish.id, name: temp_wish.name});
+							if (_this.task.wishId === temp_wish.id) _this.wishName = temp_wish.name;
+						}
 					}
 				},
 				fail() {
-					this.wishList = [];
+					_this.wishList = [];
 				}
-			})*/
+			})
 		}
 	}
 </script>

@@ -16,7 +16,7 @@ class TaskComplete {
 		//任务单位
 		//this.unit = obj.unit ? obj.unit : '次';
 		//任务定量执行时间
-		this.ration = obj.ration ? obj.ration : 0;
+		//this.ration = obj.ration ? obj.ration : 0;
 		//任务完成时间
 		this.completedTime = obj.completedTime ? obj.completedTime : new Date(new Date().toLocaleDateString()).getTime();
 	}

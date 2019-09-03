@@ -1,7 +1,8 @@
 <template>
 	<view class="wrapper">
 		<base-header :taskName="taskName" @navigateBack="navigateBack"></base-header>
-		<base-info @changeInterval="changeInterval"></base-info>
+		<base-info-date @changeInterval="changeInterval" v-if="currentPageInfo === 'clock'"></base-info-date>
+		<base-info-score v-if="currentPageInfo === 'score'"></base-info-score>
 		<uni-popup :show="show" :type="type" :custom="true" :mask-click="false">
 			<view class="uni-tip">
 				<view class="uni-tip-title">警告</view>
@@ -21,22 +22,24 @@
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
 	
 	import BaseHeader from './components/Header';
-	import BaseInfo from './components/Info';
+	import BaseInfoDate from './components/InfoDate';
+	import BaseInfoScore from './components/InfoScore';
 	
-	import { addOrUpdateTaskData } from '@/common/controller/TaskDataController.js'
+	import { addOrUpdateTaskData } from '@/common/controller/TaskDataController'
 	
 	export default {
 		name: 'TaskTally',
 		components: {
 			BaseHeader,
-			BaseInfo,
+			BaseInfoDate,
+			BaseInfoScore,
 			uniPopup
 		},
 		data() {
 			return {
 				type: '',
 				show: false,
-				
+				currentPageInfo: 'score',
 				taskId: '',
 				taskName: '',
 				timerInterval: ''
@@ -48,7 +51,7 @@
 			},
 			navigateBack () {
 				if (this.timerInterval)
-					this.togglePopup('center', 'tip');
+					this.togglePopup('tip');
 				else 
 					uni.navigateBack();
 			},
@@ -58,13 +61,8 @@
 				this.$store.state.taskData.taskObj[temp_task.id] = temp_task;
 				addOrUpdateTaskData(temp_task);
 			},
-			togglePopup(type, open) {
-				this.type = type
-				if (open === 'tip') {
-					this.show = true
-				} else {
-					this.$refs[open].open()
-				}
+			togglePopup(open) {
+				this.$refs[open].open()
 			},
 			cancel(type, state) {
 				
@@ -87,6 +85,7 @@
 						let temp_task = res.data.taskObj[params.taskId];
 						_this.$store.dispatch('changeTask', temp_task)
 						_this.taskName = temp_task.name;
+						if (temp_task.unit!=='秒'&&temp_task.unit!=='分'&&temp_task.unit!=='小时') _this.currentPageInfo = 'score';
 					}
 				})
 			}

@@ -30,7 +30,7 @@
 	
 	
 	export default {
-		name: 'TallyInfo',
+		name: 'TallyInfoDate',
 		components: {
 			uniPopup
 		},

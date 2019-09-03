@@ -35,6 +35,8 @@ class Task {
 		this.repeat_count = obj.repeat_count ? obj.repeat_count : 1;
 		//任务提醒
 		this.remind = obj.remind ? obj.remind : [];
+		//是否完结
+		this.isCompleted = obj.isCompleted ? obj.isCompleted : false;
 		//是否删除
 		this.isDel = obj.isDel ? obj.isDel : false;
 	}

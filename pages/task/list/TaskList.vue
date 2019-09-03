@@ -34,10 +34,6 @@
 			let taskData = this.getListData();
 			this.$store.dispatch('changeTaskData', taskData);
 		},
-		onLoad () {
-			let taskData = this.getListData();
-			this.$store.dispatch('changeTaskData', taskData);
-		},
 		methods: {
 			pageStateChange (pageState) {
 				this.pageState = pageState;
@@ -56,6 +52,7 @@
 					console.log('task-list save taskData success');
 				}
 			})
+			let completedData = uni.getStorageSync('completedData');
 		}
 	}
 </script>

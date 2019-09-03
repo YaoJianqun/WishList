@@ -108,6 +108,13 @@
 			}
 		},
 		methods: {
+			operateCompletedDate (taskState, task) {
+				if (taskState) {
+					 addOrUpdateCompletedData(task);
+				} else {
+					 deleteCompletedData(task);
+				}
+			},
 			handleTaskClick (taskId) {
 				if (!this.menuState) {
 					uni.navigateTo({
@@ -215,10 +222,24 @@
 				
 				task.completed_count += moveCount;
 				
-				if (task.completed_count > target_count) 
+				if (task.id !== this.taskState.id) {
+					this.taskState.id = task.id
+					this.taskState.isComplete = task.completed_count > target_count;
+					if (this.taskState.isComplete) addOrUpdateCompletedData(task);
+				};
+				
+				let isComplete = task.completed_count >= target_count;
+				
+				if (isComplete) {
 					task.completed_count = target_count
-				else if (task.completed_count < 0)
+				} else if (task.completed_count < 0) {
 					task.completed_count = 0
+				}
+				
+				if (this.taskState.isComplete !== isComplete) {
+					this.taskState.isComplete = isComplete;
+					this.operateCompletedDate(isComplete, task)
+				}
 				
 				this.startX = touchX;
 			},
@@ -273,10 +294,13 @@
 			},
 			handleTaskCompletedClick (taskId) {
 				let task = this.taskData.taskObj[taskId];
-				if (this.isCompleted(task)) 
+				let completedState = this.isCompleted(task);
+				if (this.isCompleted(task)) {
 					task.completed_count = 0;
-				else 
+				} else {
 					task.completed_count = task.target_count;
+				}
+				this.operateCompletedDate(!completedState, task);
 			},
 			taskCompleted (task) {
 				return task.completed_count + '/' + task.target_count + task.unit;

@@ -10,79 +10,38 @@
 		},
 		methods: {
 			setCompletedData () {
-				uni.setStorage({
-					key: 'completedData',
-					data: {'taskCompletedData': {}, 'wishCompletedData': {}},
-					success: function () {
-						console.log('init completedData success');
-					}
-				})
+				uni.setStorageSync('completedData', {'taskCompletedData': {}, 'wishCompletedData': {}})
+				console.log('init completedData success');
 			},
 			setWishData () {
-				uni.setStorage({
-					key: 'wishData',
-					data: {'wishIdArray': [], 'wishObj': {}},
-					success: function () {
-						console.log('init wishData success');
-					}
-				})
+				uni.setStorageSync('wishData', {'wishIdArray': [], 'wishObj': {}})
+				console.log('init wishData success');
 			},
 			setTaskData () {
-				uni.setStorage({
-					key: 'taskData',
-					data: {'taskIdArray': [], 'taskObj': {}},
-					success: function () {
-						console.log('init taskData success');
-					}
-				})
+				uni.setStorageSync('taskData', {'taskIdArray': [], 'taskObj': {}})
+				console.log('init taskData success');
 			},
-			initTaskData () {
-				let _this = this;
-				uni.getStorageInfo({
-					success: function (res) {
-						if (res.keys.indexOf('taskData') < 0)
-							_this.setTaskData();
-					},
-					fail: function () {
-						console.log('getStorageInfo fail', arguments)
-						_this.setTaskData();
-					},
-					complete: function () {console.log('init taskData complete')}
-				})
+			initTaskData (storageInfo) {
+				if (storageInfo.keys.indexOf('taskData') < 0)
+					this.setTaskData();
+				console.log('init taskData complete')
 			},
-			initWishData () {
-				let _this = this;
-				uni.getStorageInfo({
-					success: function (res) {
-						if (res.keys.indexOf('wishData') < 0)
-							_this.setWishData();
-					},
-					fail: function () {
-						console.log('getStorageInfo fail', arguments)
-						_this.setWishData();
-					},
-					complete: function () {console.log('init wishData complete')}
-				})
+			initWishData (storageInfo) {
+				if (storageInfo.keys.indexOf('wishData') < 0)
+					this.setWishData();
+				console.log('init wishData complete')
 			},
-			initCompletedData () {
-				let _this = this;
-				uni.getStorageInfo({
-					success: function (res) {
-						if (res.keys.indexOf('completedData') < 0)
-							_this.setCompletedData();
-					},
-					fail: function () {
-						console.log('getStorageInfo fail', arguments)
-						_this.setCompletedData();
-					},
-					complete: function () {console.log('init completedData complete')}
-				})
+			initCompletedData (storageInfo) {
+				if (storageInfo.keys.indexOf('completedData') < 0)
+					this.setCompletedData();
+				console.log('init completedData complete')
 			}
 		},
 		onLaunch: function() {
-			this.initTaskData();
-			this.initWishData();
-			this.initCompletedData();
+			const storageInfo = uni.getStorageInfoSync()
+			this.initTaskData(storageInfo);
+			this.initWishData(storageInfo);
+			this.initCompletedData(storageInfo);
 		},
 		onShow: function() {
 			console.log('App Show')
