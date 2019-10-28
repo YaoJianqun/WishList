@@ -14,7 +14,6 @@
 	    "backgroundColor": "#ffffff",
 	    "list": [{
 	        "pagePath": "pages/task/list/TaskList",
-	        
 	        "text": "任务"
 	    }, {
 	        "pagePath": "pages/wish/list/WishList",

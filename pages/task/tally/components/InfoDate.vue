@@ -76,6 +76,7 @@
 				uni.vibrateShort()
 			},
 			initTimer (data) {
+				
 				this.timerCanvasHeight = data[0].height;
 				this.timerCanvasWidth = data[0].width;
 				
@@ -260,7 +261,7 @@
 			},
 			getTargetMilliSeconds (targetCount, unit) {
 				
-				let temp_seconds = (targetCount - this.task.completed_count) * 1000;
+				let temp_seconds = (targetCount/* - this.task.completed_count*/) * 1000;
 				
 				let totalMilliSeconds = 0;
 				
