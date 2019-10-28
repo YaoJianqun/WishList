@@ -5,7 +5,9 @@
 	export default {
 		computed: {
 			...mapState({
-				taskData: state => state.taskData
+				taskData: state => state.taskData,
+				wishData: state => state.wishData,
+				completedData: state => state.completedData
 			})
 		},
 		methods: {
@@ -63,12 +65,28 @@
 		
 		//退出app后存储任务数据
 		onHide: function() {
-			let taskData = this.taskData;
+			
 			uni.setStorage({
 				key: 'taskData',
-				data: taskData,
+				data: this.taskData,
 				success: function () {
 					console.log('App Hide - save taskData success');
+				}
+			})
+			
+			uni.setStorage({
+				key: 'wishData',
+				data: this.wishData,
+				success: function () {
+					console.log('App Hide - save wishData success');
+				}
+			})
+			
+			uni.setStorage({
+				key: 'completedData',
+				data: this.completedData,
+				success: function () {
+					console.log('App Hide - save completedData success');
 				}
 			})
 		}

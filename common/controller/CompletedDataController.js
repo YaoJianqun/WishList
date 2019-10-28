@@ -1,4 +1,4 @@
-import { setTaskCompleted, delTaskCompleted } from '@/common/controller/CompletedController'
+import { setTaskCompleted, delTaskCompleted } from '@/common/service/CompletedDataService'
 import TaskCompleted from '@/common/model/TaskCompleted'
 
 let addOrUpdateCompletedData = function (task) {
