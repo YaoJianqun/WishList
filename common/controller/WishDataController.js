@@ -1,6 +1,7 @@
-import { setWish, delWish } from '@/common/controller/WishController'
+import { setWish, delWish } from '@/common/service/WishDataService'
 
 let addOrUpdateWishData = function (wish) {
+	debugger;
 	let wishData = uni.getStorageSync('wishData');
 	setWish.bind(wishData)(wish);
 	uni.setStorage({

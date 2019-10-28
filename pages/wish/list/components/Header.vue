@@ -18,30 +18,35 @@
 <script>
 	export default {
 		name: 'WishListHeader',
-		data () {
-			return {
-				pageTheme: 'default',
-				pageState: 'no-redeem'
+		
+		props: {
+			pageTheme: {
+			  type: String,
+			  default: 'default'
+			},
+			pageState: {
+			  type: String,
+			  default: 'no-redeem'
 			}
 		},
+		
 		computed: {
 			selTheme () {
 				return this.pageTheme === 'default' ? 'iconnavicon' : 'iconappstore-fill'
 			},
 			titleContent () {
-				let temp_text = '待完成';
-				this.pageState === 'no-redeem' ? temp_text : temp_text = '已完成';
-				return temp_text;
+				return this.pageState === 'no-redeem' ? '待完成' : '已完成';
 			}
 		},
+		
 		methods: {
 			handleTitleClick () {
-				this.pageState === 'no-redeem' ? this.pageState = 'redeem' : this.pageState = 'no-redeem';
-				this.$emit('pageStateChange', this.pageState);
+				let pageState = this.pageState === 'no-redeem' ? 'redeem' : 'no-redeem';
+				this.$emit('pageStateChange', pageState);
 			},
 			handleThemeClick (e) {
-				this.pageTheme = e.target.dataset.theme;
-				this.$emit('pageThemeChange', this.pageTheme);
+				let pageTheme = e.target.dataset.theme;
+				this.$emit('pageThemeChange', pageTheme);
 			},
 			handleAddWishClick () {
 				uni.navigateTo({

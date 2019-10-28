@@ -135,16 +135,15 @@
 		},
 		methods: {
 			handleWishClick (e) {
-				/*console.log(e.target)
-				if (
 				
-				)*/
 			},
+			
 			handleScrollClick () {
 					this.menuMoveCount = 0;
 					this.menuMoveWish = '';
 					this.menuState = false;
 			},
+			
 			handleTouchStart (e) {
 				if (this.pageTheme === 'card') {
 					let wishid = e.currentTarget.dataset.wishid;
@@ -160,27 +159,31 @@
 					}.bind(this), 100)
 					return;
 				}
-			  this.touchStatus = true;
+				this.touchStatus = true;
 				this.startX = e.touches[0].clientX;
 				if (!this.menuState) this.handleScrollClick();
 			},
+			
 			handleTouchMove (e) {
 				//判断是否为卡片主题
 				if (this.pageTheme === 'card') return;
+				
 				//判断是否为滑动状态
-			  if (this.touchStatus && this.startX !== 0) {
+				if (this.touchStatus && this.startX !== 0) {
+					
 					//判断是否存在timer，如果有清除未执行timer
-			    if (this.timer) {
-			      clearTimeout(this.timer)
-			    }
+					if (this.timer) {
+						clearTimeout(this.timer)
+					}
+					
 					//创建timer延迟16ms执行
-			    this.timer = setTimeout(() => {
-						
+					this.timer = setTimeout(() => {
+							
 						if (this.menuState) this.editWish(e);
-						
+							
 						//获取当前用户滑动位置
-			      const touchX = e.touches[0].clientX;
-						
+						const touchX = e.touches[0].clientX;
+							
 						//判断如果当前滑动位置与起始位置不同，且滑动方向未空对象
 						if (this.scrollDirection === '' && touchX !== this.startX){
 							//依据起始位置与当前位置大小判断滑动方向
@@ -192,10 +195,11 @@
 						//依据滑动方向与右滑菜单判断执行函数 moveProgress:为改变进度条大小 editWish:为弹出菜单
 						if (this.scrollDirection === 'left'&&this.menuState)
 							this.editWish(e);
-							
-			    }, 16)
-			  }
+								
+					}, 16)
+				}
 			},
+			
 			editWish (e) {
 				if (!this.touchStatus) return;
 				
@@ -215,6 +219,7 @@
 				this.menuMoveWish = wishid;
 				this.menuMoveCount = temp_moveCount;
 			},
+			
 			handleTouchEnd (e) {
 				let wishid = e.currentTarget.dataset.wishid;
 				if (this.pageTheme === 'card') {
@@ -237,6 +242,7 @@
 				if (this.menuMoveCount === -380) this.menuState = true;
 				if (this.menuMoveCount === 0) this.menuState = false;
 			},
+			
 			handleDelWishClick (wishId) {
 				let wishIndex = this.wishData.wishIdArray.indexOf(wishId);
 				if (wishIndex > -1) {
@@ -251,11 +257,13 @@
 					deleteWishData(wishId);
 				}
 			},
+			
 			handleEditWishClick (wishId) {
 				uni.navigateTo({
 					url: '../../../pages/wish/base/WishBase?wishId=' + wishId
 				});
 			},
+			
 			scroll: function(e) {
 				this.old.scrollTop = e.detail.scrollTop
 			}

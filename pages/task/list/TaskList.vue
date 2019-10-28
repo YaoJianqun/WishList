@@ -11,38 +11,50 @@
 	
 	import TaskListHeader from './components/Header'
 	import TaskListContent from './components/Content'
-	import TaskListDock from './components/Dock'
+	//import TaskListDock from './components/Dock'
 	
 	export default {
 		name: 'TaskList',
+		
 		data () {
 			return {
 				pageState: 'today'
 			}
 		},
+		
 		computed: {
 			...mapState({
 				taskData: state => state.taskData
 			})
 		},
+		
 		components: {
 			TaskListHeader,
-			TaskListContent,
-			TaskListDock
+			TaskListContent
+			//TaskListDock
 		},
-		onShow() {
-			let taskData = this.getListData();
-			this.$store.dispatch('changeTaskData', taskData);
-		},
+		
 		methods: {
+			//改变页面展示内容
 			pageStateChange (pageState) {
 				this.pageState = pageState;
 			},
+			
+			//获取任务列表数据
 			getListData () {
-				let taskData = uni.getStorageSync('taskData');
-				return taskData;
+				uni.getStorage({
+					key: 'taskData',
+					success: function (taskData) {
+						this.$store.dispatch('changeTaskData', taskData.data);
+					}.bind(this)
+				});
 			}
 		},
+		
+		onShow() {
+			this.getListData();
+		},
+		
 		onHide () {
 			let taskData = this.taskData;
 			uni.setStorage({

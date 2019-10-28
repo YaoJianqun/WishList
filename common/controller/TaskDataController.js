@@ -1,4 +1,4 @@
-import { setTask, delTask } from '@/common/controller/TaskController'
+import { setTask, delTask } from '@/common/service/TaskDataService'
 
 let addOrUpdateTaskData = function (task) {
 	let taskData = uni.getStorageSync('taskData');

@@ -1,4 +1,5 @@
 let setWish = function (wish) {
+	debugger;
 	if (this.wishIdArray && this.wishIdArray.indexOf(wish.id) < 0) {
 		this.wishIdArray.push(wish.id);
 	}

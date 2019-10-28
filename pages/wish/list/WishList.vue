@@ -1,6 +1,11 @@
 <template>
 	<view class="wrapper">
-		<wish-list-header @pageThemeChange="pageThemeChange" @pageStateChange="pageStateChange"></wish-list-header>
+		<wish-list-header 
+			:pageTheme="pageTheme" 
+			:pageState="pageState"
+			@pageThemeChange="pageThemeChange" 
+			@pageStateChange="pageStateChange"
+		></wish-list-header>
 		<wish-list-content :pageTheme="pageTheme" :pageState="pageState"></wish-list-content>
 		<!-- <task-list-dock></task-list-dock> -->
 	</view>
@@ -28,8 +33,8 @@
 		},
 		components: {
 			WishListHeader,
-			WishListContent,
-			WishListDock
+			WishListContent/*,
+			WishListDock*/
 		},
 		onShow() {
 			this.loadWishData();
@@ -39,18 +44,28 @@
 		},
 		methods: {
 			loadWishData () {
-				let wishData = this.getListData();
-				this.$store.dispatch('changeWishData', wishData);
+				this.getListData().then((wishData) => {
+					this.$store.dispatch('changeWishData', wishData);
+				});
 			},
+			
 			pageStateChange (pageState) {
 				this.pageState = pageState;
 			},
+			
 			pageThemeChange (pageTheme) {
 				this.pageTheme = pageTheme;
 			},
+			
 			getListData () {
-				let wishData = uni.getStorageSync('wishData'); 
-				return wishData;
+				return new Promise((resolve, reject) => {
+					uni.getStorage({
+						key: 'wishData',
+						success: function (wishData) {
+							resolve(wishData.data);
+						}
+					})
+				})
 			}
 		},
 		onHide () {
