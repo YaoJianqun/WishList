@@ -60,7 +60,6 @@
 					console.log('init Data success')
 				}.bind(this)
 			})
-			
 		}
 	}
 </script>
