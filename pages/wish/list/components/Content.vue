@@ -94,6 +94,11 @@
 				default: 'no-redeem'
 			}
 		},
+		
+		created () {
+			
+		},
+		
 		data() {
 			return {
 				//记录初始位置
@@ -114,6 +119,7 @@
 				}
 			}
 		},
+		
 		watch: {
 			//监听主题变化,在主题变化后重置页面所有状态
 			pageTheme () {
@@ -184,7 +190,7 @@
 						this.menuMoveWish = e.currentTarget.dataset.wishid;
 						this.cardMunuState = true;
 						clearTimeout(this.timer);
-					}, 800)
+					}, 600)
 					return;
 				}
 				
@@ -214,7 +220,7 @@
 						//获取当前滑动愿望ID
 						let wishid = e.currentTarget.dataset.wishid;
 						//获取当前用户滑动位置
-						const touchX = e.touches[0].clientX;
+						let touchX = e.touches[0].clientX;
 						//计算移动距离
 						let defferenceCount = touchX - this.startX;
 						//计算移动距离占比

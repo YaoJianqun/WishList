@@ -1,7 +1,6 @@
 import { setWish, delWish } from '@/common/service/WishDataService'
 
 let addOrUpdateWishData = function (wish) {
-	//let wishData = uni.getStorageSync('wishData');
 	return new Promise((resolve, reject) => {
 		uni.getStorage({
 			key: 'wishData',
@@ -22,7 +21,9 @@ let addOrUpdateWishData = function (wish) {
 			})
 		})
 	})
+	
 }
+
 
 let deleteWishData = function (wishId) {
 	let wishData = uni.getStorageSync('wishData');
