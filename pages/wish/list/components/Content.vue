@@ -1,5 +1,5 @@
 <template>
-	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll" @click="handleScrollClick">
+	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll" @click.stop="resetListMenu">
 		<view class="wish-list" :class="[pageTheme]">
 			<view class="wish-item"
 						:class="[wish.id === menuMoveWish ? reverseClass : '',pageTheme]"
@@ -9,9 +9,10 @@
 						:style="menuMoveWish == wish.id ? itemMoveStyle : ''"
 						@touchstart="handleTouchStart"
 						@touchmove="handleTouchMove"
-						@touchend="handleTouchEnd"
-						@click.stop="handleWishClick"
+						@touchend.prevent="handleTouchEnd"
+						@click.stop="resetListMenu"
 			>
+				<!-- 愿望图片 -->
 				<view class="image-wrapper">
 					<view class="icon iconfont icondiamond1 warning" v-if="!wish.image"></view>
 					<image :mode="'aspectFill'"
@@ -20,10 +21,12 @@
 								 v-if="wish.image"
 					></image>
 				</view>
+				<!-- 愿望信息 -->
 				<view class="wish-info">
 					<view class="title" v-text="wish.name"></view>
 					<view class="info" v-text="wish.happy_coin"></view>
 				</view>
+				<!-- 愿望进度条 -->
 				<view class="progress bdcolor warning" style="width: 60%;"></view>
 				<view class="progress bgprogress bdcolor warning"></view>
 				<!-- 默认主题菜单 -->
@@ -43,7 +46,7 @@
 					<view class="menu-title">删除</view>
 				</view>
 				<!-- 卡片主题菜单 -->
-				<view class="wish-menu" v-if="pageTheme === 'card' && menuState">
+				<view class="wish-menu" v-if="pageTheme === 'card' && cardMunuState">
 					<view class="image-wrapper">
 						<view class="icon iconfont icondiamond1 warning" v-if="!wish.image"></view>
 						<image :mode="'aspectFill'"
@@ -62,7 +65,7 @@
 							<view class="icon iconfont icontrash"></view>
 							<view class="delete-title">删除</view>
 						</view>
-						<view class="operate-item cancel bgcolor success" @click="handleScrollClick">
+						<view class="operate-item cancel bgcolor success" @click.stop="handleCanceClick">
 							<view class="cancel-title">取消</view>
 						</view>
 					</view>
@@ -80,10 +83,12 @@
 	export default {
 		name: 'WishListContent',
 		props: {
+			//主题类型
 			pageTheme: {
 				type: String,
 				default: 'default'
 			},
+			//页面状态，展示内容
 			pageState: {
 				type: String,
 				default: 'no-redeem'
@@ -91,13 +96,17 @@
 		},
 		data() {
 			return {
+				//记录初始位置
 				startX: 0,
-				timer: null,
-				clickTime: 0,
+				//用于列表主题下,函数节流
+				timer:  null,
+				//卡片模式下是否处于展示菜单的状态
 				cardMunuState: false,
+				//当前操作愿望ID
 				menuMoveWish: '',
-				menuState: false,
+				//列表主题下，记录移动距离
 				menuMoveCount: 0,
+				//滑动状态
 				touchStatus: false,
 				scrollTop: 0,
 				old: {
@@ -105,18 +114,29 @@
 				}
 			}
 		},
+		watch: {
+			//监听主题变化,在主题变化后重置页面所有状态
+			pageTheme () {
+				this.handleCanceClick();
+			}
+		},
+		
 		computed: {
+			//卡片模式下,计算是否反转,用于展示菜单
 			reverseClass () {
 				return this.cardMunuState ? 'reverse' : '';
 			},
+			//列表模式下,计算删除卡片移动距离
 			deleteMoveStyle () {
 				let moveCount = -210;
 				if (this.menuMoveCount < -210) moveCount = this.menuMoveCount;
 				return 'right:' + moveCount + 'rpx;'; 
 			},
+			//列表模式下,计算列表移动距离
 			itemMoveStyle () {
 				return 'right:' + Math.abs(this.menuMoveCount) + 'rpx;';
 			},
+			//依据页面状态计算展示列表
 			wishList () {
 				let temp_wishList = [];
 				if (this.wishData.wishIdArray) {
@@ -134,42 +154,54 @@
 			})
 		},
 		methods: {
-			handleWishClick (e) {
-				
+			//卡片模式-点击取消按钮
+			handleCanceClick () {
+				this.cardMunuState = false;
+				this.resetListMenu();
 			},
 			
-			handleScrollClick () {
-					this.menuMoveCount = 0;
-					this.menuMoveWish = '';
-					this.menuState = false;
+			//重置列表状态
+			resetListMenu () {
+				//排除长按对click的影响
+				if (this.cardMunuState) return;
+				if (this.menuMoveCount < -10) {
+					let interval = setInterval(() => {
+						this.menuMoveCount += 10;
+						if (this.menuMoveCount > 0) {
+							 this.menuMoveCount =  0;
+							 this.menuMoveWish = '';
+							 clearInterval(interval);
+						};
+					},8)
+				}
 			},
-			
+			//开始滑动
 			handleTouchStart (e) {
+				//监听卡片主题下的长按事件
 				if (this.pageTheme === 'card') {
-					let wishid = e.currentTarget.dataset.wishid;
-					this.clickTime = Date.now();
-					this.timer = setInterval(function () {
-						let endTime = Date.now();
-						if (endTime - this.clickTime >= 800) {
-							this.menuMoveWish = wishid;
-							this.cardMunuState = true;
-							this.menuState = !this.menuState;
-							clearInterval(this.timer);
-						}
-					}.bind(this), 100)
+					//创建定时器,用于计算时间
+					this.timer = setTimeout(() => {
+						this.menuMoveWish = e.currentTarget.dataset.wishid;
+						this.cardMunuState = true;
+						clearTimeout(this.timer);
+					}, 800)
 					return;
 				}
+				
+				//滑动状态打开
 				this.touchStatus = true;
+				//记录滑动初始位置
 				this.startX = e.touches[0].clientX;
-				if (!this.menuState) this.handleScrollClick();
+				//记录操作愿望ID
+				this.menuMoveWish = e.currentTarget.dataset.wishid;
 			},
-			
+			//
 			handleTouchMove (e) {
 				//判断是否为卡片主题
 				if (this.pageTheme === 'card') return;
 				
 				//判断是否为滑动状态
-				if (this.touchStatus && this.startX !== 0) {
+				if (this.touchStatus) {
 					
 					//判断是否存在timer，如果有清除未执行timer
 					if (this.timer) {
@@ -178,82 +210,58 @@
 					
 					//创建timer延迟16ms执行
 					this.timer = setTimeout(() => {
-							
-						if (this.menuState) this.editWish(e);
-							
+						if (!this.touchStatus) return;
+						//获取当前滑动愿望ID
+						let wishid = e.currentTarget.dataset.wishid;
 						//获取当前用户滑动位置
 						const touchX = e.touches[0].clientX;
-							
-						//判断如果当前滑动位置与起始位置不同，且滑动方向未空对象
-						if (this.scrollDirection === '' && touchX !== this.startX){
-							//依据起始位置与当前位置大小判断滑动方向
-							touchX > this.startX ? this.scrollDirection = 'right' : this.scrollDirection = 'left';
-							//当用户为左滑时，将左滑菜单状态置为true
-							if (this.scrollDirection === 'left') this.menuState = true;
+						//计算移动距离
+						let defferenceCount = touchX - this.startX;
+						//计算移动距离占比
+						//移动距离 / 总的移动距离 / 3
+						let movePercent = defferenceCount / 120;
+						//计算真实移动距离
+						let temp_moveCount = Math.floor(380 * movePercent);
+						//移动距离大于编辑区域距离时，置为编辑距离
+						if (temp_moveCount < -380) temp_moveCount = -380;
+						//移动距离大于起始位置时，置为0
+						if (temp_moveCount > 0 && this.menuMoveCount < 0) {
+							temp_moveCount =  -380 + temp_moveCount;
 						}
+						//排除由于移动距离过大，导致的列表跑版的问题
+						if (temp_moveCount > 0) temp_moveCount = 0;
 						
-						//依据滑动方向与右滑菜单判断执行函数 moveProgress:为改变进度条大小 editWish:为弹出菜单
-						if (this.scrollDirection === 'left'&&this.menuState)
-							this.editWish(e);
-								
-					}, 16)
+						this.menuMoveCount = temp_moveCount;
+					}, 8)
 				}
-			},
-			
-			editWish (e) {
-				if (!this.touchStatus) return;
-				
-				let wishid = e.currentTarget.dataset.wishid;
-				
-				const touchX = e.touches[0].clientX;
-				
-				let defferenceCount = touchX - this.startX;
-				if (defferenceCount > 0) defferenceCount = 0;
-				
-				let movePercent = defferenceCount / 120;
-				
-				let temp_moveCount = Math.floor(380 * movePercent);
-				
-				if (temp_moveCount < -380) temp_moveCount = -380;
-				
-				this.menuMoveWish = wishid;
-				this.menuMoveCount = temp_moveCount;
 			},
 			
 			handleTouchEnd (e) {
-				let wishid = e.currentTarget.dataset.wishid;
-				if (this.pageTheme === 'card') {
-					clearInterval(this.timer);
-					return;
-				};
-				
-				this.touchStatus = false;
-				
 				if (this.timer) {
 				  clearTimeout(this.timer);
+				  if (this.pageTheme === 'card') return; 
 				}
-			  
-				this.startX = 0;
-				if (this.scrollDirection === 'left')
-					this.menuMoveCount < -190 ? this.menuMoveCount = -380 : this.menuMoveCount = 0;
-					
-				this.scrollDirection = '';
 				
-				if (this.menuMoveCount === -380) this.menuState = true;
-				if (this.menuMoveCount === 0) this.menuState = false;
+				this.startX = 0;
+				this.touchStatus = false;
+				this.menuMoveCount < -190 ? this.menuMoveCount = -380 : this.menuMoveCount = 0;
 			},
 			
 			handleDelWishClick (wishId) {
+				//判断愿望是否存在
 				let wishIndex = this.wishData.wishIdArray.indexOf(wishId);
 				if (wishIndex > -1) {
+					//删除vuex中的愿望
 					this.wishData.wishIdArray.splice(wishIndex, 1);
-					let wish = this.wishData.wishObj[wishId]
+					let wish = this.wishData.wishObj[wishId];
+					//删除愿望图片
 					uni.removeSavedFile({
 						filePath: wish.image,
 						success() {
 							console.log('delete wish ;image cache');
 						}
 					})
+					//删除愿望缓存
 					deleteWishData(wishId);
 				}
 			},
@@ -326,7 +334,7 @@
 					}
 				}
 				right: 0rpx;
-				transition: height 0.6s, max-width 0.6s, min-width 0.6s, right 0.4s, transform 0.6s;
+				transition: height 0.6s, max-width 0.6s, min-width 0.6s, transform 0.6s;
 				.wish-menu {
 					position: absolute;
 					right: -190rpx;

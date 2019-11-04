@@ -21,11 +21,13 @@
 		},
 		methods: {
 			saveWishData (temp_wish) {
-				addOrUpdateWishData(temp_wish);
-				uni.switchTab({
-				    url: '../../wish/list/WishList'
+				addOrUpdateWishData(temp_wish).then(() => {
+					uni.switchTab({
+					    url: '../../wish/list/WishList'
+					});
 				});
 			},
+			
 			handleNextClick () {
 				let temp_wish = this.$store.state.wish;
 				let _this = this;

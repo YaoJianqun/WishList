@@ -1,15 +1,26 @@
 import { setWish, delWish } from '@/common/service/WishDataService'
 
 let addOrUpdateWishData = function (wish) {
-	debugger;
-	let wishData = uni.getStorageSync('wishData');
-	setWish.bind(wishData)(wish);
-	uni.setStorage({
-		key: 'wishData',
-		data: wishData,
-		success: function () {
-			console.log('addOrUpdate wishData success');
-		}
+	//let wishData = uni.getStorageSync('wishData');
+	return new Promise((resolve, reject) => {
+		uni.getStorage({
+			key: 'wishData',
+			success: (result) => {
+				resolve(result.data);
+			}
+		})
+	}).then((wishData) => {
+		setWish.bind(wishData)(wish);
+		return new Promise((resolve, reject) => {
+			uni.setStorage({
+				key: 'wishData',
+				data: wishData,
+				success: function () {
+					console.log('addOrUpdate wishData success');
+					resolve();
+				}
+			})
+		})
 	})
 }
 

@@ -68,16 +68,12 @@
 
 <script>
 	import { mapState } from 'vuex'
-	import uniPopup from "@/components/uni-popup/uni-popup"
 	
 	import { iconList } from '@/static/data/TaskEnum'
 	import Task from '@/common/model/Task'
 	
 	export default {
 		name: 'BaseInfo',
-		components: {
-			uniPopup
-		},
 		data() {
 			return {
 				wishName: '',
