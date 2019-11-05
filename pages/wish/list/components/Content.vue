@@ -78,7 +78,7 @@
 
 <script>
 	import { mapState } from 'vuex'
-	import { deleteWishData } from '@/common/controller/WishDataController.js'
+	import { deleteWishData } from '@/common/dataOperate/controller/WishDataController'
 	
 	export default {
 		name: 'WishListContent',
@@ -264,11 +264,11 @@
 					uni.removeSavedFile({
 						filePath: wish.image,
 						success() {
-							console.log('delete wish ;image cache');
+							console.log('delete wish image cache');
 						}
 					})
 					//删除愿望缓存
-					deleteWishData(wishId);
+					deleteWishById(wishId);
 				}
 			},
 			

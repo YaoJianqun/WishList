@@ -25,7 +25,7 @@
 	import BaseInfoDate from './components/InfoDate';
 	//import BaseInfoScore from './components/InfoScore';
 	
-	import { addOrUpdateTaskData } from '@/common/controller/TaskDataController'
+	import { addOrUpdateTaskData } from '@/common/dataOperate/controller/TaskDataController'
 	
 	export default {
 		name: 'TaskTally',

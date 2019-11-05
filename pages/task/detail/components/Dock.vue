@@ -9,7 +9,7 @@
 
 <script>
 	
-	import { addOrUpdateTaskData } from '@/common/controller/TaskDataController'
+	import { addOrUpdateTaskData } from '@/common/dataOperate/controller/TaskDataController'
 	
 	export default {
 		name: 'BaseDock',

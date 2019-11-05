@@ -10,7 +10,7 @@
 <script>
 	
 	import { mapState } from 'vuex'
-	import { addOrUpdateWishData } from '@/common/controller/WishDataController'
+	import { addOrUpdateWish, saveWishData } from '@/common/dataOperate/controller/WishDataController'
 	
 	export default {
 		name: 'BaseDock',
@@ -21,7 +21,7 @@
 		},
 		methods: {
 			saveWishData (temp_wish) {
-				addOrUpdateWishData(temp_wish).then(() => {
+				addOrUpdateWish(temp_wish).then(() => {
 					uni.switchTab({
 					    url: '../../wish/list/WishList'
 					});
@@ -30,15 +30,14 @@
 			
 			handleNextClick () {
 				let temp_wish = this.$store.state.wish;
-				let _this = this;
 				if (temp_wish.image) {
 					uni.saveFile({
 						tempFilePath: temp_wish.image,
 						success: function (res) {
 							var savedFilePath = res.savedFilePath;
 							temp_wish.image = savedFilePath;
-							_this.saveWishData(temp_wish);
-						}
+							this.saveWishData(temp_wish);
+						}.bind(this)
 					});
 				} else {
 					this.saveWishData(temp_wish);

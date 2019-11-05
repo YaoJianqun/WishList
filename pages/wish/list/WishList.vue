@@ -13,6 +13,7 @@
 
 <script>
 	import { mapState } from 'vuex'
+	import { queryWishData, saveWishData } from '@/common/dataOperate/controller/WishDataController'
 	
 	import WishListHeader from './components/Header'
 	import WishListContent from './components/Content'
@@ -44,7 +45,11 @@
 		},
 		methods: {
 			loadWishData () {
-				this.getListData().then((wishData) => {
+				/*this.getListData().then((wishData) => {
+					this.$store.dispatch('changeWishData', wishData);
+				});*/
+				console.log('start')
+				queryWishData().then((wishData) => {
 					this.$store.dispatch('changeWishData', wishData);
 				});
 			},
@@ -55,27 +60,12 @@
 			
 			pageThemeChange (pageTheme) {
 				this.pageTheme = pageTheme;
-			},
-			
-			getListData () {
-				return new Promise((resolve, reject) => {
-					uni.getStorage({
-						key: 'wishData',
-						success: function (wishData) {
-							resolve(wishData.data);
-						}
-					})
-				})
 			}
 		},
 		onHide () {
-			let wishData = this.wishData;
-			uni.setStorage({
-				key: 'wishData',
-				data: wishData,
-				success: function (e) {
-					console.log('wish-list save wishData success');
-				}
+			//推出页面时保存数据
+			saveWishData(this.wishData).then(() => {
+				console.log('wish-list save wishData success');
 			})
 		}
 	}

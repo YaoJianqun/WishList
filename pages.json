@@ -16,27 +16,29 @@
 			"iconWidth": "24px",
 			"spacing": "4px",
 			"height": "46px",
-	    "list": [{
-					"iconPath": "static/img/menu.png",
-					"selectedIconPath": "static/img/menu-sel.png",
-	        "pagePath": "pages/task/list/TaskList",
-	        "text": "任务"
-	    }, {
-					"iconPath": "static/img/carry-out-sel.png",
-					"selectedIconPath": "static/img/carry-out.png",
-	        "pagePath": "pages/wish/list/WishList",
-	        "text": "清单"
-	    }, {
-					"iconPath": "static/img/bar-chart.png",
-					"selectedIconPath": "static/img/bar-chart-sel.png",
-	        "pagePath": "pages/wish/list/WishList",
-	        "text": "统计"
-	    }, {
-					"iconPath": "static/img/user.png",
-					"selectedIconPath": "static/img/user-sel.png",
-	        "pagePath": "pages/wish/list/WishList",
-	        "text": "我的"
-	    }]
+	    "list": [
+			{
+				"iconPath": "static/img/menu.png",
+				"selectedIconPath": "static/img/menu-sel.png",
+				"pagePath": "pages/task/list/TaskList",
+				"text": "任务"
+			}, {
+				"iconPath": "static/img/carry-out-sel.png",
+				"selectedIconPath": "static/img/carry-out.png",
+				"pagePath": "pages/wish/list/WishList",
+				"text": "清单"
+			}, {
+				"iconPath": "static/img/bar-chart.png",
+				"selectedIconPath": "static/img/bar-chart-sel.png",
+				"pagePath": "pages/wish/list/WishList",
+				"text": "统计"
+			}, {
+				"iconPath": "static/img/user.png",
+				"selectedIconPath": "static/img/user-sel.png",
+				"pagePath": "pages/wish/list/WishList",
+				"text": "我的"
+			}
+		]
 	},
 	"globalStyle": {
 		"navigationStyle": "custom",

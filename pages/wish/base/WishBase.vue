@@ -9,12 +9,12 @@
 <script>
 	
 	import Wish from '@/common/model/Wish'	
+	import { queryWishData } from '@/common/dataOperate/controller/WishDataController'
 	
 	import WishHeader from './components/Header';
 	import WishInfo from './components/Info';
 	import WishDock from './components/Dock';
 	
-	//console.log(new wish_test());
 	export default {
 		name: 'WishBase',
 		components: {
@@ -31,15 +31,11 @@
 			if (params.hasOwnProperty('wishId')) {
 				let _this = this;
 				this.wishId = params.wishId;
-				uni.getStorage({
-					key: 'wishData',
-					success (res) {
-						let temp_wish = res.data.wishObj[params.wishId];
-						_this.$store.dispatch('changeWish', temp_wish)
-					},
-					fail () {
-						console.log('init wishBase fail')
-					}
+				queryWishData().then((wishData) => {
+					let temp_wish = wishData.wishObj[params.wishId];
+					this.$store.dispatch('changeWish', temp_wish)
+				}).cache(() => {
+					console.log('init wishBase fail');
 				})
 			} else {
 				this.$store.dispatch('changeWish', new Wish());

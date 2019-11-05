@@ -44,8 +44,8 @@
 	
 	import { mapState } from 'vuex'
 	import TaskCompleted from '@/common/model/TaskCompleted'
-	import { deleteTaskData } from '@/common/controller/TaskDataController'
-	import { addOrUpdateCompletedData, deleteCompletedData } from '@/common/controller/CompletedDataController'
+	import { deleteTaskData } from '@/common/dataOperate/controller/TaskDataController'
+	import { addOrUpdateCompletedData, deleteCompletedData } from '@/common/dataOperate/controller/CompletedDataController'
 	
 	export default {
 		name: 'TaskListContent',
