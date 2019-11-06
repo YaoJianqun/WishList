@@ -27,7 +27,7 @@
 					<view class="info" v-text="wish.happy_coin"></view>
 				</view>
 				<!-- 愿望进度条 -->
-				<view class="progress bdcolor warning" style="width: 60%;"></view>
+				<view class="progress bdcolor warning" :style="[`width: ${wish.completedPre}`]"></view>
 				<view class="progress bgprogress bdcolor warning"></view>
 				<!-- 默认主题菜单 -->
 				<view class="wish-menu wish-edit bgcolor warning"
@@ -78,7 +78,7 @@
 
 <script>
 	import { mapState } from 'vuex'
-	import { deleteWishData } from '@/common/dataOperate/controller/WishDataController'
+	import { deleteWishById } from '@/common/dataOperate/controller/WishDataController'
 	
 	export default {
 		name: 'WishListContent',
@@ -93,10 +93,6 @@
 				type: String,
 				default: 'no-redeem'
 			}
-		},
-		
-		created () {
-			
 		},
 		
 		data() {
@@ -148,6 +144,7 @@
 				if (this.wishData.wishIdArray) {
 					for (let id of this.wishData.wishIdArray) {
 						let wish = this.wishData.wishObj[id]; 
+						wish.completedPre = this.computeWishCompleted(id) / wish.happy_coin;
 						if (this.pageState === 'no-redeem' && wish.redeem) continue;
 						if (this.pageState === 'redeem' && !wish.redeem) continue;
 						temp_wishList.push(wish);
@@ -156,10 +153,23 @@
 				return temp_wishList;
 			},
 			...mapState({
-				wishData: state => state.wishData
+				wishData: state => state.wishData,
+				wishCompletedData: state => state.completedData.wishCompletedData
 			})
 		},
 		methods: {
+			//计算愿望完成度
+			computeWishCompleted (wishId) {
+				let completedCount = 0;
+				if (this.wishCompletedData.hasOwnProperty(wishId)) {
+					for (var i = 0, length = this.wishCompletedData[wishId]; i < length; i++) {
+						completedCount += this.wishCompletedData[wishId].happy_coin;
+					}
+					return completedCount;
+				}
+				return completedCount;
+			},
+			
 			//卡片模式-点击取消按钮
 			handleCanceClick () {
 				this.cardMunuState = false;
@@ -201,7 +211,6 @@
 				//记录操作愿望ID
 				this.menuMoveWish = e.currentTarget.dataset.wishid;
 			},
-			//
 			handleTouchMove (e) {
 				//判断是否为卡片主题
 				if (this.pageTheme === 'card') return;

@@ -1,15 +1,18 @@
-import { _queryWishDataList, _setWishData } from '@/common/dataOperate/dao/WishDataDao'
+//import { _queryWishDataList, _setWishData } from '@/common/dataOperate/dao/DataOperateDao'
+import { _setData, _queryData } from '@/common/dataOperate/dao/DataOperateDao'
+
+const key = 'wishData';
 
 let _saveWish = function (wish) {
 	if (this.wishIdArray && this.wishIdArray.indexOf(wish.id) < 0) {
 		this.wishIdArray.push(wish.id);
 	}
 	this.wishObj[wish.id] = wish;
-	return _setWishData(this);
+	return _setData(key, this);
 }
 
 let _saveWishData = function (wishData) {
-	return _setWishData(wishData);
+	return _setData(key, wishData);
 }
 
 let _delWishById = function (wish_id) {
@@ -18,11 +21,11 @@ let _delWishById = function (wish_id) {
 		this.wishIdArray.splice(wish_index, 1);
 		delete this[wish_id];
 	}
-	return _setWishData(this);
+	return _setData(key, this);
 }
 
 let _queryWishData = function () {
-	return _queryWishDataList();
+	return _queryData(key);
 }
 
 export { _saveWish, _saveWishData, _delWishById, _queryWishData };

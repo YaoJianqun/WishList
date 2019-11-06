@@ -1,26 +1,31 @@
-let _setWishData = function (wishData) {
+let _setData = function (key, data) {
 	return new Promise((resolve, reject) => {
 		uni.setStorage({
-			key: 'wishData',
-			data: wishData,
+			key: key,
+			data: data,
 			success: function () {
-				console.log('addOrUpdate wishData success');
 				resolve();
+			},
+			fail: function (e) {
+				reject(e);
 			}
 		})
 	})
 }
 
-let _queryWishDataList = function () {
+let _queryData = function (key) {
 	return new Promise((resolve, reject) => {
 		uni.getStorage({
-			key: 'wishData',
+			key: key,
 			success: (result) => {
 				resolve(result.data);
+			},
+			fail: function (e) {
+				reject(e);
 			}
 		})
 	})
 }
 
 
-export {_setWishData, _queryWishDataList};
+export {_setData, _queryData};

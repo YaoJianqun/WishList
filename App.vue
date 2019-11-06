@@ -1,6 +1,7 @@
 <script>
 	
 	import { mapState } from 'vuex'
+	import { queryCompletedData } from '@/common/dataOperate/controller/CompletedDataController'
 	
 	export default {
 		computed: {
@@ -19,7 +20,6 @@
 						console.log('init completedData success');
 					}
 				})
-				
 			},
 			
 			//创建愿望列表数据
@@ -46,6 +46,12 @@
 						console.log('init taskData success');
 					}.bind(this)
 				})
+			},
+			
+			loadCompletedData () {
+				queryCompletedData().then((completedData) => {
+					this.$store.dispatch('changeCompletedData', completedData);
+				})
 			}
 		},
 		
@@ -57,9 +63,13 @@
 					if (storageKeys.indexOf('taskData') < 0) await this.setTaskData();
 					if (storageKeys.indexOf('wishData') < 0) await this.setWishData();
 					if (storageKeys.indexOf('completedData') < 0) await this.setCompletedData();
+					await this.loadCompletedData();
 					console.log('init Data success')
 				}.bind(this)
 			})
+			
+			//记载任务及愿望清单完成情况数据
+			
 		}
 	}
 </script>

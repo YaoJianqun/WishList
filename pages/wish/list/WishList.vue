@@ -45,10 +45,6 @@
 		},
 		methods: {
 			loadWishData () {
-				/*this.getListData().then((wishData) => {
-					this.$store.dispatch('changeWishData', wishData);
-				});*/
-				console.log('start')
 				queryWishData().then((wishData) => {
 					this.$store.dispatch('changeWishData', wishData);
 				});

@@ -1,4 +1,5 @@
-import { setTaskCompleted, delTaskCompleted } from '@/common/dataOperate/service/CompletedDataService'
+import { _saveTaskCompleted, _delTaskCompleted, _queryCompletedData } from '@/common/dataOperate/service/CompletedDataService'
+
 import TaskCompleted from '@/common/model/TaskCompleted'
 
 let addOrUpdateCompletedData = function (task) {
@@ -9,28 +10,20 @@ let addOrUpdateCompletedData = function (task) {
 		completed_count: task.completed_count
 	};
 	let temp_taskCompleted = new TaskCompleted(taskCompleted);
-	
-	let completedData = uni.getStorageSync('completedData');
-	setTaskCompleted.bind(completedData)(temp_taskCompleted);
-	uni.setStorage({
-		key: 'completedData',
-		data: completedData,
-		success: function () {
-			console.log('addOrUpdate completedData success');
-		}
-	})
+	return _queryCompletedData().then((completedData) => {
+		return _saveTaskCompleted.bind(completedData)(temp_taskCompleted);
+	});
 }
 
 let deleteCompletedData = function (task) {
-	let completedData = uni.getStorageSync('completedData');
-	delTaskCompleted.bind(completedData)(task);
-	uni.setStorage({
-		key: 'completedData',
-		data: completedData,
-		success: function () {
-			console.log('remove completedData success');
-		}
-	})
+	//let completedData = uni.getStorageSync('completedData');
+	return _queryCompletedData().then((completedData) => {
+		return _delTaskCompleted.bind(completedData)(task);
+	});
 }
 
-export { addOrUpdateCompletedData, deleteCompletedData };
+let queryCompletedData = function () {
+	return _queryCompletedData();
+}
+
+export { addOrUpdateCompletedData, deleteCompletedData, queryCompletedData };

@@ -1,4 +1,8 @@
-let setTaskCompleted = function (taskCompleted) {
+import { _setData, _queryData } from '@/common/dataOperate/dao/DataOperateDao';
+
+const key = 'completedData';
+
+let _saveTaskCompleted = function (taskCompleted) {
 	//初始化状态，默认为新增，当找到相同完成任务时为
 	let taskCompletedState = true;
 	let wishCompletedState = true;
@@ -32,9 +36,10 @@ let setTaskCompleted = function (taskCompleted) {
 		}
 	}
 	if (wishCompletedState) wishCompletedArray.push(taskCompleted);
+	return _setData(key, this);
 }
 
-let delTaskCompleted = function (task) {
+let _delTaskCompleted = function (task) {
 	let taskCompletedIndex = -1;
 	let wishCompletedIndex = -1;
 	let nowDate = new Date(new Date().toLocaleDateString()).getTime();
@@ -51,9 +56,14 @@ let delTaskCompleted = function (task) {
 	}
 	if (taskCompletedIndex > -1) this.taskCompletedData[task.id].splice(taskCompletedIndex, 1);
 	if (wishCompletedIndex > -1) this.wishCompletedData[task.wishId].splice(wishCompletedIndex, 1);
+	return _setData(key, this);
 }
 
-export { setTaskCompleted, delTaskCompleted };
+let _queryCompletedData = function () {
+	return _queryData(key);
+}
+
+export { _saveTaskCompleted, _delTaskCompleted, _queryCompletedData };
 
 /*export delTask;
 
