@@ -20,16 +20,17 @@
 		},
 		computed: {
 			titleContent () {
-				let temp_text = '今日';
-				this.pageState === 'today' ? temp_text = '今日' : temp_text = '全部';
-				return temp_text;
+				return this.pageState === 'today' ? '今日' : '全部';
 			}
 		},
 		methods: {
+			//切换展示模式
 			handleTitleClick () {
-				this.pageState === 'today' ? this.pageState = 'all' : this.pageState = 'today';
+				this.pageState = this.pageState === 'today' ? 'all' : 'today';
 				this.$emit('pageStateChange', this.pageState);
 			},
+			
+			//添加任务
 			handleAddTaskClick () {
 				uni.navigateTo({
 					url: '../../../pages/task/base/TaskBase'

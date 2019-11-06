@@ -170,23 +170,23 @@
 			
 			handleTouchMove (e) {
 				//判断是否为滑动状态
-				if (this.touchStatus) {
+			  if (this.touchStatus && this.startX !== 0) {
 					//判断是否存在timer，如果有清除未执行timer
-					if (this.timer) {
-						clearTimeout(this.timer)
-					}
+			    if (this.timer) {
+			      clearTimeout(this.timer)
+			    }
 					//创建timer延迟16ms执行
-					this.timer = setTimeout(() => {
-							
+			    this.timer = setTimeout(() => {
+						
 						if (this.menuState) this.editTask(e);
 						
 						//获取当前用户滑动位置
-						const touchX = e.touches[0].clientX;
+			      const touchX = e.touches[0].clientX;
 						
-						//判断如果当前滑动位置与起始位置不同，且滑动方向为空
+						//判断如果当前滑动位置与起始位置不同，且滑动方向未空对象
 						if (this.scrollDirection === '' && touchX !== this.startX){
 							//依据起始位置与当前位置大小判断滑动方向
-							this.scrollDirection = touchX > this.startX ? 'right' : 'left';
+							touchX > this.startX ? this.scrollDirection = 'right' : this.scrollDirection = 'left';
 							//当用户为左滑时，将左滑菜单状态置为true
 							if (this.scrollDirection === 'left') this.menuState = true;
 						}
@@ -196,9 +196,9 @@
 							this.moveProgress(e);
 						else if (this.scrollDirection === 'left'&&this.menuState)
 							this.editTask(e);
-								
-					}, 16)
-				}
+							
+			    }, 16)
+			  }
 			},
 			
 			editTask (e) {
@@ -254,15 +254,17 @@
 					return;
 				};*/
 				
-				task.completed_count = moveCount;
+				task.completed_count += moveCount;
 				
 				if (task.id !== this.taskState.id) {
 					this.taskState.id = task.id
-					this.taskState.isComplete = this.isCompleted(task);
+					this.taskState.isComplete = task.completed_count > target_count;
 					if (this.taskState.isComplete) addOrUpdateTaskCompleted(task);
 				};
 				
-				if (this.taskState.isComplete) {
+				let isComplete = task.completed_count >= target_count;
+				
+				if (isComplete) {
 					task.completed_count = target_count
 				} else if (task.completed_count < 0) {
 					task.completed_count = 0
@@ -273,6 +275,7 @@
 					this.operateCompletedDate(isComplete, task)
 				}
 				
+				this.startX = touchX;
 			},
 			
 			handleTouchEnd () {

@@ -2,7 +2,7 @@ import { _saveTaskCompleted, _delTaskCompleted, _queryCompletedData } from '@/co
 
 import TaskCompleted from '@/common/model/TaskCompleted'
 
-let addOrUpdateCompletedData = function (task) {
+let addOrUpdateTaskCompleted = function (task) {
 	let taskCompleted = {
 		taskId: task.id,
 		wishId: task.wishId,
@@ -15,8 +15,7 @@ let addOrUpdateCompletedData = function (task) {
 	});
 }
 
-let deleteCompletedData = function (task) {
-	//let completedData = uni.getStorageSync('completedData');
+let deleteTaskCompleted = function (task) {
 	return _queryCompletedData().then((completedData) => {
 		return _delTaskCompleted.bind(completedData)(task);
 	});
@@ -26,4 +25,4 @@ let queryCompletedData = function () {
 	return _queryCompletedData();
 }
 
-export { addOrUpdateCompletedData, deleteCompletedData, queryCompletedData };
+export { addOrUpdateTaskCompleted, deleteTaskCompleted, queryCompletedData };

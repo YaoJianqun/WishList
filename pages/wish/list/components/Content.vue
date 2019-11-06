@@ -112,7 +112,8 @@
 				scrollTop: 0,
 				old: {
 					scrollTop: 0
-				}
+				},
+				screenWidth: uni.getSystemInfoSync().windowWidth * 0.4,
 			}
 		},
 		

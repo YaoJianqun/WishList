@@ -8,6 +8,7 @@
 
 <script>
 	import { mapState } from 'vuex'
+	import { queryTaskData, saveTaskData } from '@/common/dataOperate/controller/TaskDataController'
 	
 	import TaskListHeader from './components/Header'
 	import TaskListContent from './components/Content'
@@ -42,11 +43,8 @@
 			
 			//获取任务列表数据
 			getListData () {
-				uni.getStorage({
-					key: 'taskData',
-					success: function (taskData) {
-						this.$store.dispatch('changeTaskData', taskData.data);
-					}.bind(this)
+				queryTaskData().then((taskData) => {
+					this.$store.dispatch('changeTaskData', taskData);
 				});
 			}
 		},
@@ -56,15 +54,9 @@
 		},
 		
 		onHide () {
-			let taskData = this.taskData;
-			uni.setStorage({
-				key: 'taskData',
-				data: taskData,
-				success: function (e) {
-					console.log('task-list save taskData success');
-				}
+			saveTaskData(this.taskData).then(() => {
+				console.log('task-list save taskData success');
 			})
-			let completedData = uni.getStorageSync('completedData');
 		}
 	}
 </script>

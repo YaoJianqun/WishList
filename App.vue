@@ -10,6 +10,7 @@
 				wishData: state => state.wishData
 			})
 		},
+		
 		methods: {
 			//创建完成列表数据
 			setCompletedData () {
@@ -63,13 +64,11 @@
 					if (storageKeys.indexOf('taskData') < 0) await this.setTaskData();
 					if (storageKeys.indexOf('wishData') < 0) await this.setWishData();
 					if (storageKeys.indexOf('completedData') < 0) await this.setCompletedData();
+					//加载任务及愿望清单完成情况数据
 					await this.loadCompletedData();
 					console.log('init Data success')
 				}.bind(this)
 			})
-			
-			//记载任务及愿望清单完成情况数据
-			
 		}
 	}
 </script>

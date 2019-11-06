@@ -1,4 +1,3 @@
-//import { _queryWishDataList, _setWishData } from '@/common/dataOperate/dao/DataOperateDao'
 import { _setData, _queryData } from '@/common/dataOperate/dao/DataOperateDao'
 
 const key = 'wishData';

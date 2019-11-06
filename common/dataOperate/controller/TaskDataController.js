@@ -1,27 +1,23 @@
-import { setTask, delTask } from '@/common/dataOperate/service/TaskDataService'
+import { _saveTask, _saveTaskData, _delTaskById, _queryTaskData } from '@/common/dataOperate/service/TaskDataService'
 
 let addOrUpdateTaskData = function (task) {
-	let taskData = uni.getStorageSync('taskData');
-	setTask.bind(taskData)(task);
-	uni.setStorage({
-		key: 'taskData',
-		data: taskData,
-		success: function () {
-			console.log('addOrUpdate taskData success');
-		}
+	return _queryTaskData().then((taskData) => {
+		return _saveTask.bind(taskData)(task);;
 	})
 }
 
-let deleteTaskData = function (taskId) {
-	let taskData = uni.getStorageSync('taskData');
-	delTask.bind(taskData)(taskId);
-	uni.setStorage({
-		key: 'taskData',
-		data: taskData,
-		success: function () {
-			console.log('delete taskData success');
-		}
+let saveTaskData = function (taskData) {
+	return _saveTaskData(taskData);
+}
+
+let deleteTaskById = function (taskId) {
+	return _queryTaskData().then((taskData) => {
+		return _delTaskById.bind(taskData)(taskId);
 	})
 }
 
-export { addOrUpdateTaskData, deleteTaskData };
+let queryTaskData = function () {
+	return _queryTaskData();
+}
+
+export { addOrUpdateTaskData, saveTaskData, deleteTaskById, queryTaskData };
