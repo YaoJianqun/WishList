@@ -235,19 +235,22 @@
 				let taskid = e.currentTarget.dataset.taskid;
 				let task = this.taskData.taskObj[taskid];
 				let target_count = task.target_count;
+				let completed_count = task.completed_count;
 				
 				//计算单步移动数量
 				let oneStepCount = this.computeStepCount(target_count);
 				//计算单步数量占比
-				let CountPercent = oneStepCount / target_count;
+				let countPercent = oneStepCount / target_count;
+				//计算已完成占比
+				let completedPercent = completed_count / target_count;
 				
 				//如果移动宽度比例小于滑动宽度比例则无操作
-				if (Math.abs(movePercent) < CountPercent) return;
+				if (Math.abs(movePercent) < countPercent) return;
 				
 				//movePercent > 0 ? oneStepCount : oneStepCount *= -1;
 				
 				//真实移动数量
-				let moveCount = Math.floor(movePercent / CountPercent) * oneStepCount;
+				let moveCount = Math.floor((movePercent + completedPercent) / countPercent) * oneStepCount;
 				//排除未执行touchEnd时意外触发touchMove的情况
 				/*if (movePercent > 0.3 && target_count > 10) {
 					this.handleTouchEnd();

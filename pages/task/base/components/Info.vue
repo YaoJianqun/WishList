@@ -71,6 +71,7 @@
 	
 	import { iconList } from '@/static/data/TaskEnum'
 	import Task from '@/common/model/Task'
+	import { queryWishData } from '@/common/dataOperate/controller/WishDataController'
 	
 	export default {
 		name: 'BaseInfo',
@@ -107,36 +108,52 @@
 				this.task.wishId = this.wishList[wishIndex].id;
 				this.wishName = this.wishList[wishIndex].name;
 			},
+			
 			handleColorClick (e) {
 				let color = e.target.dataset.color;
 				if (color) {
 					this.task.color = color;
 				};
 			},
+			
 			handleIconClick (icon) {
 				this.task.icon = icon;
 			},
+			
 			changeIcon (isChange) {
 				if (!isChange) this.task.icon = this.oldIcon;
 				this.$refs.popup.close()
 			},
+			
 			selIcon(){
 				this.oldIcon = this.task.icon;
 				this.$refs.popup.open()
 			},
+			
 			closePopup(){
 				this.$refs.popup.close()
 			},
+			
 			scroll: function(e) {
 				this.old.scrollTop = e.detail.scrollTop
 			},
+			
 			isColorSel (color) {
 				if(this.task && this.task.color === color) return 'sel';
 			}
 		},
 		created() {
-			let _this = this;
-			uni.getStorage({
+			queryWishData().then((wishData) => {
+				let temp_wishObj = wishData.wishObj;
+				for (let id in temp_wishObj) {
+					let temp_wish = temp_wishObj[id];
+					if (!temp_wish.redeem) {
+						this.wishList.push({id: temp_wish.id, name: temp_wish.name});
+						if (this.task.wishId === temp_wish.id) this.wishName = temp_wish.name;
+					}
+				}
+			})
+			/*uni.getStorage({
 				key: 'wishData',
 				success(res) {
 					let temp_wishlist = res.data.wishObj;
@@ -151,7 +168,7 @@
 				fail() {
 					_this.wishList = [];
 				}
-			})
+			})*/
 		}
 	}
 </script>

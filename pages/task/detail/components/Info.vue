@@ -209,12 +209,14 @@
 			RepeatCountSel () {
 				return 'sel ' + this.task.color;
 			},
+			
 			type: {
 				get: function () {
 					let temp_type = '每' + this.frequency + this.typeList[this.task.type].value;
 					return temp_type;
 				}
 			},
+			
 			frequency: {
 				get: function () {
 					let temp_fre = this.frequencyList[this.task.frequency].value;
@@ -224,6 +226,7 @@
 					this.task.frequency = newValue;
 				}
 			},
+			
 			target_count: {
 				get: function () {
 					return this.task.target_count == 0 ? '' : this.task.target_count
@@ -232,12 +235,15 @@
 					this.task.target_count = newValue;
 				}
 			},
+			
 			showWeek () {
 				return this.task.frequency === 'week' || this.task.frequency === 'day';
 			},
+			
 			frequencyIsNotDay () {
 				return this.task.frequency !== 'day';
 			},
+			
 			typeIsTask () {
 				return this.task.type === 'task'
 			}
@@ -247,6 +253,7 @@
 				if (e.type === 'change' && this.task.remind.indexOf(e.detail.value) < 0)
 					this.task.remind.push(e.detail.value);
 			},
+			
 			handleRationClick (e) {
 				let temp_ration = e.target.dataset.ration;
 				if (temp_ration && this.task.ration.indexOf(temp_ration) < 0)
@@ -254,39 +261,49 @@
 				else if (temp_ration)
 					this.task.ration.splice(this.task.ration.indexOf(temp_ration), 1);
 			},
+			
 			handleRepeatCountClick (e) {
 				let temp_count = e.target.dataset.repeat_count;
 				if (temp_count) this.task.repeat_count = temp_count;
 			},
+			
 			handleFrequencyClick (e) {
 				let temp_fre = e.target.dataset.frequency;
 				if (temp_fre) this.task.frequency = temp_fre;
 			},
+			
 			handleTypeClick (e) {
 				let temp_type = e.target.dataset.type;
 				if (temp_type) this.task.type = temp_type;
 			},
+			
 			handleUnitClick (e) {
 				let temp_unit = e.target.dataset.unit;
 				if (temp_unit) this.task.unit = temp_unit;
 			},
+			
 			changeUnit (isChange) {
 				if (!isChange) this.task.unit = this.oldUnit;
 				this.$refs.popup.close()
 			},
+			
 			selUnit(){
 				this.oldUnit = this.task.unit;
 				this.$refs.popup.open()
 			},
+			
 			closePopup(){
 				this.$refs.popup.close()
 			},
+			
 			getKey (id) {
 				return (id + '-' + getUUID(4, 16));
 			},
+			
 			scroll: function(e) {
 				this.old.scrollTop = e.detail.scrollTop
 			},
+			
 			goLeft: function(e) {
 				// 解决view层不同步的问题
 				this.scrollTop = this.old.scrollTop

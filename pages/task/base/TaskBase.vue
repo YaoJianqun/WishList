@@ -8,13 +8,12 @@
 
 <script>
 	
-	import Task from '@/common/model/Task'	
+	import Task from '@/common/model/Task'
+	import { queryTaskData } from '@/common/dataOperate/controller/TaskDataController'
 	
 	import BaseHeader from './components/Header';
 	import BaseInfo from './components/Info';
 	import BaseDock from './components/Dock';
-	
-	//console.log(new task_test());
 	
 	export default {
 		name: 'TaskBase',
@@ -32,7 +31,11 @@
 			if (params.hasOwnProperty('taskId')) {
 				let _this = this;
 				this.taskId = params.taskId;
-				uni.getStorage({
+				queryTaskData().then((taskData) => {
+					let temp_task = taskData.taskObj[params.taskId];
+					this.$store.dispatch('changeTask', temp_task)
+				})
+				/*uni.getStorage({
 					key: 'taskData',
 					success (res) {
 						let temp_task = res.data.taskObj[params.taskId];
@@ -41,7 +44,7 @@
 					fail () {
 						console.log('init taskBase fail')
 					}
-				})
+				})*/
 			} else {
 				this.$store.dispatch('changeTask', new Task());
 			}

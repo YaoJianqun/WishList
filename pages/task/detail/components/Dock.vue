@@ -16,13 +16,15 @@
 		methods: {
 			handleNextClick () {
 				let temp_task = this.$store.state.task;
-				addOrUpdateTaskData(temp_task);
-				this.redirectTo();
-			
+				addOrUpdateTaskData(temp_task).then(() => {
+					this.redirectTo();
+				});
 			},
+			
 			handleCancelClick () {
 				this.redirectTo();
 			},
+			
 			redirectTo () {
 				uni.switchTab({
 				    url: '../../../pages/task/list/TaskList'
