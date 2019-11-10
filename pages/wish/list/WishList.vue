@@ -14,6 +14,7 @@
 <script>
 	import { mapState } from 'vuex'
 	import { queryWishData, saveWishData } from '@/common/dataOperate/controller/WishDataController'
+	import { queryCompletedData } from '@/common/dataOperate/controller/CompletedDataController'
 	
 	import WishListHeader from './components/Header'
 	import WishListContent from './components/Content'
@@ -39,15 +40,23 @@
 		},
 		onShow() {
 			this.loadWishData();
+			this.loadCompletedData();
 		},
 		onLoad () {
 			this.loadWishData();
+			this.loadCompletedData();
 		},
 		methods: {
 			loadWishData () {
 				queryWishData().then((wishData) => {
 					this.$store.dispatch('changeWishData', wishData);
 				});
+			},
+			
+			loadCompletedData () {
+				queryCompletedData().then((completedData) => {
+					this.$store.dispatch('changeCompletedData', completedData);
+				})
 			},
 			
 			pageStateChange (pageState) {

@@ -9,6 +9,8 @@ class Wish {
 		this.name = obj.name ? obj.name : '';
 		//愿望所需快乐币
 		this.happy_coin = obj.happy_coin ? obj.happy_coin : 0;
+		//已完成快乐币
+		this.completedCoin = obj.completedCoin ? obj.completedCoin : 0;
 		//愿望图片
 		this.image = obj.image ? obj.image : '';
 		//愿望颜色
@@ -17,6 +19,8 @@ class Wish {
 		this.type = obj.type ? obj.type : 'commodity';
 		//是否兑换
 		this.redeem = obj.redeem ? obj.redeem : false;
+		//是否完成
+		this.isCompleted = obj.isCompleted ? obj.isCompleted : false;
 		//是否删除
 		this.isDel = obj.isDel ? obj.isDel : false;
 	}

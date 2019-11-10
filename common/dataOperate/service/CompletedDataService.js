@@ -44,9 +44,12 @@ let _delTaskCompleted = function (task) {
 	let wishCompletedIndex = -1;
 	let nowDate = new Date(new Date().toLocaleDateString()).getTime();
 	
+	let happyCoin = 0;
+	
 	for (let index in this.taskCompletedData[task.id]) {
 		if (this.taskCompletedData[task.id][index].completedTime === nowDate) {
 			taskCompletedIndex = index;
+			happyCoin = this.taskCompletedData[task.id][index].happy_coin;
 		}
 	}
 	for (let index in this.wishCompletedData[task.wishId]) {
@@ -56,11 +59,17 @@ let _delTaskCompleted = function (task) {
 	}
 	if (taskCompletedIndex > -1) this.taskCompletedData[task.id].splice(taskCompletedIndex, 1);
 	if (wishCompletedIndex > -1) this.wishCompletedData[task.wishId].splice(wishCompletedIndex, 1);
-	return _setData(key, this);
+	return _setData(key, this).then(() => {
+		return happyCoin;
+	});
 }
 
 let _queryCompletedData = function () {
 	return _queryData(key);
+}
+
+let _queryHappyCoinPool = function () {
+	return _queryData('happyCoinPool');
 }
 
 export { _saveTaskCompleted, _delTaskCompleted, _queryCompletedData };

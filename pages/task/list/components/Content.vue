@@ -4,6 +4,7 @@
 					v-for="task of taskList"
 					:key="task.id"
 					:data-taskid="task.id"
+					:data-completedcount="task.completed_count"
 					:style="menuMoveTask == task.id ? itemMoveStyle : ''"
 					@touchstart.prevent="handleTouchStart"
 					@touchmove="handleTouchMove"
@@ -44,8 +45,9 @@
 	
 	import { mapState } from 'vuex'
 	import TaskCompleted from '@/common/model/TaskCompleted'
-	import { deleteTaskById } from '@/common/dataOperate/controller/TaskDataController'
-	import { addOrUpdateTaskCompleted, deleteTaskCompleted } from '@/common/dataOperate/controller/CompletedDataController'
+	import { addOrUpdateTaskData, deleteTaskById } from '@/common/dataOperate/controller/TaskDataController'
+	import { queryWishData, changeWishCompletedCoin } from '@/common/dataOperate/controller/WishDataController'
+	import { addOrUpdateTaskCompleted, deleteTaskCompleted, queryCompletedData } from '@/common/dataOperate/controller/CompletedDataController'
 	
 	export default {
 		name: 'TaskListContent',
@@ -69,6 +71,8 @@
 				menuState: false,
 				//滑动距离
 				menuMoveCount: 0,
+				//暂存完成数量
+				completedCount: 0,
 				//滑动状态
 				touchStatus: false,
 				//滑动方向
@@ -82,15 +86,13 @@
 		},
 		computed: {
 			itemMoveStyle () {
-				return `right${Math.abs(this.menuMoveCount)}rpx;`;
-				//return 'right:' + Math.abs(this.menuMoveCount) + 'rpx;';
+				return `right:${Math.abs(this.menuMoveCount)}rpx;`;
 			},
 			
 			deleteMoveStyle () {
-				let moveCount = -210;
+				let moveCount = -190;
 				if (this.menuMoveCount < -210) moveCount = this.menuMoveCount;
 				return `right:${moveCount}rpx;`;
-				//return 'right:' + moveCount + 'rpx;'; 
 			},
 			
 			...mapState({
@@ -133,10 +135,47 @@
 		},
 		methods: {
 			operateCompletedDate (taskState, task) {
+				
 				if (taskState) {
-					 addOrUpdateTaskCompleted(task);
+					//添加愿望快乐币surplusCoin
+					let surplusCoin = changeWishCompletedCoin(task.wishId, task.happy_coin);
+					debugger;
+					//添加任务完成信息
+					if (surplusCoin > 0) {
+						let tempHappy_coin = task.happy_coin;
+						let tempWishId = task.wishId;
+						task.happy_coin = tempHappy_coin - surplusCoin;
+						addOrUpdateTaskCompleted(task).then(() => {
+							task.wishId = 'happyCoinPool';
+							task.happy_coin = surplusCoin;
+							addOrUpdateTaskCompleted(task).then(() => {
+								task.happy_coin = tempHappy_coin;
+								task.wishId = tempWishId;
+								addOrUpdateTaskData(task).then(() => {
+									tempHappy_coin = null;
+									tempWishId = null;
+								});
+							});
+						});
+					} else {
+						addOrUpdateTaskCompleted(task);
+					}
 				} else {
-					 deleteTaskCompleted(task);
+					queryWishData().then((wishData) => {
+						if (wishData.wishObj[task.wishId].isCompleted) {
+							let tempWishId = task.wishId;
+							task.wishId = 'happyCoinPool';
+							deleteTaskCompleted(task).then(() => {
+								task.wishId = tempWishId;
+								deleteTaskCompleted(task).then((happyCoin) => {
+									tempWishId = null;
+									changeWishCompletedCoin(task.wishId, -happyCoin);
+								});
+							});
+							//deleteTaskCompleted(task);
+						}
+					})
+					
 				}
 			},
 			
@@ -164,6 +203,8 @@
 				this.scrollDirection = '';
 				//记录初始位置
 				this.startX = e.touches[0].clientX;
+				//记录原始完成数量
+				this.completedCount = e.currentTarget.dataset.completedcount;
 				//初始化任务相关数据
 				if (!this.menuState) this.resetTaskMenu();
 			},
@@ -171,10 +212,12 @@
 			handleTouchMove (e) {
 				//判断是否为滑动状态
 				if (this.touchStatus) {
+					
 					//判断是否存在timer，如果有清除未执行timer
 					if (this.timer) {
 						clearTimeout(this.timer)
 					}
+					
 					//创建timer延迟16ms执行
 					this.timer = setTimeout(() => {
 							
@@ -194,29 +237,35 @@
 						//依据滑动方向与右滑菜单判断执行函数 moveProgress:为改变进度条大小 editTask:为弹出菜单
 						if (this.scrollDirection === 'right' && !this.menuState  && this.pageState === 'today') 
 							this.moveProgress(e);
-						else if (this.scrollDirection === 'left'&&this.menuState)
+						else if (this.scrollDirection === 'left' || this.menuState)
 							this.editTask(e);
 								
-					}, 16)
+					}, 8)
 				}
 			},
 			
 			editTask (e) {
-				
 				if (!this.touchStatus) return;
 				
+				//获取当前滑动愿望ID
 				let taskid = e.currentTarget.dataset.taskid;
-				
-				const touchX = e.touches[0].clientX;
-				
+				//获取当前用户滑动位置
+				let touchX = e.touches[0].clientX;
+				//计算移动距离
 				let defferenceCount = touchX - this.startX;
-				if (defferenceCount > 0) defferenceCount = 0;
-				
+				//计算移动距离占比
+				//移动距离 / 总的移动距离 / 3
 				let movePercent = defferenceCount / 120;
-				
+				//计算真实移动距离
 				let temp_moveCount = Math.floor(380 * movePercent);
-				
+				//移动距离大于编辑区域距离时，置为编辑距离
 				if (temp_moveCount < -380) temp_moveCount = -380;
+				//移动距离大于起始位置时，置为0
+				if (temp_moveCount > 0 && this.menuMoveCount < 0) {
+					temp_moveCount =  -380 + temp_moveCount;
+				}
+				//排除由于移动距离过大，导致的列表跑版的问题
+				if (temp_moveCount > 0) temp_moveCount = 0;
 				
 				this.menuMoveTask = taskid;
 				this.menuMoveCount = temp_moveCount;
@@ -235,42 +284,39 @@
 				let taskid = e.currentTarget.dataset.taskid;
 				let task = this.taskData.taskObj[taskid];
 				let target_count = task.target_count;
-				let completed_count = task.completed_count;
 				
 				//计算单步移动数量
 				let oneStepCount = this.computeStepCount(target_count);
 				//计算单步数量占比
 				let countPercent = oneStepCount / target_count;
 				//计算已完成占比
-				let completedPercent = completed_count / target_count;
+				let completedPercent = this.completedCount / target_count;
 				
 				//如果移动宽度比例小于滑动宽度比例则无操作
 				if (Math.abs(movePercent) < countPercent) return;
 				
-				//movePercent > 0 ? oneStepCount : oneStepCount *= -1;
-				
 				//真实移动数量
 				let moveCount = Math.floor((movePercent + completedPercent) / countPercent) * oneStepCount;
-				//排除未执行touchEnd时意外触发touchMove的情况
-				/*if (movePercent > 0.3 && target_count > 10) {
-					this.handleTouchEnd();
-					return;
-				};*/
 				
+				//排除移动距离过大，造成数据错误的问题
+				if (moveCount > target_count)
+					moveCount = target_count;
+				else if (moveCount < 0)
+					moveCount = 0;
+				
+				//存储最终移动数量
 				task.completed_count = moveCount;
 				
-				if (task.id !== this.taskState.id) {
-					this.taskState.id = task.id
+				//记录初始任务完成状态
+				if (this.taskState.id !== task.id) {
+					this.taskState.id = task.id;
 					this.taskState.isComplete = this.isCompleted(task);
-					if (this.taskState.isComplete) addOrUpdateTaskCompleted(task);
-				};
-				
-				if (this.taskState.isComplete) {
-					task.completed_count = target_count
-				} else if (task.completed_count < 0) {
-					task.completed_count = 0
 				}
 				
+				//记录当前任务完成状态
+				let isComplete = this.isCompleted(task);
+				
+				//判断任务完成状态是否改变，如改变依据改变状态操作数据
 				if (this.taskState.isComplete !== isComplete) {
 					this.taskState.isComplete = isComplete;
 					this.operateCompletedDate(isComplete, task)
@@ -280,17 +326,19 @@
 			
 			handleTouchEnd () {
 				
-				this.touchStatus = false;
-				
 				if (this.timer) {
 				  clearTimeout(this.timer);
 				}
-			  
+				
+				this.touchStatus = false;
+				
 				this.startX = 0;
-				if (this.scrollDirection === 'left')
+				//如初始滑动方向为左,依据最终距离计算移动距离
+				if (this.scrollDirection === 'left' || this.menuState)
 					this.menuMoveCount < -190 ? this.menuMoveCount = -380 : this.menuMoveCount = 0;
 					
 				this.scrollDirection = '';
+				this.completedCount = 0;
 				
 				if (this.menuMoveCount === -380) this.menuState = true;
 				if (this.menuMoveCount === 0) this.menuState = false;
@@ -398,7 +446,7 @@
 				}
 			}
 			right: 0rpx;
-			transition: right 0.4s;
+			/*transition: right 0.4s;*/
 			.task-menu {
 				position: absolute;
 				right: -190rpx;

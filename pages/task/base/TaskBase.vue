@@ -29,22 +29,11 @@
 		},
 		onLoad (params) {
 			if (params.hasOwnProperty('taskId')) {
-				let _this = this;
 				this.taskId = params.taskId;
 				queryTaskData().then((taskData) => {
 					let temp_task = taskData.taskObj[params.taskId];
 					this.$store.dispatch('changeTask', temp_task)
 				})
-				/*uni.getStorage({
-					key: 'taskData',
-					success (res) {
-						let temp_task = res.data.taskObj[params.taskId];
-						_this.$store.dispatch('changeTask', temp_task)
-					},
-					fail () {
-						console.log('init taskBase fail')
-					}
-				})*/
 			} else {
 				this.$store.dispatch('changeTask', new Task());
 			}

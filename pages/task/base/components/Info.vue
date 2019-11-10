@@ -98,7 +98,7 @@
 					return this.task.happy_coin == 0 ? '' : this.task.happy_coin
 				},
 				set: function (newValue) {
-					this.task.happy_coin = newValue;
+					this.task.happy_coin = parseInt(newValue);
 				}
 			}
 		},
@@ -153,22 +153,6 @@
 					}
 				}
 			})
-			/*uni.getStorage({
-				key: 'wishData',
-				success(res) {
-					let temp_wishlist = res.data.wishObj;
-					for (let id in temp_wishlist) {
-						let temp_wish = temp_wishlist[id];
-						if (!temp_wish.redeem) {
-							_this.wishList.push({id: temp_wish.id, name: temp_wish.name});
-							if (_this.task.wishId === temp_wish.id) _this.wishName = temp_wish.name;
-						}
-					}
-				},
-				fail() {
-					_this.wishList = [];
-				}
-			})*/
 		}
 	}
 </script>

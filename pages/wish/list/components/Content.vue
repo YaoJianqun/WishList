@@ -24,10 +24,10 @@
 				<!-- 愿望信息 -->
 				<view class="wish-info">
 					<view class="title" v-text="wish.name"></view>
-					<view class="info" v-text="wish.happy_coin"></view>
+					<view class="info" v-text="`${wish.completedCount}/${wish.happy_coin}`"></view>
 				</view>
 				<!-- 愿望进度条 -->
-				<view class="progress bdcolor warning" :style="[`width: ${wish.completedPre}`]"></view>
+				<view class="progress bdcolor warning" :style="{width: wish.completedStyle}"></view>
 				<view class="progress bgprogress bdcolor warning"></view>
 				<!-- 默认主题菜单 -->
 				<view class="wish-menu wish-edit bgcolor warning"
@@ -131,7 +131,7 @@
 			},
 			//列表模式下,计算删除卡片移动距离
 			deleteMoveStyle () {
-				let moveCount = -210;
+				let moveCount = -190;
 				if (this.menuMoveCount < -210) moveCount = this.menuMoveCount;
 				return 'right:' + moveCount + 'rpx;'; 
 			},
@@ -145,10 +145,16 @@
 				if (this.wishData.wishIdArray) {
 					for (let id of this.wishData.wishIdArray) {
 						let wish = this.wishData.wishObj[id]; 
-						wish.completedPre = this.computeWishCompleted(id) / wish.happy_coin;
 						if (this.pageState === 'no-redeem' && wish.redeem) continue;
 						if (this.pageState === 'redeem' && !wish.redeem) continue;
-						temp_wishList.push(wish);
+						let tempWish = {};
+						tempWish.id = wish.id;
+						tempWish.image = wish.image;
+						tempWish.name = wish.name;
+						tempWish.happy_coin = wish.happy_coin;
+						tempWish.completedCount = this.computeWishCompleted(id);
+						tempWish.completedStyle = `${tempWish.completedCount / wish.happy_coin * 380}px`;
+						temp_wishList.push(tempWish);
 					}
 				}
 				return temp_wishList;
@@ -162,12 +168,14 @@
 			//计算愿望完成度
 			computeWishCompleted (wishId) {
 				let completedCount = 0;
+				
 				if (this.wishCompletedData.hasOwnProperty(wishId)) {
-					for (var i = 0, length = this.wishCompletedData[wishId]; i < length; i++) {
-						completedCount += this.wishCompletedData[wishId].happy_coin;
+					for (var i = 0, length = this.wishCompletedData[wishId].length; i < length; i++) {
+						completedCount += this.wishCompletedData[wishId][i].happy_coin;
 					}
 					return completedCount;
 				}
+				
 				return completedCount;
 			},
 			
