@@ -68,15 +68,15 @@ let _delHappyCoinPool = function (task) {
 	
 	let happyCoin = 0;
 	
-	let happyCoinPoolId = `${taskId}-${wishId}`;
+	let happyCoinPoolId = `${task.id}-${task.wishId}`;
 	
 	for (let index in this.happyCoinPool[happyCoinPoolId]) {
-		if (this.happyCoinPool[task.id][index].completedTime === nowDate) {
+		if (this.happyCoinPool[happyCoinPoolId][index].completedTime === nowDate) {
 			happyCoinPoolIndex = index;
-			happyCoin = this.happyCoinPool[task.id][index].happy_coin;
+			happyCoin = this.happyCoinPool[happyCoinPoolId][index].happy_coin;
 		}
 	}
-	if (happyCoinPoolIndex > -1) this.happyCoinPool[task.id].splice(happyCoinPoolIndex, 1);
+	if (happyCoinPoolIndex > -1) this.happyCoinPool[happyCoinPoolId].splice(happyCoinPoolIndex, 1);
 	return _setData(key, this).then(() => {
 		return happyCoin;
 	});

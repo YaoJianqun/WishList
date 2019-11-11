@@ -16,9 +16,11 @@
 			setCompletedData () {
 				uni.setStorage({
 					key: 'completedData',
-					data: {'taskCompletedData': {}, 'wishCompletedData': {
+					data: {
+						'taskCompletedData': {}, 
+						'wishCompletedData': {},
 						'happyCoinPool': [] 
-					}},
+					},
 					success: function () {
 						console.log('init completedData success');
 					}
