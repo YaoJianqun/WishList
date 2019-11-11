@@ -133,10 +133,63 @@
 				return temp_taskList;
 			}
 		},
+		mounted () {
+			queryCompletedData().then((res) => {
+				console.log(res);
+			})
+		},
 		methods: {
 			operateCompletedDate (taskState, task) {
-				
 				if (taskState) {
+					//添加愿望快乐币surplusCoin
+					changeWishCompletedCoin(task.wishId, task.happy_coin).then((surplusCoin) => {
+						if (surplusCoin > 0) {
+							let tempHappy_coin = task.happy_coin;
+							let tempWishId = task.wishId;
+							task.happy_coin = tempHappy_coin - surplusCoin;
+							addOrUpdateTaskCompleted(task)
+								.then(() => {
+									task.wishId = 'happyCoinPool';
+									task.happy_coin = surplusCoin;
+									return task;
+								})
+								.then(addOrUpdateTaskCompleted)
+								.then(() => {
+									task.happy_coin = tempHappy_coin;
+									task.wishId = tempWishId;
+									return task;
+								})
+								.then(addOrUpdateTaskData)
+								.then(() => {
+									tempHappy_coin = null;
+									tempWishId = null;
+								});
+						} else {
+							addOrUpdateTaskCompleted(task);
+						}
+					});
+				} else {
+					let tempWishId = '';
+					queryWishData()
+						.then((wishData) => {
+							if (wishData.wishObj[task.wishId].isCompleted) {
+								tempWishId = task.wishId;
+								task.wishId = 'happyCoinPool';
+							}
+							return task;
+						})
+						.then(deleteTaskCompleted)
+						.then(() => {
+							if (tempWishId) task.wishId = tempWishId;
+							return task;
+						})
+						.then(deleteTaskCompleted)
+						.then((happyCoin) => {
+							tempWishId = null;
+							changeWishCompletedCoin(task.wishId, -happyCoin);
+						});
+				}
+				/*if (taskState) {
 					//添加愿望快乐币surplusCoin
 					let surplusCoin = changeWishCompletedCoin(task.wishId, task.happy_coin);
 					debugger;
@@ -176,7 +229,7 @@
 						}
 					})
 					
-				}
+				}*/
 			},
 			
 			handleTaskClick (taskId) {

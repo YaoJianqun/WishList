@@ -1,4 +1,4 @@
-import { _saveTaskCompleted, _delTaskCompleted, _queryCompletedData } from '@/common/dataOperate/service/CompletedDataService'
+import { _saveTaskCompleted, _saveHappyCoinPool, _delTaskCompleted, _delHappyCoinPool, _queryCompletedData } from '@/common/dataOperate/service/CompletedDataService'
 
 import TaskCompleted from '@/common/model/TaskCompleted'
 
@@ -11,13 +11,19 @@ let addOrUpdateTaskCompleted = function (task) {
 	};
 	let temp_taskCompleted = new TaskCompleted(taskCompleted);
 	return _queryCompletedData().then((completedData) => {
-		return _saveTaskCompleted.bind(completedData)(temp_taskCompleted);
+		if (task.wishId !== 'happyCoinPool')
+			return _saveTaskCompleted.bind(completedData)(temp_taskCompleted);
+		else
+			return _saveHappyCoinPool.bind(completedData)(temp_taskCompleted);
 	});
 }
 
 let deleteTaskCompleted = function (task) {
 	return _queryCompletedData().then((completedData) => {
-		return _delTaskCompleted.bind(completedData)(task);
+		if (task.wishId !== 'happyCoinPool')
+			return _delTaskCompleted.bind(completedData)(task);
+		else 
+			return _delHappyCoinPool.bind(completedData)(task);
 	});
 }
 

@@ -39,6 +39,49 @@ let _saveTaskCompleted = function (taskCompleted) {
 	return _setData(key, this);
 }
 
+let _saveHappyCoinPool = function (taskCompleted) {
+	//初始化状态，默认为新增，当找到相同完成任务时为
+	let happyCoinPool = true;
+	
+	//获取愿望、任务ID
+	let taskId = taskCompleted.taskId;
+	let wishId = taskCompleted.wishId;
+	let happyCoinPoolId = `${taskId}-${wishId}`;
+	
+	//排除当ID不存在找不到对象报错的情况
+	if (!this.happyCoinPool[happyCoinPoolId]) this.happyCoinPool[happyCoinPoolId] = [];
+	
+	let taskCompletedArray = this.happyCoinPool[happyCoinPoolId];
+	for (let i = 0, length = taskCompletedArray.length; i < length; i++) {
+		if (taskCompletedArray[i].completedTime === taskCompleted.completedTime) {
+			taskCompletedArray[i] = taskCompleted;
+			wishCompletedState = false;
+		}
+	}
+	if (taskCompletedArray) taskCompletedArray.push(taskCompleted);
+	return _setData(key, this);
+}
+
+let _delHappyCoinPool = function (task) {
+	let happyCoinPoolIndex = -1;
+	let nowDate = new Date(new Date().toLocaleDateString()).getTime();
+	
+	let happyCoin = 0;
+	
+	let happyCoinPoolId = `${taskId}-${wishId}`;
+	
+	for (let index in this.happyCoinPool[happyCoinPoolId]) {
+		if (this.happyCoinPool[task.id][index].completedTime === nowDate) {
+			happyCoinPoolIndex = index;
+			happyCoin = this.happyCoinPool[task.id][index].happy_coin;
+		}
+	}
+	if (happyCoinPoolIndex > -1) this.happyCoinPool[task.id].splice(happyCoinPoolIndex, 1);
+	return _setData(key, this).then(() => {
+		return happyCoin;
+	});
+}
+
 let _delTaskCompleted = function (task) {
 	let taskCompletedIndex = -1;
 	let wishCompletedIndex = -1;
@@ -72,7 +115,7 @@ let _queryHappyCoinPool = function () {
 	return _queryData('happyCoinPool');
 }
 
-export { _saveTaskCompleted, _delTaskCompleted, _queryCompletedData };
+export { _saveTaskCompleted, _saveHappyCoinPool, _delTaskCompleted, _delHappyCoinPool, _queryCompletedData };
 
 /*export delTask;
 
