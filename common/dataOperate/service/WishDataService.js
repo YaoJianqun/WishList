@@ -20,9 +20,8 @@ let _addCompletedCoin = function (wishId, happyCoin) {
 		this.wishObj[wishId].completedCoin = happy_coin;
 	} else {
 		this.wishObj[wishId].completedCoin = completedCoin + happyCoin;
+		surplusCoin = 0;
 	}
-	
-	if (surplusCoin < 0) surplusCoin = 0;
 	
 	return _setData(key, this).then(() => {
 		let tempSurplusCoin = surplusCoin;
@@ -35,7 +34,7 @@ let _subCompletedCoin = function (wishId, happyCoin) {
 	
 	let completedCoin = this.wishObj[wishId].completedCoin;
 	
-	this.wishObj[wishId].completedCoin = completedCoin - happyCoin;
+	this.wishObj[wishId].completedCoin = parseInt(completedCoin) + happyCoin;
 
 	return _setData(key, this);
 }

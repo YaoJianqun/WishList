@@ -133,11 +133,6 @@
 				return temp_taskList;
 			}
 		},
-		mounted () {
-			queryCompletedData().then((res) => {
-				console.log(res);
-			})
-		},
 		methods: {
 			operateCompletedDate (taskState, task) {
 				if (taskState) {
@@ -163,6 +158,10 @@
 								.then(() => {
 									tempHappy_coin = null;
 									tempWishId = null;
+								}).then(() => {
+									queryCompletedData().then((res) => {
+										console.log(res);
+									})
 								});
 						} else {
 							addOrUpdateTaskCompleted(task);
