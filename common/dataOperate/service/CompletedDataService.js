@@ -43,22 +43,20 @@ let _saveHappyCoinPool = function (taskCompleted) {
 	//初始化状态，默认为新增，当找到相同完成任务时为
 	let happyCoinPool = true;
 	
-	//获取愿望、任务ID
-	let taskId = taskCompleted.taskId;
-	let wishId = taskCompleted.wishId;
-	let happyCoinPoolId = `${taskId}-${wishId}`;
+	//获取任务ID
+	let happyCoinPoolId = taskCompleted.taskId;
 	
 	//排除当ID不存在找不到对象报错的情况
-	if (!this.happyCoinPool[happyCoinPoolId]) this.happyCoinPool[happyCoinPoolId] = [];
+	if (!this.happyCoinPool.hasOwnProperty(happyCoinPoolId)) this.happyCoinPool[happyCoinPoolId] = [];
 	
 	let taskCompletedArray = this.happyCoinPool[happyCoinPoolId];
 	for (let i = 0, length = taskCompletedArray.length; i < length; i++) {
 		if (taskCompletedArray[i].completedTime === taskCompleted.completedTime) {
 			taskCompletedArray[i] = taskCompleted;
-			wishCompletedState = false;
+			happyCoinPool = false;
 		}
 	}
-	if (taskCompletedArray) taskCompletedArray.push(taskCompleted);
+	if (happyCoinPool) taskCompletedArray.push(taskCompleted);
 	return _setData(key, this);
 }
 
