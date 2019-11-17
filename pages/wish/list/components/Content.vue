@@ -14,7 +14,7 @@
 			>
 				<!-- 愿望图片 -->
 				<view class="image-wrapper">
-					<view class="icon iconfont icondiamond1 warning" v-if="!wish.image"></view>
+					<view class="icon iconfont icondiamond1" v-if="!wish.image" :class="[wish.color]"></view>
 					<image :mode="'aspectFill'"
 								 class="image"
 								 :src="wish.image"
@@ -27,8 +27,8 @@
 					<view class="info" v-text="`${wish.completedCount}/${wish.happy_coin}`"></view>
 				</view>
 				<!-- 愿望进度条 -->
-				<view class="progress bdcolor warning" :style="{width: wish.completedStyle}"></view>
-				<view class="progress bgprogress bdcolor warning"></view>
+				<view class="progress bdcolor" :style="{width: wish.completedStyle}" :class="[wish.color, {completed: wish.isCompleted}]"></view>
+				<view class="progress bgprogress bdcolor" :class="[wish.color]"></view>
 				<!-- 默认主题菜单 -->
 				<view class="wish-menu wish-edit bgcolor warning"
 							@click.stop="handleEditWishClick(wish.id)" 
@@ -145,6 +145,7 @@
 				if (this.wishData.wishIdArray) {
 					for (let id of this.wishData.wishIdArray) {
 						let wish = this.wishData.wishObj[id]; 
+						if (wish.isDel) continue;
 						if (this.pageState === 'no-redeem' && wish.redeem) continue;
 						if (this.pageState === 'redeem' && !wish.redeem) continue;
 						let tempWish = {};
@@ -153,7 +154,9 @@
 						tempWish.name = wish.name;
 						tempWish.happy_coin = wish.happy_coin;
 						tempWish.completedCount = this.computeWishCompleted(id);
-						tempWish.completedStyle = `${tempWish.completedCount / wish.happy_coin * 380}px`;
+						tempWish.completedStyle = `${tempWish.completedCount / wish.happy_coin * 100}%`;
+						tempWish.isCompleted = wish.isCompleted;
+						tempWish.color = wish.color;
 						temp_wishList.push(tempWish);
 					}
 				}

@@ -31,11 +31,10 @@ let _addCompletedCoin = function (wishId, happyCoin) {
 }
 
 let _subCompletedCoin = function (wishId, happyCoin) {
-	
 	let completedCoin = this.wishObj[wishId].completedCoin;
-	
 	this.wishObj[wishId].completedCoin = parseInt(completedCoin) + happyCoin;
-
+	console.log('completedCoin', parseInt(completedCoin));
+	console.log('happyCoin', happyCoin);
 	return _setData(key, this);
 }
 

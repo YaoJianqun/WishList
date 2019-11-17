@@ -150,9 +150,6 @@
 								})
 								.then(addOrUpdateTaskCompleted)
 								.then(() => {
-									queryCompletedData().then((res) => {
-										console.log(res);
-									})
 									task.happy_coin = tempHappy_coin;
 									task.wishId = tempWishId;
 									return task;
@@ -161,10 +158,6 @@
 								.then(() => {
 									tempHappy_coin = null;
 									tempWishId = null;
-								}).then(() => {
-									queryCompletedData().then((res) => {
-										console.log(res);
-									})
 								});
 						} else {
 							addOrUpdateTaskCompleted(task);
