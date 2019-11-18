@@ -30,7 +30,7 @@ let _saveTaskCompleted = function (taskCompleted) {
 	
 	let wishCompletedArray = this.wishCompletedData[wishId];
 	for (let i = 0, length = wishCompletedArray.length; i < length; i++) {
-		if (wishCompletedArray[i].completedTime === taskCompleted.completedTime) {
+		if (taskCompleted.taskId === wishCompletedArray[i].taskId && wishCompletedArray[i].completedTime === taskCompleted.completedTime) {
 			wishCompletedArray[i] = taskCompleted;
 			wishCompletedState = false;
 		}
@@ -40,6 +40,7 @@ let _saveTaskCompleted = function (taskCompleted) {
 }
 
 let _saveHappyCoinPool = function (taskCompleted) {
+	debugger;
 	//初始化状态，默认为新增，当找到相同完成任务时为
 	let happyCoinPool = true;
 	

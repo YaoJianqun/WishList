@@ -8,7 +8,6 @@ let addOrUpdateWish = function (wish) {
 
 let changeWishCompletedCoin = function (wishId, happyCoin) {
 	return _queryWishData().then((wishData) => {
-		console.log('happyCoin', happyCoin);
 		if (happyCoin > 0)
 			return _addCompletedCoin.bind(wishData)(wishId, happyCoin);
 		else 

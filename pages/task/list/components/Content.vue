@@ -1,5 +1,5 @@
 <template>
-	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll" @click="resetTaskMenu">
+	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll" @click.stop="resetCloseMenu">
 		<view class="task-item"
 					v-for="task of taskList"
 					:key="task.id"
@@ -9,7 +9,7 @@
 					@touchstart.prevent="handleTouchStart"
 					@touchmove="handleTouchMove"
 					@touchend="handleTouchEnd"
-					@click="handleTaskClick(task.id)"
+					@click.stop="handleTaskClick(task.id)"
 		>
 			<view class="task-icon icon iconfont" :class="[task.icon,task.color]"></view>
 			<view class="task-info">
@@ -31,7 +31,7 @@
 				<view class="menu-title">编辑</view>
 			</view>
 			<view class="task-menu task-delete bgcolor danger" 
-						:style="menuMoveTask == task.id ? deleteMoveStyle : ''"
+						:class="{open: deleteMoveStyle}"
 						@click.stop="handleDelTaskClick(task.id)"
 			>
 				<view class="menu-icon icon iconfont icontrash"></view>
@@ -90,9 +90,8 @@
 			},
 			
 			deleteMoveStyle () {
-				let moveCount = -190;
-				if (this.menuMoveCount < -210) moveCount = this.menuMoveCount;
-				return `right:${moveCount}rpx;`;
+				console.log(this.menuMoveCount)
+				return this.menuMoveCount === -380;
 			},
 			
 			...mapState({
@@ -137,28 +136,18 @@
 			operateCompletedDate (taskState, task) {
 				if (taskState) {
 					//添加愿望快乐币surplusCoin
-					changeWishCompletedCoin(task.wishId, task.happy_coin).then((surplusCoin) => {
+					changeWishCompletedCoin(task.wishId, task.happy_coin).then(async (surplusCoin) => {
 						if (surplusCoin > 0) {
 							let tempHappy_coin = task.happy_coin;
 							let tempWishId = task.wishId;
 							task.happy_coin = tempHappy_coin - surplusCoin;
-							addOrUpdateTaskCompleted(task)
-								.then(() => {
-									task.wishId = 'happyCoinPool';
-									task.happy_coin = surplusCoin;
-									return task;
-								})
-								.then(addOrUpdateTaskCompleted)
-								.then(() => {
-									task.happy_coin = tempHappy_coin;
-									task.wishId = tempWishId;
-									return task;
-								})
-								.then(addOrUpdateTaskData)
-								.then(() => {
-									tempHappy_coin = null;
-									tempWishId = null;
-								});
+							await addOrUpdateTaskCompleted(task);
+							task.wishId = 'happyCoinPool';
+							task.happy_coin = surplusCoin;
+							await addOrUpdateTaskCompleted(task);
+							task.happy_coin = tempHappy_coin;
+							task.wishId = tempWishId;
+							addOrUpdateTaskData(task);
 						} else {
 							addOrUpdateTaskCompleted(task);
 						}
@@ -166,65 +155,20 @@
 				} else {
 					let tempWishId = '';
 					queryWishData()
-						.then((wishData) => {
+						.then(async (wishData) => {
+							let happyCoin = 0;
 							if (wishData.wishObj[task.wishId].isCompleted) {
 								tempWishId = task.wishId;
 								task.wishId = 'happyCoinPool';
 							}
-							return task;
-						})
-						.then(deleteTaskCompleted)
-						.then(() => {
-							if (tempWishId) task.wishId = tempWishId;
-							return task;
-						})
-						.then(deleteTaskCompleted)
-						.then((happyCoin) => {
-							tempWishId = null;
+							happyCoin = await deleteTaskCompleted(task);
+							if (tempWishId) {
+								task.wishId = tempWishId;
+								happyCoin = await deleteTaskCompleted(task);
+							}					
 							changeWishCompletedCoin(task.wishId, -happyCoin);
-						});
+						})
 				}
-				/*if (taskState) {
-					//添加愿望快乐币surplusCoin
-					let surplusCoin = changeWishCompletedCoin(task.wishId, task.happy_coin);
-					debugger;
-					//添加任务完成信息
-					if (surplusCoin > 0) {
-						let tempHappy_coin = task.happy_coin;
-						let tempWishId = task.wishId;
-						task.happy_coin = tempHappy_coin - surplusCoin;
-						addOrUpdateTaskCompleted(task).then(() => {
-							task.wishId = 'happyCoinPool';
-							task.happy_coin = surplusCoin;
-							addOrUpdateTaskCompleted(task).then(() => {
-								task.happy_coin = tempHappy_coin;
-								task.wishId = tempWishId;
-								addOrUpdateTaskData(task).then(() => {
-									tempHappy_coin = null;
-									tempWishId = null;
-								});
-							});
-						});
-					} else {
-						addOrUpdateTaskCompleted(task);
-					}
-				} else {
-					queryWishData().then((wishData) => {
-						if (wishData.wishObj[task.wishId].isCompleted) {
-							let tempWishId = task.wishId;
-							task.wishId = 'happyCoinPool';
-							deleteTaskCompleted(task).then(() => {
-								task.wishId = tempWishId;
-								deleteTaskCompleted(task).then((happyCoin) => {
-									tempWishId = null;
-									changeWishCompletedCoin(task.wishId, -happyCoin);
-								});
-							});
-							//deleteTaskCompleted(task);
-						}
-					})
-					
-				}*/
 			},
 			
 			handleTaskClick (taskId) {
@@ -233,8 +177,20 @@
 						url: '../../../pages/task/tally/TaskTally?taskId=' + taskId
 					});
 				} else {
-					this.menuMoveCount = 0;
-					this.menuState = !this.menuState;
+					this.resetCloseMenu();
+				}
+			},
+			
+			//列表滚回原始位置
+			resetCloseMenu () {
+				if (this.menuMoveCount < -10) {
+					let interval = setInterval(() => {
+						this.menuMoveCount += 10;
+						if (this.menuMoveCount >= 0) {
+							this.resetTaskMenu();
+							clearInterval(interval);
+						};
+					},8)
 				}
 			},
 			
@@ -422,6 +378,7 @@
 			},
 			
 			handleEditTaskClick (taskId) {
+				this.resetCloseMenu();
 				uni.navigateTo({
 					url: '../../../pages/task/base/TaskBase?taskId=' + taskId
 				});
@@ -521,7 +478,11 @@
 				}
 				&.task-delete {
 					z-index: 1;
+					right: -190rpx;
 					transition: right 0.4s;
+				}
+				&.task-delete.open {
+					right: -380rpx;
 				}
 			}
 		}
