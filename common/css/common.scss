@@ -1,5 +1,8 @@
 @import '~@/common/css/variable.scss';
 
+.iconfont.default {
+	color: $Default;
+}
 .iconfont.warning {
 	color: $Warning;
 }
@@ -28,6 +31,9 @@
 	color: $Gray;
 }
 
+.bgcolor.default {
+	background-color: $Default!important;
+}
 .bgcolor.success {
 	background-color: $Success!important;
 }

@@ -5,7 +5,8 @@
 		{"path": "pages/task/detail/TaskDetail"},
 		{"path": "pages/task/tally/TaskTally"},
 		{"path": "pages/wish/list/WishList"},
-		{"path": "pages/wish/base/WishBase"}
+		{"path": "pages/wish/base/WishBase"},
+		{"path": "pages/personal/index"}
 	],
 	"tabBar": {
 	    "color": "#A2A2A2",
@@ -35,7 +36,7 @@
 			}, {
 				"iconPath": "static/img/user.png",
 				"selectedIconPath": "static/img/user-sel.png",
-				"pagePath": "pages/wish/list/WishList",
+				"pagePath": "pages/personal/index",
 				"text": "我的"
 			}
 		]

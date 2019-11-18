@@ -102,6 +102,7 @@
 				transition-timing-function: ease-in-out;
 				&.default {
 					left: 0;
+					color: #101010;
 				}
 				&.card {
 					left: 50%;

@@ -38,7 +38,7 @@
 					<view class="menu-title">编辑</view>
 				</view>
 				<view class="wish-menu wish-delete bgcolor danger" 
-							:style="menuMoveWish == wish.id ? deleteMoveStyle : ''"
+							:class="{open: deleteMoveStyle}"
 							@click.stop="handleDelWishClick(wish.id)"
 							v-if="pageTheme === 'default'"
 				>
@@ -131,9 +131,7 @@
 			},
 			//列表模式下,计算删除卡片移动距离
 			deleteMoveStyle () {
-				let moveCount = -190;
-				if (this.menuMoveCount < -210) moveCount = this.menuMoveCount;
-				return 'right:' + moveCount + 'rpx;'; 
+				return this.menuMoveCount === -380;
 			},
 			//列表模式下,计算列表移动距离
 			itemMoveStyle () {
@@ -195,7 +193,7 @@
 				if (this.menuMoveCount < -10) {
 					let interval = setInterval(() => {
 						this.menuMoveCount += 10;
-						if (this.menuMoveCount > 0) {
+						if (this.menuMoveCount >= 0) {
 							 this.menuMoveCount =  0;
 							 this.menuMoveWish = '';
 							 clearInterval(interval);
@@ -294,6 +292,7 @@
 			},
 			
 			handleEditWishClick (wishId) {
+				if (this.pageTheme !== 'card') this.resetListMenu();
 				uni.navigateTo({
 					url: '../../../pages/wish/base/WishBase?wishId=' + wishId
 				});
@@ -388,7 +387,11 @@
 					}
 					&.wish-delete {
 						z-index: 1;
+						right: -190rpx;
 						transition: right 0.4s;
+					}
+					&.wish-delete.open {
+						right: -380rpx;
 					}
 				}
 				&.card {
