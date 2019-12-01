@@ -1,5 +1,5 @@
 <template>
-	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll" @click.stop="resetListMenu">
+	<scroll-view :scroll-top="scrollTop" :scroll-y="!disabledWishList" class="scroll-Y content-wrapper" @scroll="scroll" @click.stop="resetListMenu">
 		<view class="wish-list" :class="[pageTheme]">
 			<view class="wish-item"
 						:class="[wish.id === menuMoveWish ? reverseClass : '',pageTheme]"
@@ -97,6 +97,8 @@
 		
 		data() {
 			return {
+				//列表是否可滚动的状态位
+				disabledWishList: false,
 				//记录初始位置
 				startX: 0,
 				//用于列表主题下,函数节流
@@ -247,6 +249,7 @@
 						let movePercent = defferenceCount / 120;
 						//计算真实移动距离
 						let temp_moveCount = Math.floor(380 * movePercent);
+						
 						//移动距离大于编辑区域距离时，置为编辑距离
 						if (temp_moveCount < -380) temp_moveCount = -380;
 						//移动距离大于起始位置时，置为0
@@ -269,6 +272,7 @@
 				
 				this.startX = 0;
 				this.touchStatus = false;
+				this.disabledWishList = false;
 				this.menuMoveCount < -190 ? this.menuMoveCount = -380 : this.menuMoveCount = 0;
 			},
 			
@@ -310,7 +314,7 @@
 		background-color: #EEE;
 		position: absolute;
 		top: 238rpx;
-		bottom: 200rpx;
+		bottom: 30rpx;
 		.wish-list {
 			.wish-item {
 				display: flex;

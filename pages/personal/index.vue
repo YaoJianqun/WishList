@@ -90,8 +90,6 @@
 
 <style lang="scss" scoped>
 	.wrapper {
-		display: flex;
-		flex-direction: column;
 		.header {
 			position: relative;
 			display: flex;

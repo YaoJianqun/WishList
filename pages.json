@@ -4,7 +4,14 @@
 		{"path": "pages/task/base/TaskBase"},
 		{"path": "pages/task/detail/TaskDetail"},
 		{"path": "pages/task/tally/TaskTally"},
-		{"path": "pages/wish/list/WishList"},
+		{
+			"path": "pages/wish/list/WishList",
+			"style": {
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
+		},
 		{"path": "pages/wish/base/WishBase"},
 		{"path": "pages/personal/index"}
 	],

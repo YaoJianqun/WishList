@@ -7,7 +7,6 @@
 			@pageStateChange="pageStateChange"
 		></wish-list-header>
 		<wish-list-content :pageTheme="pageTheme" :pageState="pageState"></wish-list-content>
-		<!-- <task-list-dock></task-list-dock> -->
 	</view>
 </template>
 
@@ -35,8 +34,7 @@
 		},
 		components: {
 			WishListHeader,
-			WishListContent/*,
-			WishListDock*/
+			WishListContent
 		},
 		onShow() {
 			this.loadWishData();

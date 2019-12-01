@@ -90,7 +90,6 @@
 			},
 			
 			deleteMoveStyle () {
-				console.log(this.menuMoveCount)
 				return this.menuMoveCount === -380;
 			},
 			
@@ -420,7 +419,7 @@
 		background-color: #EEE;
 		position: absolute;
 		top: 238rpx;
-		bottom: 200rpx;
+		bottom: 30rpx;
 		.task-item {
 			display: flex;
 			align-items: center;
