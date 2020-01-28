@@ -54,14 +54,7 @@
 		
 		computed: {
 			totalHappyCoin () {
-				let tempHappyCoin = 0;
-				let happyCoinPool =  this.$store.state.completedData.happyCoinPool;
-				for (let key in happyCoinPool) {
-					for (var i = 0; i < happyCoinPool[key].length; i++) {
-						tempHappyCoin += happyCoinPool[key][i].happy_coin;
-					}
-				}
-				return tempHappyCoin;
+				return this.$store.state.completedData.happyCoinPool;
 			}
 		},
 		

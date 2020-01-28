@@ -1,5 +1,5 @@
 <template>
-	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll" @click.stop="resetCloseMenu">
+	<scroll-view :scroll-top="scrollTop" :scroll-y="scrollY" class="scroll-Y content-wrapper" @scroll="scroll" @click.stop="resetCloseMenu">
 		<view class="task-item"
 					v-for="task of taskList"
 					:key="task.id"
@@ -46,8 +46,7 @@
 	import { mapState } from 'vuex'
 	import TaskCompleted from '@/common/model/TaskCompleted'
 	import { addOrUpdateTaskData, deleteTaskById } from '@/common/dataOperate/controller/TaskDataController'
-	import { queryWishData, changeWishCompletedCoin } from '@/common/dataOperate/controller/WishDataController'
-	import { addOrUpdateTaskCompleted, deleteTaskCompleted, queryCompletedData } from '@/common/dataOperate/controller/CompletedDataController'
+	import { addOrUpdateCompleted, deleteCompleted, queryCompletedData } from '@/common/dataOperate/controller/CompletedDataController'
 	
 	export default {
 		name: 'TaskListContent',
@@ -59,6 +58,8 @@
 		},
 		data() {
 			return {
+				//列表是否可滚动的状态位
+				scrollDirection: true,
 				//任务状态位
 				taskState: {id:'', isComplete: false},
 				//记录滑动起始位置
@@ -76,7 +77,7 @@
 				//滑动状态
 				touchStatus: false,
 				//滑动方向
-				scrollDirection: '',
+				scrollDirectionHorizontal: '',
 				screenWidth: uni.getSystemInfoSync().windowWidth * 0.4,
 				scrollTop: 0,
 				old: {
@@ -85,6 +86,9 @@
 			}
 		},
 		computed: {
+			scrollY () {
+				return this.scrollDirection && !this.menuState; 
+			},
 			itemMoveStyle () {
 				return `right:${Math.abs(this.menuMoveCount)}rpx;`;
 			},
@@ -135,7 +139,8 @@
 			operateCompletedDate (taskState, task) {
 				if (taskState) {
 					//添加愿望快乐币surplusCoin
-					changeWishCompletedCoin(task.wishId, task.happy_coin).then(async (surplusCoin) => {
+					addOrUpdateCompleted(task);
+					/*changeWishCompletedCoin(task.wishId, task.happy_coin).then(async (surplusCoin) => {
 						if (surplusCoin > 0) {
 							let tempHappy_coin = task.happy_coin;
 							let tempWishId = task.wishId;
@@ -150,10 +155,11 @@
 						} else {
 							addOrUpdateTaskCompleted(task);
 						}
-					});
+					});*/
 				} else {
 					let tempWishId = '';
-					queryWishData()
+					deleteCompleted(task);
+					/*queryWishData()
 						.then(async (wishData) => {
 							let happyCoin = 0;
 							if (wishData.wishObj[task.wishId].isCompleted) {
@@ -166,7 +172,7 @@
 								happyCoin = await deleteTaskCompleted(task);
 							}					
 							changeWishCompletedCoin(task.wishId, -happyCoin);
-						})
+						})*/
 				}
 			},
 			
@@ -182,9 +188,9 @@
 			
 			//列表滚回原始位置
 			resetCloseMenu () {
-				if (this.menuMoveCount < -10) {
+				if (this.menuMoveCount < -15) {
 					let interval = setInterval(() => {
-						this.menuMoveCount += 10;
+						this.menuMoveCount += 15;
 						if (this.menuMoveCount >= 0) {
 							this.resetTaskMenu();
 							clearInterval(interval);
@@ -203,9 +209,10 @@
 				//标记滑动开始
 				this.touchStatus = true;
 				//初始化滑动方向
-				this.scrollDirection = '';
+				this.scrollDirectionHorizontal = '';
 				//记录初始位置
 				this.startX = e.touches[0].clientX;
+				this.startY = e.touches[0].clientY;
 				//记录原始完成数量
 				this.completedCount = e.currentTarget.dataset.completedcount;
 				//初始化任务相关数据
@@ -227,20 +234,31 @@
 						if (this.menuState) this.editTask(e);
 						
 						//获取当前用户滑动位置
-						const touchX = e.touches[0].clientX;
+						let touchX = e.touches[0].clientX;
+						let touchY = e.touches[0].clientY;
+						//计算移动距离
+						let defferenceCountX = Math.abs(touchX - this.startX);
+						let defferenceCountY = Math.abs(touchY - this.startY);
+						
+						if (defferenceCountX > defferenceCountY && defferenceCountX > 20 && this.scrollDirection) {
+							this.scrollDirection = false;
+							this.startX -= 20;
+						}
+						
+						if (this.scrollDirection) return;
 						
 						//判断如果当前滑动位置与起始位置不同，且滑动方向为空
-						if (this.scrollDirection === '' && touchX !== this.startX){
+						if (this.scrollDirectionHorizontal === '' && touchX !== this.startX){
 							//依据起始位置与当前位置大小判断滑动方向
-							this.scrollDirection = touchX > this.startX ? 'right' : 'left';
+							this.scrollDirectionHorizontal = touchX > this.startX ? 'right' : 'left';
 							//当用户为左滑时，将左滑菜单状态置为true
-							if (this.scrollDirection === 'left') this.menuState = true;
+							if (this.scrollDirectionHorizontal === 'left') this.menuState = true;
 						}
 						
 						//依据滑动方向与右滑菜单判断执行函数 moveProgress:为改变进度条大小 editTask:为弹出菜单
-						if (this.scrollDirection === 'right' && !this.menuState  && this.pageState === 'today') 
+						if (this.scrollDirectionHorizontal === 'right' && !this.menuState  && this.pageState === 'today') 
 							this.moveProgress(e);
-						else if (this.scrollDirection === 'left' || this.menuState)
+						else if (this.scrollDirectionHorizontal === 'left' || this.menuState)
 							this.editTask(e);
 								
 					}, 8)
@@ -334,13 +352,14 @@
 				}
 				
 				this.touchStatus = false;
+				this.scrollDirection = true;
 				
 				this.startX = 0;
 				//如初始滑动方向为左,依据最终距离计算移动距离
-				if (this.scrollDirection === 'left' || this.menuState)
+				if (this.scrollDirectionHorizontal === 'left' || this.menuState)
 					this.menuMoveCount < -190 ? this.menuMoveCount = -380 : this.menuMoveCount = 0;
 					
-				this.scrollDirection = '';
+				this.scrollDirectionHorizontal = '';
 				this.completedCount = 0;
 				
 				if (this.menuMoveCount === -380) this.menuState = true;

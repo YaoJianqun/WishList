@@ -6,15 +6,6 @@ let addOrUpdateWish = function (wish) {
 	})
 }
 
-let changeWishCompletedCoin = function (wishId, happyCoin) {
-	return _queryWishData().then((wishData) => {
-		if (happyCoin > 0)
-			return _addCompletedCoin.bind(wishData)(wishId, happyCoin);
-		else 
-			return _subCompletedCoin.bind(wishData)(wishId, happyCoin);
-	})
-}
-
 let saveWishData = function (wishData) {
 	return _saveWishData(wishData);
 }
@@ -30,4 +21,4 @@ let queryWishData = function () {
 	return _queryWishData();
 }
 
-export { addOrUpdateWish, changeWishCompletedCoin, saveWishData, deleteWishById, queryWishData };
+export { addOrUpdateWish, saveWishData, deleteWishById, queryWishData };

@@ -8,7 +8,7 @@ class Task {
 		//任务名称
 		this.name = obj.name ? obj.name : '';
 		//愿望ID
-		this.wishId = obj.wishId ? obj.wishId : '';
+		//this.wishId = obj.wishId ? obj.wishId : '';
 		//任务快乐币价值
 		this.happy_coin = obj.happy_coin ? obj.happy_coin : 0;
 		//任务宣言

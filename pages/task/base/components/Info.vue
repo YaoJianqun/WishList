@@ -10,13 +10,12 @@
 					<view class="title">名称 : </view>
 					<input class="uni-input" type="text" placeholder="请输入任务名称" v-model="task.name"/>
 				</view>
-				<picker mode=selector :range="wishList" range-key="name" @change="selWish">
+				<!-- <picker mode=selector :range="wishList" range-key="name" @change="selWish">
 					<view class="uni-form-item uni-column">
 						<view class="title">愿望 : </view>
 						<view class="uni-input" v-text="wishName === '' ? '请选择愿望' : wishName"></view>
-						<!-- <input class="uni-input" type="text" placeholder="请选择愿望" @click.prevent=""/> -->
 					</view>
-				</picker>
+				</picker> -->
 				<view class="uni-form-item uni-column">
 					<view class="title">快乐币 : </view>
 					<input class="uni-input" type="number" placeholder="请输入当前任务快乐币价值" v-model="happy_coin"/>
@@ -103,11 +102,11 @@
 			}
 		},
 		methods: {
-			selWish (e) {
+			/*selWish (e) {
 				let wishIndex = e.detail.value;
 				this.task.wishId = this.wishList[wishIndex].id;
 				this.wishName = this.wishList[wishIndex].name;
-			},
+			},*/
 			
 			handleColorClick (e) {
 				let color = e.target.dataset.color;

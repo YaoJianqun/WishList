@@ -1,12 +1,12 @@
 <template>
-	<scroll-view :scroll-top="scrollTop" :scroll-y="!disabledWishList" class="scroll-Y content-wrapper" @scroll="scroll" @click.stop="resetListMenu">
+	<scroll-view :scroll-top="scrollTop" :scroll-y="scrollY" class="scroll-Y content-wrapper" @scroll="scroll" @click.stop="resetListMenu">
 		<view class="wish-list" :class="[pageTheme]">
 			<view class="wish-item"
-						:class="[wish.id === menuMoveWish ? reverseClass : '',pageTheme]"
+						:class="[wish.id === menuMoveWish ? reverseClass : '', pageTheme]"
 						v-for="wish in wishList"
 						:key="wish.id"
 						:data-wishid="wish.id"
-						:style="menuMoveWish == wish.id ? itemMoveStyle : ''"
+						:style="menuMoveWish === wish.id ? itemMoveStyle : ''"
 						@touchstart="handleTouchStart"
 						@touchmove="handleTouchMove"
 						@touchend.prevent="handleTouchEnd"
@@ -38,7 +38,7 @@
 					<view class="menu-title">编辑</view>
 				</view>
 				<view class="wish-menu wish-delete bgcolor danger" 
-							:class="{open: deleteMoveStyle}"
+							:class="{open: listMenuState}"
 							@click.stop="handleDelWishClick(wish.id)"
 							v-if="pageTheme === 'default'"
 				>
@@ -46,7 +46,7 @@
 					<view class="menu-title">删除</view>
 				</view>
 				<!-- 卡片主题菜单 -->
-				<view class="wish-menu" v-if="pageTheme === 'card' && cardMunuState">
+				<view class="wish-menu" v-if="pageTheme === 'card' && cardMenuState && wish.id === menuMoveWish">
 					<view class="image-wrapper">
 						<view class="icon iconfont icondiamond1 warning" v-if="!wish.image"></view>
 						<image :mode="'aspectFill'"
@@ -98,13 +98,14 @@
 		data() {
 			return {
 				//列表是否可滚动的状态位
-				disabledWishList: false,
+				scrollDirection: true,
 				//记录初始位置
 				startX: 0,
+				startY: 0,
 				//用于列表主题下,函数节流
 				timer:  null,
 				//卡片模式下是否处于展示菜单的状态
-				cardMunuState: false,
+				cardMenuState: false,
 				//当前操作愿望ID
 				menuMoveWish: '',
 				//列表主题下，记录移动距离
@@ -127,12 +128,15 @@
 		},
 		
 		computed: {
+			scrollY () {
+				return this.scrollDirection && !this.listMenuState; 
+			},
 			//卡片模式下,计算是否反转,用于展示菜单
 			reverseClass () {
-				return this.cardMunuState ? 'reverse' : '';
+				return this.cardMenuState ? 'reverse' : '';
 			},
-			//列表模式下,计算删除卡片移动距离
-			deleteMoveStyle () {
+			//列表模式下,计算菜单是否展开
+			listMenuState () {
 				return this.menuMoveCount === -380;
 			},
 			//列表模式下,计算列表移动距离
@@ -153,7 +157,7 @@
 						tempWish.image = wish.image;
 						tempWish.name = wish.name;
 						tempWish.happy_coin = wish.happy_coin;
-						tempWish.completedCount = this.computeWishCompleted(id);
+						tempWish.completedCount = this.happyCoin > wish.happy_coin ? wish.happy_coin : this.happyCoin;
 						tempWish.completedStyle = `${tempWish.completedCount / wish.happy_coin * 100}%`;
 						tempWish.isCompleted = wish.isCompleted;
 						tempWish.color = wish.color;
@@ -164,37 +168,24 @@
 			},
 			...mapState({
 				wishData: state => state.wishData,
-				wishCompletedData: state => state.completedData.wishCompletedData
+				happyCoin: state => state.completedData.happyCoinPool
 			})
 		},
 		methods: {
-			//计算愿望完成度
-			computeWishCompleted (wishId) {
-				let completedCount = 0;
-				
-				if (this.wishCompletedData.hasOwnProperty(wishId)) {
-					for (var i = 0, length = this.wishCompletedData[wishId].length; i < length; i++) {
-						completedCount += this.wishCompletedData[wishId][i].happy_coin;
-					}
-					return completedCount;
-				}
-				
-				return completedCount;
-			},
 			
 			//卡片模式-点击取消按钮
 			handleCanceClick () {
-				this.cardMunuState = false;
+				this.cardMenuState = false;
 				this.resetListMenu();
 			},
 			
 			//重置列表状态
 			resetListMenu () {
 				//排除长按对click的影响
-				if (this.cardMunuState) return;
-				if (this.menuMoveCount < -10) {
+				if (this.cardMenuState) return;
+				if (this.menuMoveCount < -15) {
 					let interval = setInterval(() => {
-						this.menuMoveCount += 10;
+						this.menuMoveCount += 15;
 						if (this.menuMoveCount >= 0) {
 							 this.menuMoveCount =  0;
 							 this.menuMoveWish = '';
@@ -210,7 +201,7 @@
 					//创建定时器,用于计算时间
 					this.timer = setTimeout(() => {
 						this.menuMoveWish = e.currentTarget.dataset.wishid;
-						this.cardMunuState = true;
+						this.cardMenuState = true;
 						clearTimeout(this.timer);
 					}, 600)
 					return;
@@ -220,13 +211,13 @@
 				this.touchStatus = true;
 				//记录滑动初始位置
 				this.startX = e.touches[0].clientX;
+				this.startY = e.touches[0].clientY;
 				//记录操作愿望ID
-				this.menuMoveWish = e.currentTarget.dataset.wishid;
+				if (!this.listMenuState) this.menuMoveWish = e.currentTarget.dataset.wishid;
 			},
 			handleTouchMove (e) {
 				//判断是否为卡片主题
 				if (this.pageTheme === 'card') return;
-				
 				//判断是否为滑动状态
 				if (this.touchStatus) {
 					
@@ -242,8 +233,18 @@
 						let wishid = e.currentTarget.dataset.wishid;
 						//获取当前用户滑动位置
 						let touchX = e.touches[0].clientX;
+						let touchY = e.touches[0].clientY;
 						//计算移动距离
 						let defferenceCount = touchX - this.startX;
+						let defferenceCountX = Math.abs(defferenceCount);
+						let defferenceCountY = Math.abs(touchY - this.startY);
+						
+						if (defferenceCountX > defferenceCountY && defferenceCountX > 20 && this.scrollDirection) {
+							this.scrollDirection = false;
+							this.startX -= 20;
+						}
+						
+						if (this.scrollDirection) return;
 						//计算移动距离占比
 						//移动距离 / 总的移动距离 / 3
 						let movePercent = defferenceCount / 120;
@@ -271,8 +272,9 @@
 				}
 				
 				this.startX = 0;
+				this.startY = 0;
 				this.touchStatus = false;
-				this.disabledWishList = false;
+				this.scrollDirection = true;
 				this.menuMoveCount < -190 ? this.menuMoveCount = -380 : this.menuMoveCount = 0;
 			},
 			

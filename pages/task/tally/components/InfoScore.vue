@@ -97,7 +97,11 @@
 		},
 		onReady() {
 			const query = uni.createSelectorQuery().in(this);
-			query.select('.info-wrapper').boundingClientRect(data => {}).exec(this.initScore);
+			query.select('.info-wrapper').boundingClientRect(data => {
+				
+				console.log(arguments)
+				this.initScore(data)
+			}).exec();
 		}
 	}
 </script>

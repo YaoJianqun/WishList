@@ -8,7 +8,7 @@ class TaskComplete {
 		//任务ID
 		this.taskId = obj.taskId ? obj.taskId : '';
 		//挂载愿望ID
-		this.wishId = obj.wishId ? obj.wishId : '';
+		//this.wishId = obj.wishId ? obj.wishId : '';
 		//当前完成任务价值快乐币
 		this.happy_coin = obj.happy_coin ? obj.happy_coin : 0;
 		//任务完成数量

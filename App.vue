@@ -14,13 +14,10 @@
 		methods: {
 			//创建完成列表数据
 			setCompletedData () {
+				let completedData = {'completedObj': {}, 'happyCoinPool': 0};
 				uni.setStorage({
 					key: 'completedData',
-					data: {
-						'taskCompletedData': {}, 
-						'wishCompletedData': {},
-						'happyCoinPool': {} 
-					},
+					data: completedData,
 					success: function () {
 						console.log('init completedData success');
 					}

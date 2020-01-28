@@ -2,7 +2,7 @@
 	<view class="wrapper">
 		<base-header :taskName="taskName" @navigateBack="navigateBack"></base-header>
 		<base-info-date @changeInterval="changeInterval" v-if="currentPageInfo === 'clock'"></base-info-date>
-		<!-- <base-info-score v-if="currentPageInfo === 'score'"></base-info-score> -->
+		<base-info-score v-if="currentPageInfo === 'score'"></base-info-score>
 		<uni-popup :show="show" :type="type" :custom="true" :mask-click="false">
 			<view class="uni-tip">
 				<view class="uni-tip-title">警告</view>
@@ -23,7 +23,7 @@
 	
 	import BaseHeader from './components/Header';
 	import BaseInfoDate from './components/InfoDate';
-	//import BaseInfoScore from './components/InfoScore';
+	import BaseInfoScore from './components/InfoScore';
 	
 	import { addOrUpdateTaskData } from '@/common/dataOperate/controller/TaskDataController'
 	
@@ -32,14 +32,14 @@
 		components: {
 			BaseHeader,
 			BaseInfoDate,
-			//BaseInfoScore,
+			BaseInfoScore,
 			uniPopup
 		},
 		data() {
 			return {
 				type: '',
 				show: false,
-				currentPageInfo: 'clock',
+				currentPageInfo: '',
 				taskId: '',
 				taskName: '',
 				timerInterval: ''
@@ -85,7 +85,11 @@
 						let temp_task = res.data.taskObj[params.taskId];
 						_this.$store.dispatch('changeTask', temp_task)
 						_this.taskName = temp_task.name;
-						if (temp_task.unit!=='秒'&&temp_task.unit!=='分'&&temp_task.unit!=='小时') _this.currentPageInfo = 'score';
+						if (temp_task.unit !== '秒' && temp_task.unit !== '分' && temp_task.unit !== '小时') {
+							_this.currentPageInfo = 'score';
+						} else {
+							_this.currentPageInfo = 'clock';
+						};
 					}
 				})
 			}
