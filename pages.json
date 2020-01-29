@@ -20,10 +20,10 @@
 	    "selectedColor": "#101010",
 	    "borderStyle": "white",
 	    "backgroundColor": "#fff",
-			"fontSize": "10px",
-			"iconWidth": "24px",
-			"spacing": "4px",
-			"height": "46px",
+		"fontSize": "10px",
+		"iconWidth": "24px",
+		"spacing": "4px",
+		"height": "52px",
 	    "list": [
 			{
 				"iconPath": "static/img/menu.png",
@@ -35,12 +35,12 @@
 				"selectedIconPath": "static/img/carry-out.png",
 				"pagePath": "pages/wish/list/WishList",
 				"text": "清单"
-			}, {
+			}/*, {
 				"iconPath": "static/img/bar-chart.png",
 				"selectedIconPath": "static/img/bar-chart-sel.png",
 				"pagePath": "pages/wish/list/WishList",
 				"text": "统计"
-			}, {
+			}*/, {
 				"iconPath": "static/img/user.png",
 				"selectedIconPath": "static/img/user-sel.png",
 				"pagePath": "pages/personal/index",

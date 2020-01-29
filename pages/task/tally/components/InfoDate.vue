@@ -275,13 +275,9 @@
 				return totalMilliSeconds;
 			}
 		},
-		onReady() {
-			const query = uni.createSelectorQuery().in(this);
-			//query.select('.info-wrapper').boundingClientRect(data => {}).exec(this.initTimer);
-			query.select('.info-wrapper').boundingClientRect(data => {
-				console.log(arguments)
-				this.initTimer(data);
-			});
+		mounted() {
+			let query = uni.createSelectorQuery().in(this);
+			query.select('.info-wrapper').boundingClientRect(data => {}).exec(this.initTimer);
 			query.select('.operate-wrapper').boundingClientRect(data => {
 				this.operateBarOffsetTop = data.top - 100;
 				this.operateBarOffsetLeft = data.left - 20;

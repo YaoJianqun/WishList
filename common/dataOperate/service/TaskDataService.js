@@ -7,6 +7,7 @@ let _saveTask = function (task) {
 		this.taskIdArray.push(task.id);
 	}
 	this.taskObj[task.id] = task;
+	console.log(this);
 	return _setData(key, this);
 }
 

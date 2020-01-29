@@ -3,12 +3,12 @@
 		<base-header :taskName="taskName" @navigateBack="navigateBack"></base-header>
 		<base-info-date @changeInterval="changeInterval" v-if="currentPageInfo === 'clock'"></base-info-date>
 		<base-info-score v-if="currentPageInfo === 'score'"></base-info-score>
-		<uni-popup :show="show" :type="type" :custom="true" :mask-click="false">
+		<uni-popup :show="show" :type="type" :custom="true" :mask-click="false" ref="tip">
 			<view class="uni-tip">
 				<view class="uni-tip-title">警告</view>
-				<view class="uni-tip-content">这是一个通过自定义 popup，自由扩展的 警告弹窗。点击遮罩不会关闭弹窗。</view>
+				<view class="uni-tip-content">您确定暂停当前任务计时并推出吗？</view>
 				<view class="uni-tip-group-button">
-					<view class="uni-tip-button" @click="cancel('tip', false)">取消</view>
+					<view class="uni-tip-button bgcolor success" @click="cancel('tip', false)">取消</view>
 					<view class="uni-tip-button" @click="cancel('tip', true)">确定</view>
 				</view>
 			</view>
@@ -24,7 +24,7 @@
 	import BaseHeader from './components/Header';
 	import BaseInfoDate from './components/InfoDate';
 	import BaseInfoScore from './components/InfoScore';
-	
+	import { mapState } from 'vuex'
 	import { addOrUpdateTaskData } from '@/common/dataOperate/controller/TaskDataController'
 	
 	export default {
@@ -35,9 +35,10 @@
 			BaseInfoScore,
 			uniPopup
 		},
+		
 		data() {
 			return {
-				type: '',
+				type: 'center',
 				show: false,
 				currentPageInfo: '',
 				taskId: '',
@@ -45,33 +46,53 @@
 				timerInterval: ''
 			}
 		},
+		
+		computed: {
+			...mapState({
+				task: state => state.task,
+				taskData: state => state.taskData
+			})
+		},
+		
 		methods: {
 			changeInterval (timerInterval) {
 				this.timerInterval = timerInterval;
 			},
+			
 			navigateBack () {
+				console.log(this.timerInterval)
 				if (this.timerInterval)
-					this.togglePopup('tip');
+					this.togglePopup();
 				else 
-					uni.navigateBack();
+					this.saveTask().then(() => {
+						uni.switchTab({url: '../../../pages/task/list/TaskList'});
+					});
+					
 			},
+			
 			saveTask () {
-				clearInterval(this.timerInterval);
-				let temp_task = this.$store.state.task;
-				this.$store.state.taskData.taskObj[temp_task.id] = temp_task;
-				addOrUpdateTaskData(temp_task);
+				if (this.timerInterval) clearInterval(this.timerInterval);
+				let temp_task = this.task;
+				this.taskData.taskObj[temp_task.id] = temp_task;
+				return addOrUpdateTaskData(temp_task);
 			},
+			
 			togglePopup(open) {
-				this.$refs[open].open()
+				this.$refs['tip'].open();
 			},
+			
 			cancel(type, state) {
 				
-				this.show = false
+				this.show = false;
+				this.$refs['tip'].close();
 				if (state) {
-					this.saveTask();
-					setTimeout(function () {uni.navigateBack();}, 400)
-				}	
-				return
+					this.saveTask().then(() => {
+						uni.navigateBack();
+					});
+				} else {
+					
+				}
+				return;
 			}
 		},
 		onLoad (params) {
@@ -94,9 +115,7 @@
 				})
 			}
 		},
-		onBackPress () {
-			this.saveTask();
-		},
+		
 		onHide () {
 			this.saveTask();
 		}
@@ -132,6 +151,9 @@
 					text-align: center;
 					font-size: 14px;
 					color: #3b4144;
+					height: 60rpx;
+					line-height: 60rpx;
+					border-radius: 20rpx;
 				}
 			}
 		}

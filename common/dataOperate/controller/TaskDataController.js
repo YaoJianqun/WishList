@@ -2,7 +2,7 @@ import { _saveTask, _saveTaskData, _delTaskById, _queryTaskData } from '@/common
 
 let addOrUpdateTaskData = function (task) {
 	return _queryTaskData().then((taskData) => {
-		return _saveTask.bind(taskData)(task);;
+		return _saveTask.bind(taskData)(task).then(()=>{console.log('addOrUpdateTaskData success')});;
 	})
 }
 
