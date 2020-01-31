@@ -56,7 +56,11 @@ let _queryCompletedData = function () {
 	return _queryData(key);
 }
 
-export { _saveCompleted, _delCompleted, _queryCompletedData };
+let _saveCompletedData = function (completedData) {
+	return _setData(key, completedData);
+}
+
+export { _saveCompleted, _delCompleted, _queryCompletedData, _saveCompletedData };
 
 /*export delTask;
 

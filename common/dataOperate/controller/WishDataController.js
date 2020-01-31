@@ -1,4 +1,4 @@
-import { _saveWish, _saveWishData, _addCompletedCoin, _subCompletedCoin, _delWishById, _queryWishData } from '@/common/dataOperate/service/WishDataService'
+import { _saveWish, _saveWishData, _delWishById, _queryWishData } from '@/common/dataOperate/service/WishDataService'
 
 let addOrUpdateWish = function (wish) {
 	return _queryWishData().then((wishData) => {

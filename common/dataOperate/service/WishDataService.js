@@ -10,32 +10,6 @@ let _saveWish = function (wish) {
 	return _setData(key, this);
 }
 
-let _addCompletedCoin = function (wishId, happyCoin) {
-	let completedCoin = this.wishObj[wishId].completedCoin;
-	let happy_coin = this.wishObj[wishId].happy_coin;
-	let surplusCoin = completedCoin + happyCoin - happy_coin;
-	
-	if (surplusCoin >= 0) {
-		this.wishObj[wishId].isCompleted = true;
-		this.wishObj[wishId].completedCoin = happy_coin;
-	} else {
-		this.wishObj[wishId].completedCoin = completedCoin + happyCoin;
-		surplusCoin = 0;
-	}
-	
-	return _setData(key, this).then(() => {
-		let tempSurplusCoin = surplusCoin;
-		surplusCoin = null;
-		return tempSurplusCoin;
-	});
-}
-
-let _subCompletedCoin = function (wishId, happyCoin) {
-	let completedCoin = this.wishObj[wishId].completedCoin;
-	this.wishObj[wishId].completedCoin = parseInt(completedCoin) + happyCoin;
-	return _setData(key, this);
-}
-
 let _saveWishData = function (wishData) {
 	return _setData(key, wishData);
 }
@@ -53,4 +27,4 @@ let _queryWishData = function () {
 	return _queryData(key);
 }
 
-export { _saveWish, _saveWishData, _addCompletedCoin, _subCompletedCoin, _delWishById, _queryWishData };
+export { _saveWish, _saveWishData, _delWishById, _queryWishData };

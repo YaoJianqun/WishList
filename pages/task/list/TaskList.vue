@@ -44,7 +44,6 @@
 			//获取任务列表数据
 			getListData () {
 				queryTaskData().then((taskData) => {
-					console.log(taskData)
 					this.$store.dispatch('changeTaskData', taskData);
 				});
 			}

@@ -57,15 +57,16 @@
 		methods: {
 			changeInterval (timerInterval) {
 				this.timerInterval = timerInterval;
+				//return this.saveTask();
 			},
 			
 			navigateBack () {
-				console.log(this.timerInterval)
 				if (this.timerInterval)
 					this.togglePopup();
 				else 
 					this.saveTask().then(() => {
-						uni.switchTab({url: '../../../pages/task/list/TaskList'});
+						//uni.switchTab({url: '../../../pages/task/list/TaskList'});
+						uni.navigateBack();
 					});
 					
 			},
@@ -154,6 +155,9 @@
 					height: 60rpx;
 					line-height: 60rpx;
 					border-radius: 20rpx;
+					&.success {
+						color: #FFFFFF;
+					}
 				}
 			}
 		}

@@ -13,7 +13,8 @@
 			}
 		},
 		{"path": "pages/wish/base/WishBase"},
-		{"path": "pages/personal/index"}
+		{"path": "pages/personal/index/index"},
+		{"path": "pages/personal/info/UserInfo"}
 	],
 	"tabBar": {
 	    "color": "#A2A2A2",
@@ -43,7 +44,7 @@
 			}*/, {
 				"iconPath": "static/img/user.png",
 				"selectedIconPath": "static/img/user-sel.png",
-				"pagePath": "pages/personal/index",
+				"pagePath": "pages/personal/index/index",
 				"text": "我的"
 			}
 		]

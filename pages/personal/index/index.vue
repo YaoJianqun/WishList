@@ -1,11 +1,11 @@
 <template>
 	<view class="wrapper">
 		<view class="header">
-			<image src="../../static/img/personal_bg.png"></image>
-			<view class="header-item user-name">Y大壮</view>
+			<image src="../../../static/img/personal_bg.png"></image>
+			<view class="header-item user-name" v-text="user.name"></view>
 			<view class="header-item user-logo">
-				<view class="icon iconfont iconuser default" v-if="true"></view>
-				<image v-else class="image"></image>
+				<view class="icon iconfont iconuser default" v-if="!user.image"></view>
+				<image v-else class="image" :mode="'aspectFill'" :src="user.image"></image>
 			</view>
 			<view class="happy-card">
 				${{totalHappyCoin}}
@@ -13,7 +13,7 @@
 		</view>
 		
 		<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y content-wrapper" @scroll="scroll">
-			<view class="option">
+			<view class="option" @click="handleOptionClick('UserInfo')">
 				<view class="icon iconfont iconuser warning"></view>
 				<view class="title">个人信息</view>
 				<view class="progress bgprogress bdcolor warning"></view>
@@ -23,17 +23,17 @@
 				<view class="title">使用说明</view>
 				<view class="progress bgprogress bdcolor success"></view>
 			</view>
-			<view class="option">
+			<view class="option" v-if="false">
 				<view class="icon iconfont iconskyatlas primary"></view>
 				<view class="title">云端同步</view>
 				<view class="progress bgprogress bdcolor primary"></view>
 			</view>
-			<view class="option">
+			<view class="option" v-if="false">
 				<view class="icon iconfont iconshare warning"></view>
 				<view class="title">分享</view>
 				<view class="progress bgprogress bdcolor warning"></view>
 			</view>
-			<view class="option">
+			<view class="option" v-if="false">
 				<view class="icon iconfont iconstar-fill purple"></view>
 				<view class="title">AppStore评分</view>
 				<view class="progress bgprogress bdcolor purple"></view>
@@ -44,18 +44,30 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
+	import { queryUserInfo } from '@/common/dataOperate/controller/UserInfoController'
 	import { queryCompletedData } from '@/common/dataOperate/controller/CompletedDataController'
 	
 	export default {
 		name: 'personal',
+		
+		onLoad() {
+			this.loadUserInfo();
+			this.loadCompletedData();
+		},
+		
 		onShow() {
+			this.loadUserInfo();
 			this.loadCompletedData();
 		},
 		
 		computed: {
 			totalHappyCoin () {
 				return this.$store.state.completedData.happyCoinPool;
-			}
+			},
+			...mapState({
+				user: state => state.userInfo
+			})
 		},
 		
 		data () {
@@ -68,9 +80,20 @@
 		},
 		
 		methods: {
+			handleOptionClick (state) {
+				if (state === 'UserInfo')
+					uni.navigateTo({url: '../../../pages/personal/info/UserInfo'});
+			},
+			
 			loadCompletedData () {
 				queryCompletedData().then((completedData) => {
 					this.$store.dispatch('changeCompletedData', completedData);
+				})
+			},
+			
+			loadUserInfo () {
+				queryUserInfo().then((userInfo) => {
+					this.$store.dispatch('changeUserInfo', userInfo);
 				})
 			},
 			
@@ -110,9 +133,18 @@
 				border-radius: 34rpx;
 				background-color: #fff;
 				margin-top: -18rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 				.icon {
 					font-size: 60rpx;
 					color: #333333;
+				}
+				.image {
+					width: 68rpx;
+					height: 68rpx;
+					border-radius: 50%;
+					z-index: 10;
 				}
 			}
 			.happy-card {

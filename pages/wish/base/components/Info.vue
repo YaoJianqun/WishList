@@ -152,14 +152,6 @@
 					padding: 0 10rpx;
 					color: rgb(128, 128, 128);
 				}
-				.uni-textarea {
-					height: 200rpx;
-					font-size: 30rpx;
-					margin-top: 28rpx;
-					padding: 10rpx;
-					border: 1px solid #BBBBBB;
-					border-radius: 20rpx;
-				}
 				.color-list {
 					display: flex;
 					flex-wrap: wrap;
@@ -191,46 +183,6 @@
 			position: absolute;
 			top: 0;
 			left: 0;
-		}
-		.icon-wrapper {
-			margin: 40rpx 40rpx;
-			border-radius: 20rpx;
-			background-color: #fff;
-			.scroll-iconList {
-				max-height: 500rpx;
-				.iconList {
-					display: flex;
-					flex-wrap: wrap;
-					align-content: flex-start;
-					color: #3E4B53;
-					.icon-item {
-						width: 116rpx;
-						height: 116rpx;
-						line-height: 116rpx;
-						text-align: center;
-						font-size: 60rpx;
-						border: 1px solid #BBB;
-						border-radius: 20rpx;
-						margin: 20rpx;
-						&.sel {
-							
-						}
-					}
-				}
-			}
-			.operate-wrapper {
-				height: 100rpx;
-				padding: 16rpx;
-				display: flex;
-				justify-content: space-around;
-				align-items: center;
-				.operate-item {
-					width: 40%;
-					color: #fff;
-					border-radius: 20rpx;
-				}
-				
-			}
 		}
 	}
 </style>

@@ -86,12 +86,12 @@
 		methods: {
 			...mapActions(['changeTask']),
 			addScore() {
-				this.task.completed_count += this.computeStepCount;
+				this.task.completed_count = parseInt(this.task.completed_count) + this.computeStepCount;
 				//this.changeTask(this.task);
 			},
 			
 			subScore() {
-				this.task.completed_count -= this.computeStepCount;
+				this.task.completed_count = parseInt(this.task.completed_count) - this.computeStepCount;
 				//this.changeTask(this.task);
 			},
 			

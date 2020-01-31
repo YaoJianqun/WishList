@@ -2,7 +2,7 @@
 	<scroll-view :scroll-top="scrollTop" :scroll-y="scrollY" class="scroll-Y content-wrapper" @scroll="scroll" @click.stop="resetListMenu">
 		<view class="wish-list" :class="[pageTheme]">
 			<view class="wish-item"
-						:class="[wish.id === menuMoveWish ? reverseClass : '', pageTheme]"
+						:class="[wish.id === menuMoveWish ? reverseClass : '', pageTheme, {'convert' : wish.isCompleted}]"
 						v-for="wish in wishList"
 						:key="wish.id"
 						:data-wishid="wish.id"
@@ -70,6 +70,12 @@
 						</view>
 					</view>
 					
+				</view>
+				<view class="stamp" v-if="!wish.redeem && !cardMenuState && wish.isCompleted" @click="convertHappyCoin(wish)">
+					<view class="content">可兑换</view>
+				</view>
+				<view class="stamp" v-else-if="wish.redeem && !cardMenuState && wish.isCompleted">
+					<view class="content">已兑换</view>
 				</view>
 			</view>
 		</view>
@@ -159,8 +165,9 @@
 						tempWish.happy_coin = wish.happy_coin;
 						tempWish.completedCount = this.happyCoin > wish.happy_coin ? wish.happy_coin : this.happyCoin;
 						tempWish.completedStyle = `${tempWish.completedCount / wish.happy_coin * 100}%`;
-						tempWish.isCompleted = wish.isCompleted;
+						tempWish.isCompleted = this.happyCoin >= tempWish.completedCount && tempWish.completedCount > 0;
 						tempWish.color = wish.color;
+						tempWish.redeem = wish.redeem;
 						temp_wishList.push(tempWish);
 					}
 				}
@@ -172,6 +179,10 @@
 			})
 		},
 		methods: {
+			//兑换物品
+			convertHappyCoin (wish) {
+				this.$emit('convertHappyCoin', wish);
+			},
 			
 			//卡片模式-点击取消按钮
 			handleCanceClick () {
@@ -331,6 +342,28 @@
 				padding: 0 30rpx 0 30rpx;
 				background-color: #fff;
 				transition: height 0.6s, max-width 0.6s, min-width 0.6s;
+				&.convert {
+					background-image: url('https://oss-yaodz-source.oss-cn-beijing.aliyuncs.com/Wish-List/img/bg.png');
+				}
+				.stamp {
+					transform:rotate(-40deg);
+					position: absolute;
+					width: 90rpx;
+					height: 90rpx;
+					bottom: 20rpx;
+					right: 20rpx;
+					border-radius: 50%;
+					border: 4rpx solid #ee2323;
+					z-index: 10;
+					.content {
+						line-height: 90rpx;
+						width: 90rpx;
+						text-align: center;
+						font-size: 30rpx;
+						color: #ee2323;
+						font-weight: bold;
+					}
+				}
 				.image-wrapper {
 					width: 120rpx;
 					height: 120rpx;

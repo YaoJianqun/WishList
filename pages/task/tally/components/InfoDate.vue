@@ -1,10 +1,23 @@
 <template>
 	<view class="info-wrapper">
-		<canvas canvas-id="task-timer"
-						:width="timerCanvasWidth"
-						:height="timerCanvasHeight"
-						:style="{width: timerCanvasWidth*2 + 'rpx', height: timerCanvasHeight*2 + 'rpx'}"
-		></canvas>
+		<view class="timer-wrapper">
+			<view class="time hour-wrapper" :style="hourRotateX">
+				<view class="number back iconfont" v-text="hour.front" :class="[task.color]"></view>
+				<view class="number front iconfont" v-text="hour.back" :class="[task.color]"></view>
+				<view class="mask"></view>
+			</view>
+			<view class="time min-wrapper" :style="minRotateX">
+				<view class="number back iconfont" v-text="min.front" :class="[task.color]"></view>
+				<view class="number front iconfont" v-text="min.back" :class="[task.color]"></view>
+				<view class="mask"></view>
+			</view>
+			<view class="time sec-wrapper" :style="secRotateX">
+				<view class="number back iconfont" v-text="sec.front" :class="[task.color]"></view>
+				<view class="number front iconfont" v-text="sec.back" :class="[task.color]"></view>
+				<view class="mask"></view>
+			</view>
+			
+		</view>
 		<view class="operate-wrapper">
 			<view class="on-off bgcolor" 
 						:class="[{'success': !timerState}, {'danger': timerState}]"
@@ -14,9 +27,13 @@
 			</view>
 		</view>
 		<view :class="['tab bdcolor', task.color]"></view>
-		<uni-popup ref="popup" :type="'center'" custom="true">
-			<view class="popup-wrapper">
-				恭喜您完成任务！
+		<uni-popup :show="show" :type="'center'" :custom="true" :mask-click="false" ref="tip">
+			<view class="uni-tip">
+				<view class="uni-tip-title">提示</view>
+				<view class="uni-tip-content">棒！恭喜你完成任务！</view>
+				<view class="uni-tip-group-button">
+					<view class="uni-tip-button bgcolor success" @click="cancel">确定</view>
+				</view>
 			</view>
 		</uni-popup>
 	</view>
@@ -36,55 +53,64 @@
 		},
 		data() {
 			return {
+				isInit: true,
 				timerInterval: null,
 				timerState: false,
-				
 				balls: [],
-				timerContext: null,
 				totalMilliSeconds: 0,
 				completedMilliSeconds: 0,
-				canvasStartX: 0,
-				canvasStartY: 0,
-				operateBarOffsetTop: 0,
-				operateBarOffsetLeft: 0,
-				operateBarOffsetRight: 0,
-				timerCanvasWidth: 0,
-				timerCanvasHeight: 0,
-				radius: 2.4
+				hour: {front: 0, back: 0},
+				min: {front: 0, back: 0},
+				sec: {front: 0, back: 0},
+				hourDeg: 0,
+				minDeg: 0,
+				secDeg: 0
 			}
 		},
 		computed: {
+			secRotateX () {
+				return `transform: translateZ(-380rpx) rotateX(${this.secDeg}deg);`;
+			},
+			
+			minRotateX () {
+				return `transform: translateZ(-380rpx) rotateX(${this.minDeg}deg);`;
+			},
+			
+			hourRotateX () {
+				return `transform: translateZ(-380rpx) rotateX(${this.hourDeg}deg);`;
+			},
 			...mapState({
 				task: state => state.task
 			})
 		},
 		methods: {
-			togglePopup() {
-				this.$refs['popup'].open()
+			
+			cancel() {
+				this.$refs['tip'].close();
 			},
+			
+			togglePopup() {
+				this.$refs['tip'].open()
+			},
+			
 			handleOnOffClick () {
+				if (!this.timerState && this.task.completed_count == this.task.target_count) return;
 				//当前计时器为计时状态时
 				if (this.timerState) {
 					clearInterval(this.timerInterval);
 					this.timerInterval = '';
 				} else {
-					this.timerStart (this.timerContext);
+					this.timerStart ();
 				}
+				console.log(this.timerState)
 				this.timerState = !this.timerState;
+				console.log(this.timerState)
 				//uni.vibrateLong()
 				this.$emit('changeInterval', this.timerInterval);
 				uni.vibrateShort()
 			},
-			initTimer (data) {
-				
-				this.timerCanvasHeight = data[0].height;
-				this.timerCanvasWidth = data[0].width;
-				
-				this.timerContext = uni.createCanvasContext('task-timer', this);
-				
-				let temp_time = this.task.target_count;
-				let time_unit = this.task.unit;
-				
+			
+			initTimer () {
 				if (this.task.unit === '分') {
 					this.completedMilliSeconds = this.task.completed_count * 60 * 1000 + this.task.completed_milliseconds;
 				} else if (this.task.unit === '时') {
@@ -93,162 +119,83 @@
 					this.completedMilliSeconds = this.task.completed_count * 1000;
 				}
 				this.totalMilliSeconds = this.getTargetMilliSeconds(this.task.target_count, this.task.unit);
-				
-				let timeWidth = (this.radius + 0.25) * 7 * 6 * 2 + (this.radius + 0.25) * 4 * 2 * 2 + (this.radius + 0.25) * 7;
-				
-				this.canvasStartX = (this.timerCanvasWidth / 2) - (timeWidth / 2);
-				this.canvasStartY = this.timerCanvasHeight * 0.2;
-				
-				this.renderTimer(this.timerContext);
-				//this.timerStart (this.timerContext);
+				this.renderTimer();
 			},
-			timerStart (ctx) {
+			
+			timerStart () {
 				this.timerInterval = setInterval(function () {
-					this.renderTimer(ctx);
 					this.updateTime();
-				}.bind(this), 50)
+					this.renderTimer();
+				}.bind(this), 1000)
 			},
-			renderTimer (ctx) {
-				
-				ctx.clearRect(0, 0, this.timerCanvasWidth, this.timerCanvasHeight);
-				
+			
+			renderTimer () {
 				let timeData = this.getTimeData();
 				
-				if (timeData.hours === 0 && timeData.minutes ===0 && timeData.seconds === 0) {
-					this.handleOnOffClick();
-					this.togglePopup();
-				}
-				
 				let hours = timeData.hours;
-				
 				let minutes = timeData.minutes;
 				let seconds = timeData.seconds;
 				
-				this.renderDigit(this.canvasStartX, this.canvasStartY, parseInt(hours/10), ctx);
-				this.renderDigit(this.canvasStartX + (this.radius + 0.25) * 15, this.canvasStartY, parseInt(hours%10), ctx);
-				this.renderDigit(this.canvasStartX + (this.radius + 0.25) * 30, this.canvasStartY, 10, ctx);
-				this.renderDigit(this.canvasStartX + (this.radius + 0.25) * 39, this.canvasStartY, parseInt(minutes/10), ctx);
-				this.renderDigit(this.canvasStartX + (this.radius + 0.25) * 54, this.canvasStartY, parseInt(minutes%10), ctx);
-				this.renderDigit(this.canvasStartX + (this.radius + 0.25) * 69, this.canvasStartY, 10, ctx);
-				this.renderDigit(this.canvasStartX + (this.radius + 0.25) * 78, this.canvasStartY, parseInt(seconds/10), ctx);
-				this.renderDigit(this.canvasStartX + (this.radius + 0.25) * 93, this.canvasStartY, parseInt(seconds%10), ctx);
-				
-				for (let i = 0,length = this.balls.length; i < length; i++) {
-					ctx.fillStyle = this.balls[i].color;
-					ctx.beginPath();
-					ctx.arc(this.balls[i].x, this.balls[i].y, this.radius, 0, Math.PI * 2, true);
-					ctx.closePath();
-					ctx.fill();
-				}
-				
-				ctx.draw(true);
-			},
-			renderDigit (renderStartX, renderStartY, number, ctx) {
-				ctx.fillStyle = commonColor[this.task.color];
-				for (let i = 0,length = digit[number].length; i < length; i++) {
-					for (let j = 0,length = digit[number][i].length; j < length; j++) {
-						if (digit[number][i][j] === 1) {
-							ctx.beginPath();
-							let arcX = renderStartX + j * 2 * (this.radius + 0.25) + (this.radius + 0.25);
-							let arcY = renderStartY + i * 2 * (this.radius + 0.25) + (this.radius + 0.25);
-							ctx.arc(arcX, arcY, this.radius, 0 , 2*Math.PI)
-							ctx.closePath();
-							ctx.fill();
-						}
-					}
-				}
-			},
-			updateTime () {
-				let beforeTimeData = this.getTimeData();
-				this.completedMilliSeconds += 50;
-				let afterTimeData = this.getTimeData();
-				if (beforeTimeData.hours !== afterTimeData.hours)
-					this.addBalls(this.canvasStartX + 0 * (this.radius + 0.25), this.canvasStartY, parseInt(beforeTimeData.hours/10));
-				if (beforeTimeData.hours !== afterTimeData.hours)
-					this.addBalls(this.canvasStartX + 15 * (this.radius + 0.25), this.canvasStartY, parseInt(beforeTimeData.hours%10));
-				if (beforeTimeData.minutes !== afterTimeData.minutes)
-					this.addBalls(this.canvasStartX + 39 * (this.radius + 0.25), this.canvasStartY, parseInt(beforeTimeData.minutes/10));
-				if (beforeTimeData.minutes !== afterTimeData.minutes)
-					this.addBalls(this.canvasStartX + 54 * (this.radius + 0.25), this.canvasStartY, parseInt(beforeTimeData.minutes%10));
-				if (beforeTimeData.seconds !== afterTimeData.seconds)
-					this.addBalls(this.canvasStartX + 78 * (this.radius + 0.25), this.canvasStartY, parseInt(beforeTimeData.seconds/10));
-				if (beforeTimeData.seconds !== afterTimeData.seconds)
-					this.addBalls(this.canvasStartX + 93 * (this.radius + 0.25), this.canvasStartY, parseInt(beforeTimeData.seconds%10));
-					
-				this.updateBalls();
-				
-				if (this.completedMilliSeconds%1000 === 0) {
-					if (this.task.unit === '分') {
-						this.task.completed_count = Math.floor(this.completedMilliSeconds/1000/60);
-						this.task.completed_milliseconds = (this.completedMilliSeconds - this.task.completed_count*60*1000);
-					} else if (this.task.unit === '时') {
-						this.task.completed_count = Math.floor(this.completedMilliSeconds/1000/3600);
-						this.task.completed_milliseconds = Math.floor((this.completedMilliSeconds - this.task.completed_count*3600*1000));
+				setTimeout(() => {
+					let temp_seconds = `${parseInt(seconds/10)}${parseInt(seconds%10)}`;
+					if (Math.abs(this.secDeg) / 180 % 2 == 0) {
+						this.sec.back = temp_seconds;
 					} else {
-						this.task.completed_count = this.completedMilliSeconds/1000;
+						this.sec.front = temp_seconds;
 					}
-				}
-			},
-			addBalls (renderStartX, renderStartY, number) {
-				let colorLength = commonColors.length;
-				for (let i = 0,length = digit[number].length; i < length; i++) {
-					for (let j = 0,length = digit[number][i].length; j < length; j++) {
-						if (digit[number][i][j] === 1) {
-							
-							let arcX = renderStartX + j * 2 * (this.radius + 0.25) + (this.radius + 0.25);
-							let arcY = renderStartY + i * 2 * (this.radius + 0.25) + (this.radius + 0.25);
-							
-							let aBall = {
-								x: arcX,
-								y: arcY,
-								g: 1.5 + Math.random(),
-								vx: Math.pow( -1, Math.ceil(Math.random()*1000)) * 4,
-								vy: -1 * Math.floor(Math.random() * 8),
-								'color': commonColors[Math.floor(Math.random()*colorLength)]
-							}
-							this.balls.push(aBall);
-						}
+				}, 400)
+				this.secDeg -= 180;
+				
+				setTimeout(() => {
+					let temp_min = `${parseInt(minutes/10)}${parseInt(minutes%10)}`;
+					if (Math.abs(this.minDeg) / 180 % 2 == 0) {
+						this.min.back = temp_min;
+					} else {
+						this.min.front = temp_min;
 					}
-				}
-			},
-			updateBalls () {
-				for (let i = 0,length = this.balls.length; i < length; i++) {
-					this.balls[i].x += this.balls[i].vx;
-					this.balls[i].y += this.balls[i].vy;
-					this.balls[i].vy += this.balls[i].g;
+				}, 400);
+				if (seconds === 59 || this.isInit) this.minDeg -= 180;
+				
+				setTimeout(() => {
+					let temp_sec = `${parseInt(hours/10)}${parseInt(hours%10)}`;
+					if (Math.abs(this.hourDeg) / 180 % 2 == 0) {
+						this.hour.back = temp_sec;
+					} else {
+						this.hour.front = temp_sec;
+					}
+				}, 400);
+				if ((seconds === 59 && minutes%10 === 9) || this.isInit) this.hourDeg -= 180;
+				
+				if (hours === 0 && minutes ===0 && seconds === 0) {
+					if (this.timerState) {
+						setTimeout(() => {
+							this.handleOnOffClick();
+							this.togglePopup();
+						}, 500)
+					} else {
+						return;
+					}
 					
-					let ballX = this.balls[i].x + this.radius;
-					let ballY = this.balls[i].y + this.radius;
-					
-					let isOperateBar = ballX > this.operateBarOffsetLeft && ballX < this.operateBarOffsetRight;
-					if (
-						(!isOperateBar && ballY >= this.timerCanvasHeight - this.radius)
-						||
-						(isOperateBar && ballY >= this.operateBarOffsetTop - this.radius)
-					) {
-						if (!isOperateBar)
-							ballY = this.timerCanvasHeight - this.radius;
-						else
-							ballY = this.operateBarOffsetTop - this.radius;
-						this.balls[i].vy = - this.balls[i].vy * 0.75;
-					}
 				}
-				
-				let cnt = 0;
-				for (let i = 0, length = this.balls.length; i < length; i++) {
-					let ballEdge = this.balls[i].x + this.radius;
-					if (ballEdge > 0 && ballEdge < this.timerCanvasWidth) {
-						this.balls[cnt++] = this.balls[i]
-					}
-				}
-				
-				while (this.balls.length > Math.min(cnt, 200)) {
-					this.balls.pop();
-				}
-				
+				if (this.isInit) this.isInit = false;
+			
 			},
+			
+			updateTime () {
+				this.completedMilliSeconds += 1000;
+				
+				if (this.task.unit === '分') {
+					this.task.completed_count = Math.floor(this.completedMilliSeconds/1000/60);
+					this.task.completed_milliseconds = (this.completedMilliSeconds - this.task.completed_count*60*1000);
+				} else if (this.task.unit === '时') {
+					this.task.completed_count = Math.floor(this.completedMilliSeconds/1000/3600);
+					this.task.completed_milliseconds = Math.floor((this.completedMilliSeconds - this.task.completed_count*3600*1000));
+				} else {
+					this.task.completed_count = this.completedMilliSeconds/1000;
+				}
+			},
+			
 			getTimeData () {
-				
 				let temp_totalMilliSeconds = this.totalMilliSeconds - this.completedMilliSeconds;
 				
 				let timeData = {hours: 0, minutes: 0, seconds: 0};
@@ -259,6 +206,7 @@
 				
 				return timeData;
 			},
+			
 			getTargetMilliSeconds (targetCount, unit) {
 				
 				let temp_seconds = (targetCount/* - this.task.completed_count*/) * 1000;
@@ -276,13 +224,7 @@
 			}
 		},
 		mounted() {
-			let query = uni.createSelectorQuery().in(this);
-			query.select('.info-wrapper').boundingClientRect(data => {}).exec(this.initTimer);
-			query.select('.operate-wrapper').boundingClientRect(data => {
-				this.operateBarOffsetTop = data.top - 100;
-				this.operateBarOffsetLeft = data.left - 20;
-				this.operateBarOffsetRight = data.right - 20;
-			}).exec();
+			this.initTimer();
 		}
 	}
 </script>
@@ -296,25 +238,71 @@
 		bottom: 68rpx;
 		border-radius: 20rpx;
 		background-color: #fff;
-		.popup-wrapper {
-			padding: 20rpx;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		.timer-wrapper {
+			position: relative;
+			height: 420rpx;
+			margin: 102rpx 40rpx 40rpx;
+			/*background-color: #2AD181;*/
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
 			border-radius: 20rpx;
-			min-width: 300rpx;
-			min-height: 300rpx;
-			background-color: #fff;
+			perspective: 380rpx;
+			box-shadow: 0rpx 0rpx 10rpx 0rpx #ccc;
+			.time {
+				width: 26%;
+				height: 100%;
+				position: relative;
+				transform: translateZ(-380rpx);
+				transition:transform .8s;
+				transform-style: preserve-3d;
+				.number {
+					width: 100%;
+					height: 360rpx;
+					line-height: 380rpx;
+					background-color: #FFFFFF;
+					border: 2rpx solid #AAAAAA;
+					border-radius: 20rpx;
+					position: absolute;
+					margin: 30rpx 0rpx;
+					text-align: center;
+					font-size: 40rpx;
+					
+					&.front {
+						transform: translateZ(380rpx);
+					}
+					&.back {
+						transform: translateZ(-380rpx) rotateX(180deg);
+					}
+				}
+				&.min-wrapper {
+					z-index: 2;
+				}
+				.mask {
+					background: rgba($color: #FFFFFF, $alpha: 1.0);
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					transform: translateZ(0rpx);
+					z-index: 1;
+				}
+			}
+			/*.time:hover {
+				transform: translateZ(-380rpx) rotateX(-180deg);
+			}*/
 		}
 		/*overflow: hidden;*/
 		.operate-wrapper {
-			position: absolute;
-			bottom: 400rpx;
-			height: 160rpx;
-			left: 40rpx;
-			right: 40rpx;
+			margin: 200rpx 40rpx;
+			padding: 20rpx;
 			border-radius: 20rpx;
 			background-color: #fff;
 			box-shadow: 0rpx 0rpx 6rpx 6rpx #eee;
 			display: flex;
-			justify-content: space-around;
+			justify-content: center;
 			align-items: center;
 			.on-off {
 				width: 100rpx;
@@ -342,6 +330,39 @@
 			position: absolute;
 			top: 0;
 			left: 0;
+		}
+		.uni-tip {
+			padding: 15px;
+			width: 300px;
+			background: #fff;
+			box-sizing: border-box;
+			border-radius: 10px;
+			.uni-tip-title {
+				text-align: center;
+				font-weight: bold;
+				font-size: 16px;
+				color: #333;
+			}
+			
+			.uni-tip-content {
+				text-align: center;
+				padding: 15px;
+				font-size: 14px;
+				color: #666;
+			}
+			.uni-tip-group-button {
+				margin-top: 10px;
+				display: flex;
+				.uni-tip-button {
+					width: 100%;
+					text-align: center;
+					font-size: 14px;
+					color: #FFFFFF;
+					height: 60rpx;
+					line-height: 60rpx;
+					border-radius: 20rpx;
+				}
+			}
 		}
 	}
 </style>

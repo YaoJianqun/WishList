@@ -2,6 +2,7 @@
 	
 	import { mapState } from 'vuex'
 	import { queryCompletedData } from '@/common/dataOperate/controller/CompletedDataController'
+	import User from '@/common/model/User'
 	
 	export default {
 		computed: {
@@ -50,6 +51,19 @@
 				})
 			},
 			
+			//创建用户信息
+			setUserInfo () {
+				let userInfo = new User();
+				uni.setStorage({
+					key: 'userInfo',
+					data: userInfo,
+					success: function(){
+						this.$store.dispatch('changeUserInfo', userInfo);
+						console.log('init userInfo success');
+					}.bind(this)
+				})
+			},
+			
 			loadCompletedData () {
 				queryCompletedData().then((completedData) => {
 					this.$store.dispatch('changeCompletedData', completedData);
@@ -65,9 +79,10 @@
 					if (storageKeys.indexOf('taskData') < 0) await this.setTaskData();
 					if (storageKeys.indexOf('wishData') < 0) await this.setWishData();
 					if (storageKeys.indexOf('completedData') < 0) await this.setCompletedData();
+					if (storageKeys.indexOf('userInfo') < 0) await this.setUserInfo();
 					//加载任务及愿望清单完成情况数据
 					await this.loadCompletedData();
-					console.log('init Data success')
+					console.log('init Data success');
 				}.bind(this)
 			})
 		}

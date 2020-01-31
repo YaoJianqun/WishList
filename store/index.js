@@ -7,6 +7,7 @@ export default new Vuex.Store({
 	state: {
 		task: null,
 		wish: null,
+		userInfo: {},
 		taskData: {},
 		wishData: {},
 		completedData: {}
@@ -26,6 +27,9 @@ export default new Vuex.Store({
 		},
 		changeCompletedData (ctx, completedData) {
 			ctx.commit('changeCompletedData', completedData);
+		},
+		changeUserInfo (ctx, userInfo) {
+			ctx.commit('changeUserInfo', userInfo);
 		}
 	},
 	mutations: {
@@ -43,6 +47,9 @@ export default new Vuex.Store({
 		},
 		changeCompletedData (state, completedData) {
 			state.completedData = completedData;
+		},
+		changeUserInfo (state, userInfo) {
+			state.userInfo = userInfo;
 		}
 	}
 })

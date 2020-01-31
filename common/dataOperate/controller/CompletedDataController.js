@@ -1,4 +1,4 @@
-import { _saveCompleted, _delCompleted, _queryCompletedData } from '@/common/dataOperate/service/CompletedDataService'
+import { _saveCompleted, _delCompleted, _queryCompletedData, _saveCompletedData } from '@/common/dataOperate/service/CompletedDataService'
 
 import TaskCompleted from '@/common/model/TaskCompleted'
 
@@ -12,7 +12,24 @@ let addOrUpdateCompleted = function (task) {
 	let temp_completed = new TaskCompleted(taskCompleted);
 	
 	return _queryCompletedData().then((completedData) => {
-		_saveCompleted.bind(completedData)(temp_completed);
+		return _saveCompleted.bind(completedData)(temp_completed);
+		/*if (task.wishId !== 'happyCoinPool')
+			return _saveTaskCompleted.bind(completedData)(temp_taskCompleted);
+		else
+			return _saveHappyCoinPool.bind(completedData)(temp_taskCompleted);*/
+	});
+}
+
+let changeHappyCoinPool = function (state, happyCoin) {
+	return _queryCompletedData().then((completedData) => {
+		happyCoin = parseInt(happyCoin);
+		if (state === 'add')
+			completedData.happyCoinPool += happyCoin;
+		else if (state === 'sub')
+			completedData.happyCoinPool -= happyCoin;
+		else
+			return;
+		return _saveCompletedData(completedData);
 		/*if (task.wishId !== 'happyCoinPool')
 			return _saveTaskCompleted.bind(completedData)(temp_taskCompleted);
 		else
@@ -34,4 +51,4 @@ let queryCompletedData = function () {
 	return _queryCompletedData();
 }
 
-export { addOrUpdateCompleted, deleteCompleted, queryCompletedData };
+export { addOrUpdateCompleted, deleteCompleted, queryCompletedData, changeHappyCoinPool };
