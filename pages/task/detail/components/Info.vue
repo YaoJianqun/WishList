@@ -274,6 +274,7 @@
 			
 			handleTypeClick (e) {
 				let temp_type = e.target.dataset.type;
+				if (temp_type === 'count') return; 
 				if (temp_type) this.task.type = temp_type;
 			},
 			
