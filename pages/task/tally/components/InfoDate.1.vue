@@ -115,7 +115,6 @@
 				let timeData = this.getTimeData();
 				
 				if (timeData.hours === 0 && timeData.minutes ===0 && timeData.seconds === 0) {
-					console.log('off')
 					if (this.timerState) {
 						this.handleOnOffClick();
 						this.togglePopup();

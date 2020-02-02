@@ -19,10 +19,6 @@ class Task {
 		this.color = obj.color ? obj.color : 'warning';
 		//任务目标数量
 		this.target_count = obj.target_count ? obj.target_count : 0;
-		//任务完成数量
-		this.completed_count = obj.completed_count ? obj.completed_count : 0;
-		//当单位为时间时,补充完成数量
-		this.completed_milliseconds = obj.completed_milliseconds ? obj.completed_milliseconds : 0;
 		//任务单位
 		this.unit = obj.unit ? obj.unit : '次';
 		//频率
@@ -35,10 +31,18 @@ class Task {
 		this.repeat_count = obj.repeat_count ? obj.repeat_count : 1;
 		//任务提醒
 		this.remind = obj.remind ? obj.remind : [];
-		//是否完结
-		this.isCompleted = obj.isCompleted ? obj.isCompleted : false;
 		//是否删除
 		this.isDel = obj.isDel ? obj.isDel : false;
+		
+		
+		//任务完成数量
+		this.completed_count = obj.completed_count ? obj.completed_count : 0;
+		//当单位为时间时,补充完成数量
+		this.completed_milliseconds = obj.completed_milliseconds ? obj.completed_milliseconds : 0;
+		//是否完结
+		this.isCompleted = obj.isCompleted ? obj.isCompleted : false;
+		//当前完成数量时间
+		this.completed_time = obj.completedTime ? obj.completedTime : 0;
 	}
 }
 

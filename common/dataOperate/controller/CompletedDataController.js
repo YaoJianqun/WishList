@@ -13,10 +13,6 @@ let addOrUpdateCompleted = function (task) {
 	
 	return _queryCompletedData().then((completedData) => {
 		return _saveCompleted.bind(completedData)(temp_completed);
-		/*if (task.wishId !== 'happyCoinPool')
-			return _saveTaskCompleted.bind(completedData)(temp_taskCompleted);
-		else
-			return _saveHappyCoinPool.bind(completedData)(temp_taskCompleted);*/
 	});
 }
 
@@ -30,20 +26,12 @@ let changeHappyCoinPool = function (state, happyCoin) {
 		else
 			return;
 		return _saveCompletedData(completedData);
-		/*if (task.wishId !== 'happyCoinPool')
-			return _saveTaskCompleted.bind(completedData)(temp_taskCompleted);
-		else
-			return _saveHappyCoinPool.bind(completedData)(temp_taskCompleted);*/
 	});
 }
 
 let deleteCompleted = function (task) {
 	return _queryCompletedData().then((completedData) => {
 		return _delCompleted.bind(completedData)(task);
-		/*if (task.wishId !== 'happyCoinPool')
-			return _delTaskCompleted.bind(completedData)(task);
-		else 
-			return _delHappyCoinPool.bind(completedData)(task);*/
 	});
 }
 

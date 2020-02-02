@@ -45,7 +45,7 @@
 	
 	import { mapState } from 'vuex'
 	import TaskCompleted from '@/common/model/TaskCompleted'
-	import { addOrUpdateTaskData, deleteTaskById } from '@/common/dataOperate/controller/TaskDataController'
+	import { deleteTaskById } from '@/common/dataOperate/controller/TaskDataController'
 	import { addOrUpdateCompleted, deleteCompleted, queryCompletedData } from '@/common/dataOperate/controller/CompletedDataController'
 	
 	export default {
@@ -79,6 +79,7 @@
 				//滑动方向
 				scrollDirectionHorizontal: '',
 				screenWidth: uni.getSystemInfoSync().windowWidth * 0.4,
+				completedTime : null,
 				scrollTop: 0,
 				old: {
 					scrollTop: 0
@@ -98,7 +99,8 @@
 			},
 			
 			...mapState({
-				taskData: state => state.taskData
+				taskData: state => state.taskData,
+				completedData: state => state.completedData
 			}),
 			
 			taskList () {
@@ -126,6 +128,32 @@
 						let task = this.taskData.taskObj[id]; 
 						//页面为今日状态下，过滤不满足条件的任务
 						if (this.pageState === 'today' && task.ration.indexOf(weekDay) < 0 && task.ration.indexOf(monthSection) < 0) continue;
+						console.log(task)
+						console.log(task.completed_time)
+						if (task.completed_time != 0) {
+							let taskCompletedTime = new Date();
+							taskCompletedTime.setTime(task.completed_time);
+							console.log(new Date().Format("yyyy-MM-dd"))
+							console.log(taskCompletedTime.Format("yyyy-MM-dd"))
+							if (new Date().Format("yyyy-MM-dd") !== taskCompletedTime.Format("yyyy-MM-dd")) {
+								task.completed_count = 0;
+								task.completed_milliseconds = 0;
+								task.completed_time = 0;
+							}
+						}
+						
+						/*let completedArrayByTask = this.completedData.completedObj[task.id] ? this.completedData.completedObj[task.id] : [];
+						
+						if (completedArrayByTask.length > 0) {
+							let taskIndex = completedArrayByTask.length - 1;
+							let taskCompletedTime = new Date();
+							taskCompletedTime.setTime(completedArrayByTask[taskIndex].completedTime);
+							let haveCompletedData = new Date().Format("yyyy-MM-dd") === taskCompletedTime.Format('yyyy-MM-dd') ? true : false;
+							if(!haveCompletedData) {
+								task.completed_count = 0;
+								task.completed_milliseconds = 0;
+							};
+						}*/
 						task.taskCompleted = `${task.completed_count}/${task.target_count + task.unit}`;
 						task.isCompleted = this.isCompleted(task);
 						task.taskProgress = this.taskProgress(task);
@@ -136,43 +164,26 @@
 			}
 		},
 		methods: {
+			/*haveCompletedData (task) {
+				let completedArrayByTask = this.completedData[task.id] ? this.completedData[task.id] : [];
+				let taskIndex = completedArrayByTask.length - 1;
+	 			if (taskIndex < 0) return; 
+				let timeDifference = new Date(new Date().toLocaleDateString()).getTime() - parseInt(completedArrayByTask[taskIndex].completedTime);
+				if (timeDifference > 24 * 60 * 60 * 1000) return false;
+				else return true;
+			},*/
+			
 			operateCompletedDate (taskState, task) {
+				let _this = this;
 				if (taskState) {
 					//添加愿望快乐币surplusCoin
-					addOrUpdateCompleted(task);
-					/*changeWishCompletedCoin(task.wishId, task.happy_coin).then(async (surplusCoin) => {
-						if (surplusCoin > 0) {
-							let tempHappy_coin = task.happy_coin;
-							let tempWishId = task.wishId;
-							task.happy_coin = tempHappy_coin - surplusCoin;
-							await addOrUpdateTaskCompleted(task);
-							task.wishId = 'happyCoinPool';
-							task.happy_coin = surplusCoin;
-							await addOrUpdateTaskCompleted(task);
-							task.happy_coin = tempHappy_coin;
-							task.wishId = tempWishId;
-							addOrUpdateTaskData(task);
-						} else {
-							addOrUpdateTaskCompleted(task);
-						}
-					});*/
+					addOrUpdateCompleted(task).then(() => {
+						_this.$emit('changeCompletedDate');
+					});
 				} else {
-					let tempWishId = '';
-					deleteCompleted(task);
-					/*queryWishData()
-						.then(async (wishData) => {
-							let happyCoin = 0;
-							if (wishData.wishObj[task.wishId].isCompleted) {
-								tempWishId = task.wishId;
-								task.wishId = 'happyCoinPool';
-							}
-							happyCoin = await deleteTaskCompleted(task);
-							if (tempWishId) {
-								task.wishId = tempWishId;
-								happyCoin = await deleteTaskCompleted(task);
-							}					
-							changeWishCompletedCoin(task.wishId, -happyCoin);
-						})*/
+					deleteCompleted(task).then(() => {
+						_this.$emit('changeCompletedDate');
+					});;
 				}
 			},
 			
@@ -213,6 +224,7 @@
 				//记录初始位置
 				this.startX = e.touches[0].clientX;
 				this.startY = e.touches[0].clientY;
+				this.completedTime = new Date();
 				//记录原始完成数量
 				this.completedCount = e.currentTarget.dataset.completedcount;
 				//初始化任务相关数据
@@ -327,6 +339,7 @@
 				
 				//存储最终移动数量
 				task.completed_count = moveCount;
+				task.completed_time = this.completedTime.getTime();
 				
 				//记录初始任务完成状态
 				if (this.taskState.id !== task.id) {
@@ -407,9 +420,12 @@
 				let completedState = this.isCompleted(task);
 				if (completedState) {
 					task.completed_count = 0;
+					task.completed_time = 0;
 				} else {
 					task.completed_count = task.target_count;
+					task.completed_time = new Date().getTime();
 				}
+				
 				this.operateCompletedDate(!completedState, task);
 			},
 			

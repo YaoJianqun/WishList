@@ -102,9 +102,7 @@
 				} else {
 					this.timerStart ();
 				}
-				console.log(this.timerState)
 				this.timerState = !this.timerState;
-				console.log(this.timerState)
 				//uni.vibrateLong()
 				this.$emit('changeInterval', this.timerInterval);
 				uni.vibrateShort()

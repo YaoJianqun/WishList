@@ -26,7 +26,6 @@ let _saveCompleted = function (completed) {
 	//如果为新增状态,添加完成内容
 	if (completedState) {
 		completedArray.push(completed);
-		debugger;
 		this.happyCoinPool += completed.happy_coin;
 	};
 	return _setData(key, this);
@@ -61,10 +60,3 @@ let _saveCompletedData = function (completedData) {
 }
 
 export { _saveCompleted, _delCompleted, _queryCompletedData, _saveCompletedData };
-
-/*export delTask;
-
-export function importTask (taskData) {
-	taskData.setTask = setTask;
-	taskData.delTask = delTask;
-}*/
