@@ -118,7 +118,7 @@
 						</view>
 					</view>
 				</transition>
-				<view class="uni-form-item uni-column">
+				<!-- <view class="uni-form-item uni-column">
 					<view class="title">提醒 : </view>
 					<scroll-view class="circle-wrapper" :scroll-left="scrollRight" scroll-x="true" @scroll="scroll">
 							<picker mode="time" start="00:00" end="24:00" @change="bindRemindChangeChange">
@@ -146,7 +146,7 @@
 							<view class="time-title">结束时间</view>
 						</view>
 					</view>
-				</view>
+				</view> -->
 			</view>
 		</scroll-view>
 		<!-- 顶部标签 -->

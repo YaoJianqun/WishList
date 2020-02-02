@@ -43,7 +43,6 @@
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
 	import { mapState } from 'vuex'
 	import { commonColor, commonColors } from '@/static/data/commonData'
-	import digit from '@/static/data/digit'
 	
 	
 	export default {

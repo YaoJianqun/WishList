@@ -1,8 +1,8 @@
 <template>
 	<view class="dock-wrapper">
 		<view class="dock">
-			<view class="item bgcolor success" @click="handleNextClick">完成</view>
 			<view class="item bgcolor danger" @click="handleCancelClick">取消</view>
+			<view class="item bgcolor success" @click="handleNextClick">完成</view>
 		</view>
 	</view>
 </template>

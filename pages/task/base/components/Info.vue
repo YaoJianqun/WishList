@@ -57,8 +57,8 @@
 					</view>
 				</scroll-view>
 				<view class="operate-wrapper">
-					<button type="primary" class="operate-item bgcolor success" @click="changeIcon(true)">确认</button>
 					<button type="primary" class="operate-item bgcolor danger" @click="changeIcon(false)">取消</button>
+					<button type="primary" class="operate-item bgcolor success" @click="changeIcon(true)">确认</button>
 				</view>
 			</view>
 		</uni-popup>

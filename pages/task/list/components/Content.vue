@@ -128,13 +128,9 @@
 						let task = this.taskData.taskObj[id]; 
 						//页面为今日状态下，过滤不满足条件的任务
 						if (this.pageState === 'today' && task.ration.indexOf(weekDay) < 0 && task.ration.indexOf(monthSection) < 0) continue;
-						console.log(task)
-						console.log(task.completed_time)
 						if (task.completed_time != 0) {
 							let taskCompletedTime = new Date();
 							taskCompletedTime.setTime(task.completed_time);
-							console.log(new Date().Format("yyyy-MM-dd"))
-							console.log(taskCompletedTime.Format("yyyy-MM-dd"))
 							if (new Date().Format("yyyy-MM-dd") !== taskCompletedTime.Format("yyyy-MM-dd")) {
 								task.completed_count = 0;
 								task.completed_milliseconds = 0;
@@ -142,18 +138,6 @@
 							}
 						}
 						
-						/*let completedArrayByTask = this.completedData.completedObj[task.id] ? this.completedData.completedObj[task.id] : [];
-						
-						if (completedArrayByTask.length > 0) {
-							let taskIndex = completedArrayByTask.length - 1;
-							let taskCompletedTime = new Date();
-							taskCompletedTime.setTime(completedArrayByTask[taskIndex].completedTime);
-							let haveCompletedData = new Date().Format("yyyy-MM-dd") === taskCompletedTime.Format('yyyy-MM-dd') ? true : false;
-							if(!haveCompletedData) {
-								task.completed_count = 0;
-								task.completed_milliseconds = 0;
-							};
-						}*/
 						task.taskCompleted = `${task.completed_count}/${task.target_count + task.unit}`;
 						task.isCompleted = this.isCompleted(task);
 						task.taskProgress = this.taskProgress(task);
