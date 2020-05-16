@@ -3,4 +3,4 @@
 
 此APP基于uni-app开发，可同时编译为小程序/ Android/IOS
 
-请使用 HBuilderX 编译工具进行打开
+请使用 HBuilderX 编译工具进行打开编译
