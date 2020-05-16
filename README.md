@@ -4,3 +4,6 @@
 此APP基于uni-app开发，可同时编译为小程序/ Android/IOS
 
 请使用 HBuilderX 编译工具进行打开编译
+
+链接：https://pan.baidu.com/s/1UYW09YU5VgbIsFKSQOzeJg 
+提取码：mbg1 
